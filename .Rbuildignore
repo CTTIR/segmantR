@@ -1,0 +1,12 @@
+^_build\.R$
+^cran-comments\.md$
+^\.github$
+^docs$
+^pkgdown$
+^_pkgdown\.yml$
+^segmantR_icon\.svg$
+^data-raw$
+^LICENSE\.md$
+^README\.Rmd$
+^\.Rproj\.user$
+^.*\.Rproj$

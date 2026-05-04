@@ -1,0 +1,34 @@
+
+R version 4.5.2 (2025-10-31 ucrt) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(segmantR)
+segmantR v0.1.0 -- Cell Segmentation with Human-in-the-Loop
+Backends: none detected (using pure-R methods)
+> 
+> test_check("segmantR")
+v Extracted intensity, morphology features for 2 cells.
+v Kept 1 of 2 cells.
+i Removed 1 cell by morphological filtering.
+i Threshold applied using "otsu" method.
+v Segmented 8 objects via threshold (otsu).
+v Computed 2 segmentation metrics.
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 40 ]
+> 
+> proc.time()
+   user  system elapsed 
+   2.48    1.00   17.67 
