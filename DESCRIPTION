@@ -12,8 +12,8 @@ Description: Comprehensive cell segmentation for histology and multiplexed
     researchers annotate, correct, train, evaluate, and download custom
     segmentation models without leaving R.
 License: MIT + file LICENSE
-URL: https://github.com/r-heller/segmantR, https://r-heller.github.io/segmantR/
-BugReports: https://github.com/r-heller/segmantR/issues
+URL: https://github.com/cttir/segmantR, https://cttir.github.io/segmantR/
+BugReports: https://github.com/cttir/segmantR/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
