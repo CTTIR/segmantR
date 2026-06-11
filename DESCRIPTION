@@ -2,7 +2,7 @@ Package: segmantR
 Title: Cell Segmentation of Histology Slides with Human-in-the-Loop Training
 Version: 0.1.0
 Authors@R:
-    person("Raban", "Heller", , "raban.heller@charite.de", role = c("aut", "cre"),
+    person("R.", "Heller", , "raban.heller@charite.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8006-9742"))
 Description: Comprehensive cell segmentation for histology and multiplexed
     tissue imaging. Provides classical segmentation methods (adaptive
