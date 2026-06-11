@@ -10,3 +10,6 @@
 ^README\.Rmd$
 ^\.Rproj\.user$
 ^.*\.Rproj$
+^segmantR\.Rcheck$
+^segmantR.*\.tar\.gz$
+^\.remember$

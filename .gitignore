@@ -6,3 +6,6 @@
 docs/
 _build.R
 inst/doc
+segmantR.Rcheck/
+*.tar.gz
+.remember/
