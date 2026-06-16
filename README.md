@@ -1,4 +1,4 @@
-# segmantR
+# segmantR <img src="man/figures/logo.png" align="right" height="139" alt="segmantR logo" />
 
 ## Use of LLM tools
 
