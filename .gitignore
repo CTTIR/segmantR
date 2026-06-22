@@ -8,4 +8,10 @@ _build.R
 inst/doc
 segmantR.Rcheck/
 *.tar.gz
-.remember/
+*.tmp
+*.log
+*~
+*.bak
+*.orig
+.RData
+*.Rcheck/
