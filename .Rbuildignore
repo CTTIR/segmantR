@@ -13,3 +13,5 @@
 ^segmantR\.Rcheck$
 ^segmantR.*\.tar\.gz$
 ^\.remember$
+^_coverage$
+^codecov\.yml$

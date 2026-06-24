@@ -85,6 +85,12 @@
   padded <- matrix(0, nrow = nr + 2L * half, ncol = nc + 2L * half)
   padded[(half + 1L):(half + nr), (half + 1L):(half + nc)] <- channel
   cum <- .cumsum2d(padded)
+  # Integral-image lookups: a row/column index of 0 falls outside the
+  # cumulative-sum array and contributes 0 to the windowed total.
+  cum_at <- function(r, c) {
+    if (r < 1L || c < 1L) return(0)
+    cum[r, c]
+  }
   local_mean <- matrix(0, nrow = nr, ncol = nc)
   for (i in seq_len(nr)) {
     for (j in seq_len(nc)) {
@@ -92,7 +98,8 @@
       c1 <- j
       r2 <- i + 2L * half
       c2 <- j + 2L * half
-      total <- cum[r2, c2] - cum[r1 - 1L, c2] - cum[r2, c1 - 1L] + cum[r1 - 1L, c1 - 1L]
+      total <- cum_at(r2, c2) - cum_at(r1 - 1L, c2) -
+        cum_at(r2, c1 - 1L) + cum_at(r1 - 1L, c1 - 1L)
       local_mean[i, j] <- total / (block_size * block_size)
     }
   }

@@ -1,3 +1,12 @@
+# segmantR (development version)
+
+## Bug fixes
+
+* `sg_segment_threshold(method = "adaptive")` no longer errors with
+  "replacement has length zero". The internal integral-image lookup now
+  treats out-of-range indices as contributing zero, so adaptive
+  thresholding works for all images.
+
 # segmantR 0.1.0
 
 * Initial release.
