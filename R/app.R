@@ -15,7 +15,7 @@
 #' @return `NULL`, invisibly.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' sg_run_app()
 #' }
 sg_run_app <- function(image = NULL, mask = NULL, port = NULL,

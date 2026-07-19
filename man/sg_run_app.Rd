@@ -25,7 +25,7 @@ annotation, and model training. The app is bundled under
 \verb{inst/shiny/segmantR/}.
 }
 \examples{
-\donttest{
+\dontrun{
 sg_run_app()
 }
 }
