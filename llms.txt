@@ -1,0 +1,97 @@
+# segmantR
+
+## Use of LLM tools
+
+Portions of this package were prepared with assistance from large
+language model tooling for narrowly defined, non-authorial tasks:
+copyediting, prose smoothing, Markdown/LaTeX formatting, scaffolding of
+boilerplate files (CI configs, build scripts), code refactoring. The
+tools used were [Chat
+AI](https://kisski.gwdg.de/leistungen/2-02-llm-service/), the LLM
+service of KISSKI (GWDG), and a self-hosted **Mistral Small (24B,
+Apache-2.0)** run locally via [Ollama](https://ollama.com/) and the
+`ollamar` R package — local inference only, with no data sent to third
+parties for the self-hosted model.
+
+All scientific claims, methodological choices, analyses,
+interpretations, and conclusions are the author’s own. No LLM-generated
+text was incorporated without review and revision, and every reference
+was verified against its DOI, arXiv ID, or ISBN.
+
+# Package index
+
+## All functions
+
+- [`example_images`](https://cttir.github.io/segmantR/reference/example_images.md)
+  : Example segmantR images
+- [`example_masks`](https://cttir.github.io/segmantR/reference/example_masks.md)
+  : Example segmantR masks
+- [`new_sg_image()`](https://cttir.github.io/segmantR/reference/new_sg_image.md)
+  : Create a new sg_image object
+- [`new_sg_mask()`](https://cttir.github.io/segmantR/reference/new_sg_mask.md)
+  : Create a new sg_mask object
+- [`new_sg_trained_model()`](https://cttir.github.io/segmantR/reference/new_sg_trained_model.md)
+  : Create a new sg_trained_model object
+- [`sg_active_learning_loop()`](https://cttir.github.io/segmantR/reference/sg_active_learning_loop.md)
+  : Run an active learning loop for iterative segmentation refinement
+- [`sg_apply_corrections()`](https://cttir.github.io/segmantR/reference/sg_apply_corrections.md)
+  : Apply manual corrections to a segmentation mask
+- [`sg_create_annotation_task()`](https://cttir.github.io/segmantR/reference/sg_create_annotation_task.md)
+  : Create an annotation task for human review
+- [`sg_evaluate_segmentation()`](https://cttir.github.io/segmantR/reference/sg_evaluate_segmentation.md)
+  : Evaluate segmentation quality
+- [`sg_example_image()`](https://cttir.github.io/segmantR/reference/sg_example_image.md)
+  : Load a bundled example image
+- [`sg_example_mask()`](https://cttir.github.io/segmantR/reference/sg_example_mask.md)
+  : Load a bundled example mask
+- [`sg_export_mask()`](https://cttir.github.io/segmantR/reference/sg_export_mask.md)
+  : Export mask to file
+- [`sg_extract_features()`](https://cttir.github.io/segmantR/reference/sg_extract_features.md)
+  : Extract per-cell features from an image and mask
+- [`sg_filter_cells()`](https://cttir.github.io/segmantR/reference/sg_filter_cells.md)
+  : Filter cells by morphological criteria
+- [`sg_load_model()`](https://cttir.github.io/segmantR/reference/sg_load_model.md)
+  : Load a packaged segmantR model
+- [`sg_mask_to_polygons()`](https://cttir.github.io/segmantR/reference/sg_mask_to_polygons.md)
+  : Convert mask to polygon geometries
+- [`sg_merge_masks()`](https://cttir.github.io/segmantR/reference/sg_merge_masks.md)
+  : Merge nuclear and cell body masks
+- [`sg_model_card()`](https://cttir.github.io/segmantR/reference/sg_model_card.md)
+  : Display a formatted model card
+- [`sg_package_model()`](https://cttir.github.io/segmantR/reference/sg_package_model.md)
+  : Package a trained model for sharing
+- [`sg_plot_comparison()`](https://cttir.github.io/segmantR/reference/sg_plot_comparison.md)
+  : Side-by-side comparison of two masks
+- [`sg_plot_features()`](https://cttir.github.io/segmantR/reference/sg_plot_features.md)
+  : Scatter plot of cell features
+- [`sg_plot_mask()`](https://cttir.github.io/segmantR/reference/sg_plot_mask.md)
+  : Render a mask as a coloured image
+- [`sg_plot_metrics()`](https://cttir.github.io/segmantR/reference/sg_plot_metrics.md)
+  : Bar chart of evaluation metrics
+- [`sg_plot_overlay()`](https://cttir.github.io/segmantR/reference/sg_plot_overlay.md)
+  : Overlay cell boundaries on an image
+- [`sg_preprocess()`](https://cttir.github.io/segmantR/reference/sg_preprocess.md)
+  : Preprocess an image
+- [`sg_read_image()`](https://cttir.github.io/segmantR/reference/sg_read_image.md)
+  : Read an image file
+- [`sg_run_app()`](https://cttir.github.io/segmantR/reference/sg_run_app.md)
+  : Launch the segmantR Shiny application
+- [`sg_segment_cellpose()`](https://cttir.github.io/segmantR/reference/sg_segment_cellpose.md)
+  : Cellpose cell segmentation
+- [`sg_segment_mesmer()`](https://cttir.github.io/segmantR/reference/sg_segment_mesmer.md)
+  : Mesmer (DeepCell) cell segmentation
+- [`sg_segment_propagate()`](https://cttir.github.io/segmantR/reference/sg_segment_propagate.md)
+  : Voronoi propagation from nuclear seeds
+- [`sg_segment_stardist()`](https://cttir.github.io/segmantR/reference/sg_segment_stardist.md)
+  : StarDist cell segmentation
+- [`sg_segment_threshold()`](https://cttir.github.io/segmantR/reference/sg_segment_threshold.md)
+  : Threshold-based cell segmentation
+- [`sg_segment_watershed()`](https://cttir.github.io/segmantR/reference/sg_segment_watershed.md)
+  : Marker-controlled watershed segmentation
+- [`sg_setup_python()`](https://cttir.github.io/segmantR/reference/sg_setup_python.md)
+  : Set up a Python environment for deep learning backends
+- [`sg_stain_deconvolve()`](https://cttir.github.io/segmantR/reference/sg_stain_deconvolve.md)
+  : Separate H&E stain channels by colour deconvolution
+- [`sg_train_cellpose()`](https://cttir.github.io/segmantR/reference/sg_train_cellpose.md)
+  : Fine-tune a Cellpose model on user-corrected masks
+
