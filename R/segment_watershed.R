@@ -156,7 +156,7 @@ sg_segment_propagate <- function(image,
   if (.check_ebimage() && is.null(membrane_image)) {
     ch <- .extract_channel(image, 1L)
     labels <- tryCatch({
-      eb_result <- EBImage::propagate(ch, seeds = seeds, lambda = lambda)
+      eb_result <- .ebimage_propagate(ch, seeds = seeds, lambda = lambda)
       eb_labels <- as.integer(EBImage::imageData(eb_result))
       dim(eb_labels) <- dim(seeds)
       eb_labels
@@ -206,6 +206,16 @@ sg_segment_propagate <- function(image,
 
 
 # ---- Internal helpers ---------------------------------------------------
+
+#' Thin wrapper around `EBImage::propagate()`
+#'
+#' Provides a mockable seam so tests can force the EBImage code path to fail
+#' and exercise the pure-R Voronoi fallback regardless of whether EBImage is
+#' installed.
+#' @noRd
+.ebimage_propagate <- function(x, seeds, lambda) {
+  EBImage::propagate(x, seeds = seeds, lambda = lambda)
+}
 
 #' Simple priority-free watershed (greedy flood fill from seeds)
 #' @noRd

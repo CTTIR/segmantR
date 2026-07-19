@@ -60,9 +60,14 @@ test_that("sg_segment_propagate uses a membrane image when provided", {
 })
 
 test_that("sg_segment_propagate falls back when EBImage::propagate fails", {
-  local_mocked_bindings(.check_ebimage = function() TRUE)
-  # EBImage is not installed, so EBImage::propagate() raises inside tryCatch
-  # and the pure-R Voronoi fallback is exercised.
+  # Force the EBImage code path, then make the propagate seam throw so the
+  # pure-R Voronoi fallback is exercised deterministically regardless of
+  # whether EBImage is installed (test-coverage installs it, R-CMD-check
+  # does not).
+  local_mocked_bindings(
+    .check_ebimage = function() TRUE,
+    .ebimage_propagate = function(...) stop("forced EBImage::propagate failure")
+  )
   set.seed(42)
   img <- new_sg_image(matrix(stats::runif(400), 20, 20))
   seeds <- matrix(0L, 20, 20); seeds[5, 5] <- 1L; seeds[15, 15] <- 2L
