@@ -1,5 +1,7 @@
 # segmantR
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21889962.svg)](https://doi.org/10.5281/zenodo.21889962)
+
 ## Use of LLM tools
 
 Portions of this package were prepared with assistance from large
@@ -17,3 +19,13 @@ All scientific claims, methodological choices, analyses,
 interpretations, and conclusions are the author’s own. No LLM-generated
 text was incorporated without review and revision, and every reference
 was verified against its DOI, arXiv ID, or ISBN.
+
+## Citation
+
+If you use this software, please cite it as:
+
+> Heller, R. (2026). *segmantR: Cell segmentation of histology slides
+> with human-in-the-loop training* (Version 0.1.0) \[Computer
+> software\]. Zenodo. <https://doi.org/10.5281/zenodo.21889962>
+
+DOI: [10.5281/zenodo.21889962](https://doi.org/10.5281/zenodo.21889962)
