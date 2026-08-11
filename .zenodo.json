@@ -1,0 +1,35 @@
+{
+  "upload_type": "software",
+  "title": "segmantR: Cell segmentation of histology slides with human-in-the-loop training",
+  "version": "0.1.0",
+  "publication_date": "2026-08-11",
+  "description": "<p>segmantR performs cell segmentation on histology and multiplexed tissue imaging data. It combines classical methods such as adaptive thresholding, watershed and Voronoi propagation with wrappers around deep learning segmentation models, and adds an iterative refinement workflow in which a human corrects model output and feeds those corrections back into training. An interactive application lets researchers annotate, correct, train, evaluate and download custom segmentation models without leaving R. It is intended for pathology and tissue imaging groups that need segmentation adapted to their own stains and tissue types rather than a fixed pretrained model.</p>",
+  "creators": [
+    {
+      "name": "Heller, Raban",
+      "orcid": "0000-0001-8006-9742"
+    }
+  ],
+  "contributors": [],
+  "license": "mit",
+  "access_right": "open",
+  "language": "eng",
+  "keywords": [
+    "cell-segmentation",
+    "histology",
+    "deep-learning",
+    "human-in-the-loop",
+    "tissue-imaging",
+    "r-package",
+    "rstats"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/CTTIR/segmantR",
+      "relation": "isSupplementTo",
+      "scheme": "url",
+      "resource_type": "software"
+    }
+  ],
+  "notes": "Prepared draft. Not yet published."
+}
