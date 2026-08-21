@@ -16,7 +16,7 @@
 #' @return Invisibly returns `TRUE` on success.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' sg_setup_python(backends = "cellpose")
 #' }
 sg_setup_python <- function(envname = "segmantr",

@@ -50,6 +50,10 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
+          # segmantR Suggests EBImage, simpleSeg, SingleCellExperiment and
+          # SummarizedExperiment. Without the Bioconductor repo, pak cannot
+          # solve them and the job dies before R CMD check ever starts.
+          extra-repositories: https://bioconductor.org/packages/release/bioc
 
       - name: Install Bioconductor Suggests (optional)
         run: |

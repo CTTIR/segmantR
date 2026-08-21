@@ -33,7 +33,7 @@ environment with the requested deep learning segmentation backends
 (Cellpose, StarDist) installed.
 }
 \examples{
-\donttest{
+\dontrun{
 sg_setup_python(backends = "cellpose")
 }
 }
