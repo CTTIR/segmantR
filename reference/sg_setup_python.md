@@ -44,14 +44,7 @@ Invisibly returns `TRUE` on success.
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 sg_setup_python(backends = "cellpose")
-#> ℹ Setting up Python environment "segmantr".
-#> ℹ Method: "auto", GPU: TRUE.
-#> + /usr/share/miniconda/bin/conda create --yes --name segmantr 'python=3.12' --quiet -c conda-forge
-#> ℹ Installing Python packages: "cellpose[gui]".
-#> + /usr/share/miniconda/bin/conda install --yes --name segmantr -c conda-forge 'cellpose[gui]'
-#> ✔ Python environment "segmantr" is ready.
-#> ℹ Use `reticulate::use_virtualenv('segmantr')` to activate.
-# }
+} # }
 ```
