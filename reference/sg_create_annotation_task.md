@@ -56,5 +56,5 @@ task <- sg_create_annotation_task(img, n_patches = 4L, patch_size = 32L)
 print(task)
 #> <sg_annotation_task>
 #> Patches: 4 (32 x 32 px)
-#> Created: 2026-08-21 19:51:34
+#> Created: 2026-08-22 13:08:29
 ```
