@@ -9,7 +9,11 @@ new_sg_trained_model(
   backend = c("cellpose", "stardist"),
   base_model,
   training_metrics,
-  model_card = list()
+  model_card = list(),
+  runtime = NULL,
+  dataset_manifest = NULL,
+  license = NULL,
+  representation = "unknown"
 )
 }
 \arguments{
@@ -24,7 +28,23 @@ new_sg_trained_model(
 number of epochs).}
 
 \item{model_card}{Named list of model card metadata (description, author,
-intended use, etc.).}
+intended use, etc.). The versioned card written by \code{\link[=sg_package_model]{sg_package_model()}}
+reads \code{purpose}, \code{data_domain}, \code{channels}, \code{target_pixel_size_um},
+\code{input_value_semantics}, \code{normalization}, \code{limitations} (character),
+\code{evaluation} (named list of metrics) and \code{license} from here.}
+
+\item{runtime}{Optional runtime description (list) recorded at training
+time; never a copy of a Python environment.}
+
+\item{dataset_manifest}{Optional \code{sg_dataset_manifest} the model was
+trained on.}
+
+\item{license}{Optional list with \code{id} (e.g. an SPDX identifier), \code{name},
+\code{source} and \code{text}.}
+
+\item{representation}{Weight representation: \code{"pb"}, \code{"savedmodel"},
+\code{"bioimageio"}, \code{"pytorch"}, \code{"keras"}, \code{"directory"}, \code{"file"} or
+\code{"unknown"}.}
 }
 \value{
 An object of class \code{sg_trained_model}.

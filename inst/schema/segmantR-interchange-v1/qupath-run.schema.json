@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/qupath-run.schema.json",
+  "title": "segmantR QuPath run description (run.json)",
+  "description": "Declarative input for the segmantR Groovy templates. All paths are relative to the directory containing run.json; the templates resolve and check them before use and write only according to save_policy.",
+  "type": "object",
+  "required": ["schema", "schema_version", "run_id", "created", "producer",
+               "task", "template_version", "qupath", "image_binding",
+               "region_policy", "save_policy", "outputs", "expected_files",
+               "unsupported", "extensions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "segmantR-qupath-run-v1"},
+    "schema_version": {"$ref": "common.schema.json#/definitions/semver_v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "created": {"$ref": "common.schema.json#/definitions/timestamp"},
+    "producer": {"$ref": "common.schema.json#/definitions/producer"},
+    "task": {"enum": ["stardist", "import", "export"]},
+    "template_version": {"$ref": "common.schema.json#/definitions/semver"},
+    "qupath": {
+      "type": "object",
+      "required": ["min_version", "tested_version", "extension"],
+      "additionalProperties": false,
+      "properties": {
+        "min_version": {"$ref": "common.schema.json#/definitions/semver"},
+        "tested_version": {"type": ["string", "null"]},
+        "extension": {
+          "type": ["object", "null"],
+          "required": ["name", "min_version", "tested_version"],
+          "additionalProperties": false,
+          "properties": {
+            "name": {"const": "qupath-extension-stardist"},
+            "min_version": {"$ref": "common.schema.json#/definitions/semver"},
+            "tested_version": {"type": ["string", "null"]}
+          }
+        }
+      }
+    },
+    "image_binding": {
+      "type": "object",
+      "required": ["image_name", "image_id", "width", "height",
+                   "pixel_size_um", "plane", "channels", "require_calibration"],
+      "additionalProperties": false,
+      "properties": {
+        "image_name": {"type": ["string", "null"]},
+        "image_id": {"type": ["string", "null"]},
+        "width": {"type": ["integer", "null"], "minimum": 1},
+        "height": {"type": ["integer", "null"], "minimum": 1},
+        "pixel_size_um": {
+          "type": ["object", "null"],
+          "required": ["x", "y"],
+          "additionalProperties": false,
+          "properties": {
+            "x": {"type": "number", "exclusiveMinimum": 0},
+            "y": {"type": "number", "exclusiveMinimum": 0},
+            "tolerance": {"type": "number", "minimum": 0}
+          }
+        },
+        "plane": {"$ref": "common.schema.json#/definitions/plane"},
+        "channels": {"type": ["array", "null"], "items": {"type": "string"}},
+        "require_calibration": {"type": "boolean"}
+      }
+    },
+    "protocol": {"oneOf": [{"$ref": "common.schema.json#/definitions/protocol_ref"}, {"type": "null"}]},
+    "parameters_digest": {"$ref": "common.schema.json#/definitions/nullable_digest"},
+    "stardist": {
+      "type": ["object", "null"],
+      "required": ["model", "threshold", "channels", "normalization",
+                   "pixel_size_um", "tile_size", "include_probability",
+                   "cell_expansion_um", "cell_constrain_scale",
+                   "create_annotations", "classification", "measure_shape",
+                   "measure_intensity", "n_threads"],
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "type": "object",
+          "required": ["path", "representation", "digest"],
+          "additionalProperties": false,
+          "properties": {
+            "path": {"$ref": "common.schema.json#/definitions/relpath"},
+            "representation": {"enum": ["pb", "savedmodel", "bioimageio", "directory", "file", "unknown"]},
+            "digest": {"$ref": "common.schema.json#/definitions/digest"}
+          }
+        },
+        "threshold": {"type": "number", "minimum": 0, "maximum": 1},
+        "channels": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": ["string", "integer"]}
+        },
+        "normalization": {
+          "type": "object",
+          "required": ["scope", "low", "high", "max_dimension"],
+          "additionalProperties": false,
+          "properties": {
+            "scope": {"enum": ["tile", "global"]},
+            "low": {"type": "number", "minimum": 0, "maximum": 100},
+            "high": {"type": "number", "minimum": 0, "maximum": 100},
+            "max_dimension": {"type": ["integer", "null"], "minimum": 1}
+          }
+        },
+        "pixel_size_um": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "tile_size": {"type": ["integer", "null"], "minimum": 64},
+        "include_probability": {"type": "boolean"},
+        "cell_expansion_um": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "cell_constrain_scale": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "create_annotations": {"type": "boolean"},
+        "classification": {"type": ["string", "null"]},
+        "measure_shape": {"type": "boolean"},
+        "measure_intensity": {"type": "boolean"},
+        "n_threads": {"type": "integer", "minimum": 1}
+      }
+    },
+    "import": {
+      "type": ["object", "null"],
+      "required": ["manifest", "geojson", "geojson_sha256", "object_type"],
+      "additionalProperties": false,
+      "properties": {
+        "manifest": {"$ref": "common.schema.json#/definitions/relpath"},
+        "geojson": {"$ref": "common.schema.json#/definitions/relpath"},
+        "geojson_sha256": {"$ref": "common.schema.json#/definitions/sha256_hex"},
+        "object_type": {"enum": ["detection", "annotation", "cell"]},
+        "replace_existing": {"type": "boolean"}
+      }
+    },
+    "unsupported": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["parameter", "status", "note"],
+        "additionalProperties": false,
+        "properties": {
+          "parameter": {"type": "string"},
+          "status": {"enum": ["unsupported", "approximated", "not_applicable"]},
+          "note": {"type": "string"}
+        }
+      }
+    },
+    "region_policy": {"enum": ["whole_image", "selected_annotations", "all_annotations"]},
+    "save_policy": {"enum": ["none", "project"]},
+    "outputs": {
+      "type": "object",
+      "required": ["directory", "geojson", "mask_tiff", "measurements", "manifest"],
+      "additionalProperties": false,
+      "properties": {
+        "directory": {"$ref": "common.schema.json#/definitions/relpath"},
+        "geojson": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9_.-]+$"},
+        "mask_tiff": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9_.-]+$"},
+        "measurements": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9_.-]+$"},
+        "native_measurements": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9_.-]+$"},
+        "manifest": {"const": "manifest.json"},
+        "object_types": {"type": "array", "items": {"enum": ["detection", "annotation", "cell"]}}
+      }
+    },
+    "expected_files": {
+      "type": "array",
+      "items": {"$ref": "common.schema.json#/definitions/relpath"}
+    },
+    "extensions": {"$ref": "common.schema.json#/definitions/extensions"}
+  }
+}

@@ -21,8 +21,14 @@ sg_run_app(image = NULL, mask = NULL, port = NULL, launch.browser = TRUE)
 }
 \description{
 Starts the interactive Shiny application for cell segmentation,
-annotation, and model training. The app is bundled under
-\verb{inst/shiny/segmantR/}.
+annotation, and model training. The app is built by \code{\link[=sg_app]{sg_app()}} from
+package code; \code{inst/shiny/segmantR/app.R} is a thin wrapper for
+\code{shiny::runApp()} on the installed directory.
+}
+\details{
+For compatibility with code that starts the bundled app directory
+directly, the pre-loaded objects are also stored in the option
+\code{segmantR.app_env}; \code{\link[=sg_app]{sg_app()}} itself does not use options.
 }
 \examples{
 \dontrun{

@@ -180,18 +180,21 @@ sg_segment_cellpose <- function(image,
   ch_list <- as.integer(c(channels$cytoplasm %||% 0L,
                           channels$nucleus %||% 0L))
 
-  # Run evaluation
+  # Run evaluation. Cellpose >= 3 removed the `tile` argument (it always
+  # tiles internally); pass it only when the installed eval() accepts it.
+  eval_args <- list(
+    np_image,
+    diameter = diameter,
+    channels = ch_list,
+    flow_threshold = flow_threshold,
+    cellprob_threshold = cellprob_threshold,
+    batch_size = batch_size,
+    do_3D = FALSE
+  )
+  accepts_tile <- .sg_py_accepts_arg(cp_model$eval, "tile")
+  if (accepts_tile) eval_args$tile <- tile
   result <- tryCatch({
-    cp_model$eval(
-      np_image,
-      diameter = diameter,
-      channels = ch_list,
-      flow_threshold = flow_threshold,
-      cellprob_threshold = cellprob_threshold,
-      batch_size = batch_size,
-      do_3D = FALSE,
-      tile = tile
-    )
+    do.call(cp_model$eval, eval_args)
   }, error = function(e) {
     cli::cli_abort(c(
       "Cellpose evaluation failed.",
@@ -210,7 +213,9 @@ sg_segment_cellpose <- function(image,
     method = paste0("cellpose:", model),
     diameter = diameter,
     flow_threshold = flow_threshold,
-    cellprob_threshold = cellprob_threshold
+    cellprob_threshold = cellprob_threshold,
+    tile = if (accepts_tile) tile else
+      "not an eval() argument in this Cellpose version (tiles internally)"
   ))
 
   n_cells <- mask$n_cells
@@ -223,6 +228,18 @@ sg_segment_cellpose <- function(image,
 
 
 # ---- Internal helpers ---------------------------------------------------
+
+#' Does a Python callable accept a keyword argument?
+#' @noRd
+.sg_py_accepts_arg <- function(fn, arg) {
+  tryCatch({
+    inspect <- reticulate::import("inspect", convert = FALSE)
+    sig <- inspect$signature(fn)
+    keys <- reticulate::py_to_r(reticulate::import_builtins()$list(
+      sig$parameters$keys()))
+    arg %in% unlist(keys)
+  }, error = function(e) TRUE)
+}
 
 #' Check if GPU is available for Cellpose
 #' @noRd

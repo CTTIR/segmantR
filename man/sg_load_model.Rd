@@ -4,10 +4,15 @@
 \alias{sg_load_model}
 \title{Load a packaged segmantR model}
 \usage{
-sg_load_model(path)
+sg_load_model(path, expected_digest = NULL, allow_legacy = TRUE)
 }
 \arguments{
 \item{path}{Character. Path to the \code{.segmantR} archive file.}
+
+\item{expected_digest}{Optional \code{"sha256:<hex>"} digest of the archive's
+\code{checksums.sha256} content (reported as \code{bundle_digest}).}
+
+\item{allow_legacy}{Logical; accept archives without checksums.}
 }
 \value{
 An \code{sg_trained_model} object.
@@ -15,6 +20,14 @@ An \code{sg_trained_model} object.
 \description{
 Reads a \code{.segmantR} archive created by \code{\link[=sg_package_model]{sg_package_model()}} and
 returns an \code{sg_trained_model} object.
+}
+\details{
+Before extracting, entry names are checked (no absolute paths, parent
+segments, backslashes or drive letters; entry count and total size
+limits). After extraction, symbolic links are rejected, \code{checksums.sha256}
+is verified (missing, extra or modified files are errors), the model card
+schema and major version and the backend are checked. Archives written by
+segmantR 0.1.0 have no checksums; they load with \code{integrity = "unverified"} unless \code{allow_legacy = FALSE}.
 }
 \examples{
 \donttest{

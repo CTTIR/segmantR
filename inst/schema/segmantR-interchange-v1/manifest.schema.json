@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/manifest.schema.json",
+  "title": "segmantR interchange manifest",
+  "description": "Envelope shared by JSON, GeoJSON, integer TIFF/OME-TIFF, CSV/Parquet and RDS representations of an image, mask, segmentation run or QuPath export. Asset paths are relative to the manifest directory.",
+  "type": "object",
+  "required": ["schema", "schema_version", "kind", "id", "created", "producer",
+               "coordinate_convention", "assets", "conversions", "extensions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "segmantR-interchange-v1"},
+    "schema_version": {"$ref": "common.schema.json#/definitions/semver_v1"},
+    "kind": {"enum": ["image", "mask", "segmentation-run", "measurements",
+                      "qupath-export", "training-dataset", "model"]},
+    "id": {"type": "string", "minLength": 1},
+    "created": {"$ref": "common.schema.json#/definitions/timestamp"},
+    "producer": {"$ref": "common.schema.json#/definitions/producer"},
+    "coordinate_convention": {"$ref": "common.schema.json#/definitions/coordinate_convention"},
+    "image": {"$ref": "image.schema.json"},
+    "mask": {"$ref": "mask.schema.json"},
+    "protocol": {
+      "oneOf": [
+        {"$ref": "common.schema.json#/definitions/protocol_ref"},
+        {"type": "null"}
+      ]
+    },
+    "run": {"$ref": "run.schema.json"},
+    "measurements": {
+      "type": ["object", "null"],
+      "required": ["n_rows", "namespace", "columns"],
+      "additionalProperties": false,
+      "properties": {
+        "n_rows": {"type": "integer", "minimum": 0},
+        "namespace": {"enum": ["stored", "dynamic", "derived", "mixed"]},
+        "columns": {"type": "array", "items": {"type": "string"}},
+        "names": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "runtime": {"$ref": "runtime.schema.json"},
+    "assets": {
+      "type": "array",
+      "items": {"$ref": "common.schema.json#/definitions/asset"}
+    },
+    "conversions": {
+      "type": "array",
+      "items": {"$ref": "common.schema.json#/definitions/conversion"}
+    },
+    "integrity_file": {"const": "integrity.json"},
+    "extensions": {"$ref": "common.schema.json#/definitions/extensions"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"kind": {"enum": ["mask", "segmentation-run", "qupath-export"]}}},
+      "then": {"required": ["mask"]}
+    },
+    {
+      "if": {"properties": {"kind": {"const": "segmentation-run"}}},
+      "then": {"required": ["run", "protocol"]}
+    }
+  ]
+}

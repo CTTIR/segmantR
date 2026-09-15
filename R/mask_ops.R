@@ -96,8 +96,10 @@ sg_filter_cells <- function(mask, min_area = 50L, max_area = 5000L,
     "i" = "Removed {n_removed} cell{?s} by morphological filtering."
   ))
 
-  result <- new_sg_mask(new_labels, image_id = mask$image_id,
-                        model_info = mask$model_info)
+  result <- .sg_mask_derive(mask, new_labels,
+                            label_map = stats::setNames(seq_along(keep_ids),
+                                                        keep_ids),
+                            operation = "filter_cells")
   if (border_cells == "flag") {
     result$border_cell_ids <- flagged_ids
   }

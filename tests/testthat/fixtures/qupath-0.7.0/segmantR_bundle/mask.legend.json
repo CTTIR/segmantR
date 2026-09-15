@@ -1,0 +1,98 @@
+{
+  "background": 0,
+  "entries": [
+    {
+      "class": null,
+      "label": 1,
+      "name": null,
+      "object_id": "1b919ddc-4f83-8ce5-99df-c257a38b6764"
+    },
+    {
+      "class": null,
+      "label": 2,
+      "name": null,
+      "object_id": "81748058-330d-87cd-929e-882543905b7c"
+    },
+    {
+      "class": null,
+      "label": 3,
+      "name": null,
+      "object_id": "b7a4ea32-4965-8ca8-a877-31d693cd2714"
+    },
+    {
+      "class": null,
+      "label": 4,
+      "name": null,
+      "object_id": "e7e59b1c-0155-891d-ab2a-38c47e06098a"
+    },
+    {
+      "class": null,
+      "label": 5,
+      "name": null,
+      "object_id": "15ead2c2-a0d5-8bd1-a006-dbf71688e286"
+    },
+    {
+      "class": null,
+      "label": 6,
+      "name": null,
+      "object_id": "bdefb0f9-8bfe-84ed-bbda-cbe7e870c617"
+    },
+    {
+      "class": null,
+      "label": 7,
+      "name": null,
+      "object_id": "083e8538-a81a-8dec-8d9a-5c045d596643"
+    },
+    {
+      "class": null,
+      "label": 8,
+      "name": null,
+      "object_id": "0b3b4fc1-d6fa-808d-b0fd-b9f214b04555"
+    },
+    {
+      "class": null,
+      "label": 9,
+      "name": null,
+      "object_id": "00b33acd-2d42-8d16-b5ed-35981317a33a"
+    },
+    {
+      "class": null,
+      "label": 10,
+      "name": null,
+      "object_id": "011b9ad4-88c9-80f1-92c1-cb519568884d"
+    },
+    {
+      "class": null,
+      "label": 11,
+      "name": null,
+      "object_id": "8967eb00-af32-8099-81d6-21f30530108a"
+    },
+    {
+      "class": null,
+      "label": 12,
+      "name": null,
+      "object_id": "43e6c571-8616-8641-b4bd-3ecb19131886"
+    },
+    {
+      "class": null,
+      "label": 13,
+      "name": null,
+      "object_id": "59093553-1c96-820a-80c8-1edcbdb87df2"
+    },
+    {
+      "class": null,
+      "label": 14,
+      "name": null,
+      "object_id": "4fac76d7-62ba-836c-a628-104397b9fcbe"
+    }
+  ],
+  "extensions": {
+
+  },
+  "image_id": "nuclei",
+  "kind": "legend",
+  "mask_type": "instance",
+  "schema": "segmantR-interchange-v1",
+  "schema_version": "1.0.0"
+}
+

@@ -1,0 +1,46 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "a-0001",
+      "geometry": {"type": "Polygon", "coordinates": [[[1, 1], [3, 1], [3, 3], [1, 3], [1, 1]]]},
+      "properties": {"objectType": "detection", "classification": {"name": "Tumor"},
+                     "measurements": {"Area px": 4, "Mean": 0.5}}
+    },
+    {
+      "type": "Feature",
+      "id": "b-0002",
+      "geometry": {"type": "Polygon", "coordinates": [[[4, 0], [8, 0], [8, 4], [7, 4], [7, 1], [4, 1], [4, 0]]]},
+      "properties": {"objectType": "detection", "classification": {"name": "Stroma"},
+                     "measurements": [{"name": "Area px", "value": 7}]}
+    },
+    {
+      "type": "Feature",
+      "id": "c-0003",
+      "geometry": {"type": "Polygon", "coordinates": [
+        [[0, 5], [3, 5], [3, 8], [0, 8], [0, 5]],
+        [[1, 6], [1, 7], [2, 7], [2, 6], [1, 6]]
+      ]},
+      "properties": {"objectType": "detection"}
+    },
+    {
+      "type": "Feature",
+      "id": "d-0004",
+      "geometry": {"type": "Polygon", "coordinates": [[[4.2, 5.1], [7.9, 5.1], [7.9, 7.9], [4.2, 5.1]]]},
+      "properties": {"objectType": "detection"}
+    },
+    {
+      "type": "Feature",
+      "id": "e-0005",
+      "geometry": {"type": "Point", "coordinates": [5.5, 3.5]},
+      "properties": {"objectType": "annotation"}
+    },
+    {
+      "type": "Feature",
+      "id": "f-0006",
+      "geometry": {"type": "LineString", "coordinates": [[0, 0], [2, 4]]},
+      "properties": {"objectType": "annotation"}
+    }
+  ]
+}

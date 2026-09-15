@@ -1,0 +1,167 @@
+{
+  "description": "Delegates to sg_segment_mesmer() on a two-channel image built from nuclear_channel and membrane_channel. Unlike the direct function the protocol never assumes 0.5 um/px: the image must be calibrated or image_mpp must be given. Predictions are staged for review.",
+  "extensions": {
+
+  },
+  "family": "dnn",
+  "id": "mesmer.2d.v1",
+  "input_contract": {
+    "array_order": "y,x,channel",
+    "calibration": {
+      "parameters": [
+        "image_mpp"
+      ],
+      "required": "always"
+    },
+    "channel": {
+      "min_channels": 2,
+      "operation": "pair",
+      "parameters": [
+        "nuclear_channel",
+        "membrane_channel"
+      ]
+    },
+    "inputs": [
+      {
+        "description": "Image providing the segmentation channel.",
+        "required": true,
+        "role": "image",
+        "type": "sg_image"
+      }
+    ],
+    "min_shape_yx": [
+      16,
+      16
+    ],
+    "value_range": {
+      "max": null,
+      "min": null,
+      "policy": "observed"
+    },
+    "value_semantics": [
+      "unknown",
+      "intensity",
+      "raw"
+    ]
+  },
+  "method": {
+    "backend": "python-deepcell",
+    "delegate": "sg_segment_mesmer",
+    "mapping": {
+      "compartment": "compartment",
+      "image_mpp": "image_mpp",
+      "membrane_channel": null,
+      "nuclear_channel": null
+    }
+  },
+  "output_contract": {
+    "background": 0,
+    "connectivity": null,
+    "dtype": "int32",
+    "label_order": "backend",
+    "mask_type": "instance",
+    "measurements": [
+      "area",
+      "centroid",
+      "bbox",
+      "mean_intensity"
+    ],
+    "status": "staged"
+  },
+  "parameters": {
+    "compartment": {
+      "default": "whole-cell",
+      "description": "Compartment to segment.",
+      "enum": [
+        "whole-cell",
+        "nuclear"
+      ],
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "none"
+    },
+    "image_mpp": {
+      "default": null,
+      "description": "Pixel size in um; null = take it from the image resolution (required).",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": true,
+      "type": "number",
+      "unit": "um"
+    },
+    "membrane_channel": {
+      "default": 2,
+      "description": "1-based membrane/cytoplasm channel.",
+      "minimum": 1,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "index"
+    },
+    "nuclear_channel": {
+      "default": 1,
+      "description": "1-based nuclear channel.",
+      "minimum": 1,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "index"
+    }
+  },
+  "postprocess": {
+    "steps": [
+
+    ]
+  },
+  "preprocess": {
+    "normalization": {
+      "clip": false,
+      "high": null,
+      "low": null,
+      "method": "percentile",
+      "note": "Performed inside Mesmer.",
+      "scope": "global"
+    },
+    "resample": "backend",
+    "target_pixel_size_um": 0.5
+  },
+  "provenance_policy": {
+    "hash": "sha256",
+    "record": [
+      "protocol_digest",
+      "parameters_digest",
+      "input_digests",
+      "runtime",
+      "delegate_call",
+      "mask_revision",
+      "measurements_digest"
+    ]
+  },
+  "runtime_profile": {
+    "gpu": "optional",
+    "install_hint": "Install the Python package 'deepcell' and make it visible to reticulate.",
+    "language": "R",
+    "python_modules": [
+      "deepcell"
+    ],
+    "qupath": null,
+    "r_packages": [
+      "reticulate"
+    ],
+    "requires_python": true
+  },
+  "schema": "segmantR-protocol-v1",
+  "seed_policy": {
+    "note": "Inference with fixed weights is deterministic on CPU; GPU kernels may introduce small differences.",
+    "policy": "backend",
+    "seed": null
+  },
+  "tiling": {
+    "max_pixels": null,
+    "mode": "backend",
+    "note": "Mesmer tiles internally (512 px tiles).",
+    "overlap": null,
+    "tile_size": 512
+  },
+  "title": "Mesmer (DeepCell) whole-cell or nuclear segmentation (optional backend)",
+  "version": "1.0.0"
+}
+

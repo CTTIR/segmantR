@@ -1,0 +1,83 @@
+{
+ "numbers": {
+  "value": [
+   0,
+   1,
+   -1,
+   0.1,
+   0.5,
+   1.5,
+   1e-7,
+   0.000001,
+   0.0000015,
+   123456.789,
+   1e+21,
+   100000000000000000000,
+   2.5e+300,
+   -0.000123,
+   5e-324,
+   0.30000000000000004
+  ],
+  "canonical": "[0,1,-1,0.1,0.5,1.5,1e-7,0.000001,0.0000015,123456.789,1e+21,100000000000000000000,2.5e+300,-0.000123,5e-324,0.30000000000000004]",
+  "sha256": "846f8a67ab0ebeb52310be98c211c57deb526efcb462006085bc74ceeb69ec38"
+ },
+ "strings": {
+  "value": [
+   "plain",
+   "quote\"back\\slash",
+   "tab\tnew\nline",
+   "ctl\u0001\u001f",
+   "µm² unicode",
+   "slash/kept"
+  ],
+  "canonical": "[\"plain\",\"quote\\\"back\\\\slash\",\"tab\\tnew\\nline\",\"ctl\\u0001\\u001f\",\"µm² unicode\",\"slash/kept\"]",
+  "sha256": "eaa37eed9d6a98744fdce8b219ed653aee839931cc19a09bf300e3a42b8397f5"
+ },
+ "object": {
+  "value": {
+   "b": 1,
+   "a": [
+    true,
+    false,
+    null
+   ],
+   "Z": {
+    "y": 2,
+    "x": "1"
+   },
+   "ä": 0.25
+  },
+  "canonical": "{\"Z\":{\"x\":\"1\",\"y\":2},\"a\":[true,false,null],\"b\":1,\"ä\":0.25}",
+  "sha256": "084065e07c8dabc702aa852ab547f919f79e12a8ed5e834b54ba71895c5d6779"
+ },
+ "integrity": {
+  "value": {
+   "format_version": "1.0",
+   "files": [
+    {
+     "path": "manifest.json",
+     "size_bytes": 1234,
+     "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+     "path": "mask.tif",
+     "size_bytes": 99,
+     "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+   ]
+  },
+  "canonical": "{\"files\":[{\"path\":\"manifest.json\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"size_bytes\":1234},{\"path\":\"mask.tif\",\"sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"size_bytes\":99}],\"format_version\":\"1.0\"}",
+  "sha256": "69b1736404bdccdf6e8c19fa0a3011fb36d4c860c973d6cb59acfcd968bb453b"
+ },
+ "empty": {
+  "value": {
+   "o": {},
+   "a": []
+  },
+  "canonical": "{\"a\":[],\"o\":{}}",
+  "sha256": "9bee7ebfc94b459dacb8cbc72cb2900e61f0aa42189df18329f84f92568f4f89"
+ },
+ "_generator": {
+  "node": "v24.19.0"
+ }
+}

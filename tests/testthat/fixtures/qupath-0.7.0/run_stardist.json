@@ -1,0 +1,109 @@
+{
+  "created": "2026-09-14T21:14:40Z",
+  "expected_files": [
+    "out/manifest.json",
+    "out/integrity.json"
+  ],
+  "extensions": {
+    "detected_qupath": "0.7.0",
+    "detected_stardist_extension": "0.6.0"
+  },
+  "image_binding": {
+    "channels": [
+      "DAPI"
+    ],
+    "height": 96,
+    "image_id": "nuclei",
+    "image_name": "nuclei.ome.tif",
+    "pixel_size_um": {
+      "tolerance": 0.000001,
+      "x": 0.5,
+      "y": 0.5
+    },
+    "plane": {
+      "c": null,
+      "level": 0,
+      "series": 0,
+      "t": 0,
+      "z": 0
+    },
+    "require_calibration": true,
+    "width": 128
+  },
+  "import": null,
+  "outputs": {
+    "directory": "out",
+    "geojson": "objects.geojson",
+    "manifest": "manifest.json",
+    "mask_tiff": "mask.tif",
+    "measurements": "measurements.csv",
+    "native_measurements": "qupath_detections.tsv",
+    "object_types": [
+      "detection"
+    ]
+  },
+  "parameters_digest": "sha256:a7159d4a49201aa3a739a6dcd6d972ce1ecc4a617434729fb356a4c2dbbe923c",
+  "producer": {
+    "api_version": "1.0.0",
+    "dirty": "unknown",
+    "name": "segmantR",
+    "source_revision": "87b524a6eabba5062f6f4d98b7ba98ca5dc8c26d",
+    "version": "0.1.0.9000"
+  },
+  "protocol": {
+    "digest": "sha256:136dc870c8bd8c8c8c652ff6799233ab6ff65dfc26c0fa71a849dff7ad9254fc",
+    "id": "stardist.2d.v1",
+    "version": "1.0.0"
+  },
+  "qupath": {
+    "extension": {
+      "min_version": "0.5.0",
+      "name": "qupath-extension-stardist",
+      "tested_version": null
+    },
+    "min_version": "0.5.0",
+    "tested_version": null
+  },
+  "region_policy": "whole_image",
+  "run_id": "c9ca99a0-8e46-8127-9cca-93ee8d3508d9",
+  "save_policy": "project",
+  "schema": "segmantR-qupath-run-v1",
+  "schema_version": "1.0.0",
+  "stardist": {
+    "cell_constrain_scale": null,
+    "cell_expansion_um": null,
+    "channels": [
+      "DAPI"
+    ],
+    "classification": "Nucleus",
+    "create_annotations": false,
+    "include_probability": true,
+    "measure_intensity": true,
+    "measure_shape": true,
+    "model": {
+      "digest": "sha256:63758042981a73982f26b84c8c0b92aaabc447057ca8209bf1b12509289b47ee",
+      "path": "models/dsb2018_heavy_augment.pb",
+      "representation": "pb"
+    },
+    "n_threads": 1,
+    "normalization": {
+      "high": 99,
+      "low": 1,
+      "max_dimension": null,
+      "scope": "tile"
+    },
+    "pixel_size_um": 0.5,
+    "threshold": 0.5,
+    "tile_size": null
+  },
+  "task": "stardist",
+  "template_version": "1.0.0",
+  "unsupported": [
+    {
+      "note": "The extension has no NMS threshold option; it resolves overlaps itself.",
+      "parameter": "nms_thresh",
+      "status": "approximated"
+    }
+  ]
+}
+

@@ -1,0 +1,200 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/common.schema.json",
+  "title": "segmantR interchange v1: shared definitions",
+  "definitions": {
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$"
+    },
+    "semver_v1": {
+      "type": "string",
+      "pattern": "^1\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "sha256_hex": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "nullable_digest": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "relpath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![/~])(?![A-Za-z]:)(?!.*\\\\)(?!(.*/)?\\.\\.?(/|$))(?!.*//)[^\\x00-\\x1f]+(?<!/)$"
+    },
+    "basename": {"type": "string", "minLength": 1, "pattern": "^[^/\\\\]+$"},
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+    },
+    "nonneg_int": {"type": "integer", "minimum": 0},
+    "shape_yx": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 1},
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "plane": {
+      "type": "object",
+      "description": "Zero-based image plane; c = null means all channels.",
+      "required": ["level", "series", "c", "z", "t"],
+      "additionalProperties": false,
+      "properties": {
+        "level": {"type": "integer", "minimum": 0},
+        "series": {"type": "integer", "minimum": 0},
+        "c": {"type": ["integer", "null"], "minimum": 0},
+        "z": {"type": "integer", "minimum": 0},
+        "t": {"type": "integer", "minimum": 0}
+      }
+    },
+    "origin": {
+      "type": "object",
+      "description": "Top-left corner of the array in full-resolution pixel coordinates; downsample = full-resolution pixels per array pixel.",
+      "required": ["x", "y", "downsample"],
+      "additionalProperties": false,
+      "properties": {
+        "x": {"type": ["number", "null"]},
+        "y": {"type": ["number", "null"]},
+        "downsample": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "pixel_size": {
+      "type": "object",
+      "required": ["x", "y", "unit"],
+      "additionalProperties": false,
+      "properties": {
+        "x": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "y": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "unit": {"enum": ["um"]}
+      }
+    },
+    "coordinate_convention": {
+      "type": "object",
+      "required": ["origin", "x_axis", "y_axis", "units", "pixel_centre",
+                   "array_order", "plane_index_base"],
+      "additionalProperties": false,
+      "properties": {
+        "origin": {"const": "top_left"},
+        "x_axis": {"const": "right"},
+        "y_axis": {"const": "down"},
+        "units": {"const": "px"},
+        "pixel_centre": {"const": "half_integer"},
+        "array_order": {"const": "y,x,channel"},
+        "plane_index_base": {"const": 0}
+      }
+    },
+    "value_semantics": {
+      "enum": ["unknown", "intensity", "raw", "reflectance", "radiance",
+               "absorbance", "probability"]
+    },
+    "band": {
+      "type": "object",
+      "required": ["c", "name", "wavelength_nm", "fwhm_nm"],
+      "additionalProperties": false,
+      "properties": {
+        "c": {"type": "integer", "minimum": 0},
+        "name": {"type": ["string", "null"]},
+        "wavelength_nm": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "fwhm_nm": {"type": ["number", "null"], "exclusiveMinimum": 0}
+      }
+    },
+    "asset": {
+      "type": "object",
+      "required": ["role", "path", "media_type", "size_bytes", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "role": {
+          "enum": ["manifest", "image_tiff", "mask_tiff", "legend", "geojson",
+                   "qupath_geojson", "measurements_csv", "measurements_parquet",
+                   "rds", "run", "groovy", "model_weights", "model_card",
+                   "runtime", "dataset_manifest", "license", "tile_image",
+                   "tile_mask", "other"]
+        },
+        "path": {"$ref": "#/definitions/relpath"},
+        "media_type": {"type": "string", "minLength": 1},
+        "size_bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/definitions/sha256_hex"}
+      }
+    },
+    "producer": {
+      "type": "object",
+      "required": ["name", "version", "api_version", "source_revision"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string"},
+        "api_version": {"$ref": "#/definitions/semver"},
+        "source_revision": {"type": ["string", "null"]},
+        "dirty": {"enum": ["true", "false", "unknown"]}
+      }
+    },
+    "legend_entry": {
+      "type": "object",
+      "required": ["label", "object_id", "class", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "label": {"type": "integer", "minimum": 1},
+        "object_id": {"type": ["string", "null"], "minLength": 1},
+        "class": {"type": ["string", "null"]},
+        "name": {"type": ["string", "null"]}
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["status", "revision", "parent_revision"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {"enum": ["draft", "staged", "reviewed"]},
+        "revision": {"$ref": "#/definitions/nullable_digest"},
+        "reviewed_revision": {"$ref": "#/definitions/nullable_digest"},
+        "parent_revision": {"$ref": "#/definitions/nullable_digest"},
+        "reviewed_at": {"type": ["string", "null"]},
+        "reviewer": {"type": ["string", "null"]}
+      }
+    },
+    "protocol_ref": {
+      "type": "object",
+      "required": ["id", "version", "digest"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*(\\.[a-z0-9_-]+)*\\.v[0-9]+$"},
+        "version": {"$ref": "#/definitions/semver"},
+        "digest": {"$ref": "#/definitions/digest"}
+      }
+    },
+    "value_state": {"enum": ["finite", "missing", "nan", "pos_inf", "neg_inf"]},
+    "measurement_record": {
+      "type": "object",
+      "required": ["image_id", "object_id", "label", "name", "namespace",
+                   "value", "value_state", "unit", "provider_id"],
+      "additionalProperties": false,
+      "properties": {
+        "image_id": {"type": ["string", "null"]},
+        "object_id": {"type": ["string", "null"]},
+        "label": {"type": ["integer", "null"], "minimum": 1},
+        "name": {"type": "string", "minLength": 1},
+        "namespace": {"enum": ["stored", "dynamic", "derived"]},
+        "value": {"type": ["number", "null"]},
+        "value_state": {"$ref": "#/definitions/value_state"},
+        "unit": {"type": "string"},
+        "provider_id": {"type": "string"}
+      },
+      "if": {"properties": {"value_state": {"const": "finite"}}},
+      "then": {"properties": {"value": {"type": "number"}}},
+      "else": {"properties": {"value": {"type": "null"}}}
+    },
+    "conversion": {
+      "type": "object",
+      "required": ["from", "to", "fidelity"],
+      "additionalProperties": false,
+      "properties": {
+        "from": {"type": "string"},
+        "to": {"type": "string"},
+        "fidelity": {"enum": ["exact", "approximated", "unsupported"]},
+        "notes": {"type": ["string", "null"]},
+        "count": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "extensions": {"type": "object"}
+  }
+}

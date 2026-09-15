@@ -1,0 +1,183 @@
+{
+  "comparisons": {
+    "cross_language_revision_checked": true,
+    "import_all_ids_preserved": true,
+    "import_geojson_vs_tiff": {
+      "differing_pixels": 0,
+      "exact": true,
+      "total_pixels": 12288
+    },
+    "import_pixels_identical_per_object_id": true,
+    "stardist_geojson_vs_tiff": {
+      "differing_pixels": 0,
+      "exact": false,
+      "total_pixels": 12288
+    },
+    "stardist_interactive_path_labels_identical": true,
+    "stardist_metrics": {
+      "aji": 0.8562535370684776,
+      "ap50": 1,
+      "ap75": 1,
+      "dice": 0.9225609756097561,
+      "f1_detection": 1,
+      "jaccard": 0.8562535370684776,
+      "panoptic_quality": 0.8509459646409726
+    },
+    "stardist_objects": 14,
+    "stardist_reopened_ids_identical": true,
+    "stardist_reopened_labels_identical": true,
+    "stardist_reopened_measurements_identical": true,
+    "truth_objects": 14
+  },
+  "generated": "2026-09-14T21:15:13Z",
+  "model": {
+    "file": "dsb2018_heavy_augment.pb",
+    "inventory_digest": "sha256:63758042981a73982f26b84c8c0b92aaabc447057ca8209bf1b12509289b47ee",
+    "sha256": "fc1f1148f22180bf2874346d14926e7baf8486088cb66277e13cb22ddccfe01b"
+  },
+  "not_executed": "GUI Script Editor session (the interactive code path was exercised through QuPath script without --args)",
+  "qupath_version": "0.7.0",
+  "r_version": "R version 4.6.1 (2026-06-24)",
+  "run_ids": {
+    "import": "31dd10fc-d375-8334-9376-e48de281076f",
+    "stardist": "c9ca99a0-8e46-8127-9cca-93ee8d3508d9"
+  },
+  "segmantR_version": "0.1.0.9000",
+  "source_revision": {
+    "dirty": "unknown",
+    "revision": "87b524a6eabba5062f6f4d98b7ba98ca5dc8c26d",
+    "source": "git-head"
+  },
+  "stardist_extension_version": "0.6.0",
+  "steps": {
+    "create_project_A": {
+      "args": [
+        "script",
+        "--args=<workspace>/projectA",
+        "--args=<workspace>/nuclei.ome.tif",
+        "/data/GitHub/CTTIR/public/segmantR/tests/testthat/qupath/create_project.groovy"
+      ],
+      "exit_status": 0,
+      "segmantR_log": [
+
+      ]
+    },
+    "create_project_B": {
+      "args": [
+        "script",
+        "--args=<workspace>/projectB",
+        "--args=<workspace>/nuclei.ome.tif",
+        "/data/GitHub/CTTIR/public/segmantR/tests/testthat/qupath/create_project.groovy"
+      ],
+      "exit_status": 0,
+      "segmantR_log": [
+
+      ]
+    },
+    "create_project_C": {
+      "args": [
+        "script",
+        "--args=<workspace>/projectC",
+        "--args=<workspace>/nuclei.ome.tif",
+        "/data/GitHub/CTTIR/public/segmantR/tests/testthat/qupath/create_project.groovy"
+      ],
+      "exit_status": 0,
+      "segmantR_log": [
+
+      ]
+    },
+    "import_headless_save": {
+      "args": [
+        "script",
+        "--project=<workspace>/projectC/project.qpproj",
+        "--image=nuclei.ome.tif",
+        "--args=run.json",
+        "--save",
+        "segmantR_import.groovy"
+      ],
+      "exit_status": 0,
+      "segmantR_log": [
+        "segmantR plan: import 14 object(s) into \"nuclei.ome.tif\" (z=0, t=0), save_policy project",
+        "segmantR: image data saved to the project",
+        "segmantR: import report written to import_report"
+      ]
+    },
+    "import_reopen_export": {
+      "args": [
+        "script",
+        "--project=<workspace>/projectC/project.qpproj",
+        "--image=nuclei.ome.tif",
+        "--args=run_export.json",
+        "segmantR_export.groovy"
+      ],
+      "exit_status": 0,
+      "segmantR_log": [
+        "segmantR plan: export 14 object(s) of type [detection] from \"nuclei.ome.tif\" (z=0, t=0) to qupath_export; project data are not modified",
+        "segmantR: export finished; project data were not modified"
+      ]
+    },
+    "import_repeat_refused": {
+      "args": [
+        "script",
+        "--project=<workspace>/projectC/project.qpproj",
+        "--image=nuclei.ome.tif",
+        "--args=run.json",
+        "--save",
+        "segmantR_import.groovy"
+      ],
+      "exit_status": 1,
+      "segmantR_log": [
+
+      ]
+    },
+    "stardist_headless_save": {
+      "args": [
+        "script",
+        "--project=<workspace>/projectA/project.qpproj",
+        "--image=nuclei.ome.tif",
+        "--args=run.json",
+        "--save",
+        "segmantR_stardist.groovy"
+      ],
+      "exit_status": 0,
+      "segmantR_log": [
+        "segmantR plan: StarDist 0.6.0 on \"nuclei.ome.tif\" (128 x 96 px, z=0, t=0), 1 region(s), model models/dsb2018_heavy_augment.pb, threshold 0.5, save_policy project, outputs out",
+        "segmantR: unsupported/approximated parameters: nms_thresh (approximated)",
+        "segmantR: 14 object(s) detected",
+        "segmantR: image data saved to the project",
+        "segmantR: outputs written to out"
+      ]
+    },
+    "stardist_interactive_path": {
+      "args": [
+        "script",
+        "--project=<workspace>/projectB/project.qpproj",
+        "--image=nuclei.ome.tif",
+        "segmantR/segmantR_stardist.groovy"
+      ],
+      "exit_status": 0,
+      "segmantR_log": [
+        "segmantR plan: StarDist 0.6.0 on \"nuclei.ome.tif\" (128 x 96 px, z=0, t=0), 1 region(s), model models/dsb2018_heavy_augment.pb, threshold 0.5, save_policy project, outputs out",
+        "segmantR: unsupported/approximated parameters: nms_thresh (approximated)",
+        "segmantR: 14 object(s) detected",
+        "segmantR: image data saved to the project",
+        "segmantR: outputs written to out"
+      ]
+    },
+    "stardist_reopen_export": {
+      "args": [
+        "script",
+        "--project=<workspace>/projectA/project.qpproj",
+        "--image=nuclei.ome.tif",
+        "--args=run_export.json",
+        "segmantR_export.groovy"
+      ],
+      "exit_status": 0,
+      "segmantR_log": [
+        "segmantR plan: export 14 object(s) of type [detection] from \"nuclei.ome.tif\" (z=0, t=0) to qupath_export; project data are not modified",
+        "segmantR: export finished; project data were not modified"
+      ]
+    }
+  }
+}
+

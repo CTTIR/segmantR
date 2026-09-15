@@ -1,0 +1,177 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/dataset-manifest.schema.json",
+  "title": "segmantR training dataset manifest",
+  "description": "Tiles of one origin (subject, sample or slide) never occur in more than one split.",
+  "type": "object",
+  "required": ["schema", "schema_version", "kind", "dataset_id", "created",
+               "producer", "coordinate_convention", "mask_type", "background",
+               "classes", "tile_size", "overlap", "level", "partial_tiles",
+               "pixel_size", "channels", "bands", "value_semantics",
+               "normalization", "split", "sources", "tiles", "exclusions",
+               "target", "dataset_digest", "extensions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "segmantR-interchange-v1"},
+    "schema_version": {"$ref": "common.schema.json#/definitions/semver_v1"},
+    "kind": {"const": "training-dataset"},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "created": {"$ref": "common.schema.json#/definitions/timestamp"},
+    "producer": {"$ref": "common.schema.json#/definitions/producer"},
+    "coordinate_convention": {"$ref": "common.schema.json#/definitions/coordinate_convention"},
+    "mask_type": {"enum": ["instance", "labelled", "binary"]},
+    "background": {"const": 0},
+    "classes": {"type": "array", "items": {"type": "string"}},
+    "tile_size": {"type": "integer", "minimum": 8},
+    "overlap": {"type": "integer", "minimum": 0},
+    "level": {"type": "integer", "minimum": 0},
+    "partial_tiles": {"enum": ["exclude", "keep"]},
+    "pixel_size": {"$ref": "common.schema.json#/definitions/pixel_size"},
+    "channels": {"type": "array", "items": {"type": "string"}},
+    "bands": {
+      "type": ["array", "null"],
+      "items": {"$ref": "common.schema.json#/definitions/band"}
+    },
+    "value_semantics": {"$ref": "common.schema.json#/definitions/value_semantics"},
+    "normalization": {
+      "type": "object",
+      "required": ["method", "low", "high", "raw_range"],
+      "additionalProperties": false,
+      "properties": {
+        "method": {"enum": ["none", "minmax", "percentile"]},
+        "low": {"type": ["number", "null"]},
+        "high": {"type": ["number", "null"]},
+        "raw_range": {
+          "type": "object",
+          "required": ["min", "max"],
+          "additionalProperties": false,
+          "properties": {
+            "min": {"type": ["number", "null"]},
+            "max": {"type": ["number", "null"]}
+          }
+        },
+        "applied": {"type": "boolean"}
+      }
+    },
+    "split": {
+      "type": "object",
+      "required": ["group_by", "seed", "proportions", "groups", "tile_counts"],
+      "additionalProperties": false,
+      "properties": {
+        "group_by": {"enum": ["subject_id", "sample_id", "slide_id"]},
+        "seed": {"type": "integer"},
+        "proportions": {
+          "type": "object",
+          "required": ["train", "validation", "test"],
+          "additionalProperties": false,
+          "properties": {
+            "train": {"type": "number", "minimum": 0, "maximum": 1},
+            "validation": {"type": "number", "minimum": 0, "maximum": 1},
+            "test": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        },
+        "groups": {
+          "type": "object",
+          "required": ["train", "validation", "test"],
+          "additionalProperties": false,
+          "properties": {
+            "train": {"type": "array", "items": {"type": "string"}},
+            "validation": {"type": "array", "items": {"type": "string"}},
+            "test": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "tile_counts": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["source_index", "image_id", "image_digest", "mask_revision",
+                     "review_status", "subject_id", "sample_id", "slide_id",
+                     "group", "split", "shape_yx", "plane", "origin",
+                     "annotation_revision"],
+        "additionalProperties": false,
+        "properties": {
+          "source_index": {"type": "integer", "minimum": 1},
+          "image_id": {"type": "string"},
+          "image_digest": {"$ref": "common.schema.json#/definitions/digest"},
+          "source_digest": {"$ref": "common.schema.json#/definitions/nullable_digest"},
+          "mask_revision": {"$ref": "common.schema.json#/definitions/digest"},
+          "review_status": {"enum": ["draft", "staged", "reviewed"]},
+          "annotation_revision": {"type": ["string", "null"]},
+          "subject_id": {"type": ["string", "null"]},
+          "sample_id": {"type": ["string", "null"]},
+          "slide_id": {"type": ["string", "null"]},
+          "group": {"type": "string"},
+          "split": {"enum": ["train", "validation", "test"]},
+          "shape_yx": {"$ref": "common.schema.json#/definitions/shape_yx"},
+          "plane": {"$ref": "common.schema.json#/definitions/plane"},
+          "origin": {"$ref": "common.schema.json#/definitions/origin"},
+          "transform_digest": {"$ref": "common.schema.json#/definitions/nullable_digest"},
+          "calibration_digest": {"$ref": "common.schema.json#/definitions/nullable_digest"}
+        }
+      }
+    },
+    "tiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tile_id", "source_index", "split", "x", "y", "width",
+                     "height", "n_objects", "excluded", "exclusion_reason",
+                     "image_path", "mask_path", "image_digest", "mask_digest",
+                     "objects"],
+        "additionalProperties": false,
+        "properties": {
+          "tile_id": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+$"},
+          "source_index": {"type": "integer", "minimum": 1},
+          "split": {"enum": ["train", "validation", "test"]},
+          "x": {"type": "number"},
+          "y": {"type": "number"},
+          "width": {"type": "integer", "minimum": 1},
+          "height": {"type": "integer", "minimum": 1},
+          "n_objects": {"type": "integer", "minimum": 0},
+          "n_split_parts": {"type": "integer", "minimum": 0},
+          "excluded": {"type": "boolean"},
+          "exclusion_reason": {"enum": [null, "empty", "partial_tile", "not_reviewed", "too_few_objects"]},
+          "image_path": {"oneOf": [{"$ref": "common.schema.json#/definitions/relpath"}, {"type": "null"}]},
+          "mask_path": {"oneOf": [{"$ref": "common.schema.json#/definitions/relpath"}, {"type": "null"}]},
+          "image_digest": {"$ref": "common.schema.json#/definitions/nullable_digest"},
+          "mask_digest": {"$ref": "common.schema.json#/definitions/nullable_digest"},
+          "objects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["label", "object_id", "class"],
+              "additionalProperties": false,
+              "properties": {
+                "label": {"type": "integer", "minimum": 1},
+                "object_id": {"type": ["string", "null"]},
+                "class": {"type": ["string", "null"]}
+              }
+            }
+          }
+        }
+      }
+    },
+    "exclusions": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "target": {
+      "type": "object",
+      "required": ["backend", "runtime"],
+      "additionalProperties": false,
+      "properties": {
+        "backend": {"type": ["string", "null"]},
+        "runtime": {"$ref": "runtime.schema.json"}
+      }
+    },
+    "dataset_digest": {"$ref": "common.schema.json#/definitions/digest"},
+    "extensions": {"$ref": "common.schema.json#/definitions/extensions"}
+  }
+}

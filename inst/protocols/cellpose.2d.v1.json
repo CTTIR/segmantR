@@ -1,0 +1,226 @@
+{
+  "description": "Delegates to sg_segment_cellpose() through reticulate. Channel indices follow the Cellpose convention (0 = grayscale, 1..3 = channel). Predictions are staged for review.",
+  "extensions": {
+
+  },
+  "family": "dnn",
+  "id": "cellpose.2d.v1",
+  "input_contract": {
+    "array_order": "y,x,channel",
+    "calibration": {
+      "parameters": [
+        "diameter_um"
+      ],
+      "required": "when_parameters_set"
+    },
+    "channel": {
+      "min_channels": 1,
+      "operation": "stack",
+      "parameters": [
+        "cytoplasm_channel",
+        "nucleus_channel"
+      ]
+    },
+    "inputs": [
+      {
+        "description": "Image providing the segmentation channel.",
+        "required": true,
+        "role": "image",
+        "type": "sg_image"
+      },
+      {
+        "description": "Custom Cellpose model (backend cellpose).",
+        "required": false,
+        "role": "trained_model",
+        "type": "sg_trained_model"
+      }
+    ],
+    "min_shape_yx": [
+      16,
+      16
+    ],
+    "value_range": {
+      "max": null,
+      "min": null,
+      "policy": "observed"
+    },
+    "value_semantics": [
+      "unknown",
+      "intensity",
+      "raw"
+    ]
+  },
+  "method": {
+    "backend": "python-cellpose",
+    "delegate": "sg_segment_cellpose",
+    "mapping": {
+      "batch_size": "batch_size",
+      "cellprob_threshold": "cellprob_threshold",
+      "cytoplasm_channel": "channels.cytoplasm",
+      "diameter": "diameter",
+      "diameter_um": "diameter",
+      "flow_threshold": "flow_threshold",
+      "model": "model",
+      "nucleus_channel": "channels.nucleus",
+      "tile": "tile"
+    }
+  },
+  "output_contract": {
+    "background": 0,
+    "connectivity": null,
+    "dtype": "int32",
+    "label_order": "backend",
+    "mask_type": "instance",
+    "measurements": [
+      "area",
+      "centroid",
+      "bbox",
+      "mean_intensity"
+    ],
+    "status": "staged"
+  },
+  "parameters": {
+    "batch_size": {
+      "default": 8,
+      "description": "Tiles per inference batch.",
+      "maximum": 256,
+      "minimum": 1,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "count"
+    },
+    "cellprob_threshold": {
+      "default": 0,
+      "description": "Cell probability threshold (logit).",
+      "maximum": 8,
+      "minimum": -8,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "none"
+    },
+    "cytoplasm_channel": {
+      "default": 0,
+      "description": "Cellpose cytoplasm channel (0 = grayscale).",
+      "maximum": 3,
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "index"
+    },
+    "diameter": {
+      "default": null,
+      "description": "Expected cell diameter; null = estimated by Cellpose.",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "px"
+    },
+    "diameter_um": {
+      "default": null,
+      "description": "Expected cell diameter in micrometres.",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": true,
+      "type": "number",
+      "unit": "um"
+    },
+    "flow_threshold": {
+      "default": 0.4,
+      "description": "Flow error threshold.",
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "none"
+    },
+    "model": {
+      "default": "cyto3",
+      "description": "Pretrained Cellpose model.",
+      "enum": [
+        "cyto3",
+        "cyto2",
+        "nuclei",
+        "tissuenet",
+        "livecell"
+      ],
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "none"
+    },
+    "nucleus_channel": {
+      "default": 1,
+      "description": "Cellpose nucleus channel (0 = none).",
+      "maximum": 3,
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "index"
+    },
+    "tile": {
+      "default": true,
+      "description": "Tile large images inside Cellpose.",
+      "requires_calibration": false,
+      "type": "boolean",
+      "unit": "none"
+    }
+  },
+  "postprocess": {
+    "steps": [
+
+    ]
+  },
+  "preprocess": {
+    "normalization": {
+      "clip": false,
+      "high": 99,
+      "low": 1,
+      "method": "percentile",
+      "note": "Performed inside Cellpose (normalize = True default).",
+      "scope": "global"
+    },
+    "resample": "backend",
+    "target_pixel_size_um": null
+  },
+  "provenance_policy": {
+    "hash": "sha256",
+    "record": [
+      "protocol_digest",
+      "parameters_digest",
+      "input_digests",
+      "runtime",
+      "delegate_call",
+      "mask_revision",
+      "measurements_digest",
+      "model_digest"
+    ]
+  },
+  "runtime_profile": {
+    "gpu": "optional",
+    "install_hint": "Install the Python package 'cellpose' (sg_setup_python(backends = 'cellpose')) and make it visible to reticulate.",
+    "language": "R",
+    "python_modules": [
+      "cellpose"
+    ],
+    "qupath": null,
+    "r_packages": [
+      "reticulate"
+    ],
+    "requires_python": true
+  },
+  "schema": "segmantR-protocol-v1",
+  "seed_policy": {
+    "note": "Inference with fixed weights is deterministic on CPU; GPU kernels may introduce small differences.",
+    "policy": "backend",
+    "seed": null
+  },
+  "tiling": {
+    "max_pixels": null,
+    "mode": "backend",
+    "note": "Cellpose tiles internally (224 px, 10% overlap) when tile = true.",
+    "overlap": null,
+    "tile_size": 224
+  },
+  "title": "Cellpose 2D cell segmentation (optional backend)",
+  "version": "1.0.0"
+}
+

@@ -1,0 +1,296 @@
+{
+  "description": "Star-convex polygon nucleus detection. The R path delegates to sg_segment_stardist() through reticulate; sg_stardist_parameter_map() maps the same parameters to the QuPath StarDist extension. Predictions are staged for review. Percentile normalisation with low = 0 and high = 100 equals the min-max normalisation of sg_segment_stardist().",
+  "extensions": {
+
+  },
+  "family": "dnn",
+  "id": "stardist.2d.v1",
+  "input_contract": {
+    "array_order": "y,x,channel",
+    "calibration": {
+      "parameters": [
+        "pixel_size_um",
+        "cell_expansion_um"
+      ],
+      "required": "when_parameters_set"
+    },
+    "channel": {
+      "min_channels": 1,
+      "operation": "single",
+      "parameters": [
+        "channel",
+        "channel_name",
+        "wavelength_nm"
+      ]
+    },
+    "inputs": [
+      {
+        "description": "Image providing the segmentation channel.",
+        "required": true,
+        "role": "image",
+        "type": "sg_image"
+      },
+      {
+        "description": "Custom StarDist model (backend stardist).",
+        "required": false,
+        "role": "trained_model",
+        "type": "sg_trained_model"
+      }
+    ],
+    "min_shape_yx": [
+      16,
+      16
+    ],
+    "value_range": {
+      "max": null,
+      "min": null,
+      "policy": "observed"
+    },
+    "value_semantics": [
+      "unknown",
+      "intensity",
+      "raw"
+    ]
+  },
+  "method": {
+    "backend": "python-stardist",
+    "delegate": "sg_segment_stardist",
+    "mapping": {
+      "cell_expansion_um": null,
+      "channel": "channel",
+      "classification": null,
+      "create_annotations": null,
+      "include_probability": null,
+      "model": "model",
+      "nms_thresh": "nms_thresh",
+      "normalize_high": null,
+      "normalize_low": null,
+      "normalize_scope": null,
+      "pixel_size_um": "scale",
+      "prob_thresh": "prob_thresh",
+      "tile_size": "n_tiles"
+    }
+  },
+  "output_contract": {
+    "background": 0,
+    "connectivity": null,
+    "dtype": "int32",
+    "label_order": "backend",
+    "mask_type": "instance",
+    "measurements": [
+      "area",
+      "centroid",
+      "bbox",
+      "mean_intensity"
+    ],
+    "status": "staged"
+  },
+  "parameters": {
+    "cell_expansion_um": {
+      "default": null,
+      "description": "QuPath only: expand nuclei to approximate cells by this distance.",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": true,
+      "type": "number",
+      "unit": "um"
+    },
+    "channel": {
+      "default": 1,
+      "description": "1-based channel (band) position in the [y, x, channel] array. Used when channel_name, wavelength_nm and band_operation are not set.",
+      "minimum": 1,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "index"
+    },
+    "channel_name": {
+      "default": null,
+      "description": "Channel or band name to select instead of an index.",
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "name"
+    },
+    "classification": {
+      "default": null,
+      "description": "Class name assigned to all objects.",
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "name"
+    },
+    "create_annotations": {
+      "default": false,
+      "description": "QuPath only: create annotations instead of detections.",
+      "requires_calibration": false,
+      "type": "boolean",
+      "unit": "none"
+    },
+    "include_probability": {
+      "default": false,
+      "description": "Store the object probability.",
+      "requires_calibration": false,
+      "type": "boolean",
+      "unit": "none"
+    },
+    "model": {
+      "default": "2D_versatile_fluo",
+      "description": "Pretrained model name; ignored when a model input is supplied.",
+      "enum": [
+        "2D_versatile_fluo",
+        "2D_versatile_he",
+        "2D_paper_dsb2018"
+      ],
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "none"
+    },
+    "nms_thresh": {
+      "default": 0.4,
+      "description": "Non-maximum suppression overlap threshold.",
+      "maximum": 1,
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "fraction"
+    },
+    "normalize_high": {
+      "default": 100,
+      "description": "Upper normalisation percentile.",
+      "maximum": 100,
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "percentile"
+    },
+    "normalize_low": {
+      "default": 0,
+      "description": "Lower normalisation percentile.",
+      "maximum": 100,
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "percentile"
+    },
+    "normalize_scope": {
+      "default": "global",
+      "description": "global: percentiles of the whole plane; tile: percentiles per tile (QuPath normalizePercentiles).",
+      "enum": [
+        "global",
+        "tile"
+      ],
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "none"
+    },
+    "pixel_size_um": {
+      "default": null,
+      "description": "Target pixel size the model expects; null = use the image as is.",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": true,
+      "type": "number",
+      "unit": "um"
+    },
+    "prob_thresh": {
+      "default": 0.5,
+      "description": "Object probability threshold (QuPath: threshold).",
+      "maximum": 1,
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "fraction"
+    },
+    "tile_size": {
+      "default": null,
+      "description": "Tile size for prediction; null = backend default.",
+      "maximum": 16384,
+      "minimum": 64,
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "px"
+    },
+    "wavelength_nm": {
+      "default": null,
+      "description": "Centre wavelength of the band to select (requires band wavelengths in the image metadata).",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "nm"
+    },
+    "wavelength_tolerance_nm": {
+      "default": 5,
+      "description": "Maximum distance between wavelength_nm and the nearest band centre.",
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "nm"
+    }
+  },
+  "postprocess": {
+    "steps": [
+
+    ]
+  },
+  "preprocess": {
+    "normalization": {
+      "clip": false,
+      "high": 100,
+      "low": 0,
+      "method": "percentile",
+      "note": "Bounds come from the normalize_low/normalize_high parameters.",
+      "scope": "global"
+    },
+    "resample": "backend",
+    "target_pixel_size_um": null
+  },
+  "provenance_policy": {
+    "hash": "sha256",
+    "record": [
+      "protocol_digest",
+      "parameters_digest",
+      "input_digests",
+      "runtime",
+      "delegate_call",
+      "mask_revision",
+      "measurements_digest",
+      "model_digest"
+    ]
+  },
+  "runtime_profile": {
+    "gpu": "optional",
+    "install_hint": "Install the Python packages 'stardist' and 'tensorflow' (sg_setup_python(backends = 'stardist')) and make them visible to reticulate.",
+    "language": "R",
+    "python_modules": [
+      "stardist",
+      "tensorflow"
+    ],
+    "qupath": {
+      "extension": "qupath-extension-stardist",
+      "min_extension_version": "0.5.0",
+      "min_version": "0.5.0"
+    },
+    "r_packages": [
+      "reticulate"
+    ],
+    "requires_python": true
+  },
+  "schema": "segmantR-protocol-v1",
+  "seed_policy": {
+    "note": "Inference with fixed weights is deterministic on CPU; GPU kernels may introduce small differences.",
+    "policy": "backend",
+    "seed": null
+  },
+  "tiling": {
+    "max_pixels": null,
+    "mode": "backend",
+    "note": "tile_size maps to StarDist n_tiles (ceiling(dimension / tile_size)) and to QuPath tileSize; overlap is determined by the backend from the model receptive field.",
+    "overlap": null,
+    "tile_size": 1024
+  },
+  "title": "StarDist 2D nucleus segmentation (optional backend)",
+  "version": "1.0.0"
+}
+

@@ -17,7 +17,10 @@ An \code{sg_image} object.
 \description{
 Reads TIFF, PNG, or JPEG image files and returns an \code{sg_image} object.
 Dispatches to \code{EBImage::readImage()} when available, otherwise uses
-\code{imager::load.image()}.
+\code{imager::load.image()}. The returned pixel array is always ordered
+\verb{[y, x, channel]}, and the object records the SHA-256 digest of the file
+in \code{source_digest} plus its base name (never the full path) in
+\code{metadata$source_name}.
 }
 \examples{
 \donttest{

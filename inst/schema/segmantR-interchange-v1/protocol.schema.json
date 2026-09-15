@@ -1,0 +1,245 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/protocol.schema.json",
+  "title": "segmantR-protocol-v1 declarative segmentation protocol",
+  "description": "Protocols are data. They contain no executable code; the delegate is chosen from a fixed whitelist and every parameter is declared with type, bounds, unit and calibration requirement.",
+  "type": "object",
+  "required": ["schema", "id", "version", "title", "description", "family",
+               "input_contract", "preprocess", "method", "postprocess",
+               "tiling", "output_contract", "runtime_profile", "seed_policy",
+               "provenance_policy", "parameters", "extensions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "segmantR-protocol-v1"},
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*(\\.[a-z0-9_-]+)*\\.v[0-9]+$"},
+    "version": {"$ref": "common.schema.json#/definitions/semver"},
+    "title": {"type": "string", "minLength": 1},
+    "description": {"type": "string"},
+    "family": {"enum": ["threshold", "watershed", "propagate", "postprocess", "dnn"]},
+    "input_contract": {
+      "type": "object",
+      "required": ["array_order", "inputs", "channel", "value_semantics",
+                   "value_range", "calibration", "min_shape_yx"],
+      "additionalProperties": false,
+      "properties": {
+        "array_order": {"const": "y,x,channel"},
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["role", "type", "required"],
+            "additionalProperties": false,
+            "properties": {
+              "role": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+              "type": {"enum": ["sg_image", "sg_mask", "sg_trained_model"]},
+              "required": {"type": "boolean"},
+              "mask_type": {"enum": ["instance", "labelled", "binary"]},
+              "description": {"type": "string"}
+            }
+          }
+        },
+        "channel": {
+          "type": ["object", "null"],
+          "required": ["parameters", "operation", "min_channels"],
+          "additionalProperties": false,
+          "properties": {
+            "parameters": {"type": "array", "items": {"type": "string"}},
+            "operation": {"enum": ["single", "pair", "stack", "band_operation"]},
+            "min_channels": {"type": "integer", "minimum": 1}
+          }
+        },
+        "value_semantics": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "common.schema.json#/definitions/value_semantics"}
+        },
+        "value_range": {
+          "type": "object",
+          "required": ["min", "max", "policy"],
+          "additionalProperties": false,
+          "properties": {
+            "min": {"type": ["number", "null"]},
+            "max": {"type": ["number", "null"]},
+            "policy": {"enum": ["observed", "declared"]}
+          }
+        },
+        "calibration": {
+          "type": "object",
+          "required": ["required"],
+          "additionalProperties": false,
+          "properties": {
+            "required": {"enum": ["never", "always", "when_parameters_set"]},
+            "parameters": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "min_shape_yx": {"$ref": "common.schema.json#/definitions/shape_yx"}
+      }
+    },
+    "preprocess": {
+      "type": "object",
+      "required": ["normalization", "target_pixel_size_um", "resample"],
+      "additionalProperties": false,
+      "properties": {
+        "normalization": {
+          "type": "object",
+          "required": ["method", "scope"],
+          "additionalProperties": false,
+          "properties": {
+            "method": {"enum": ["none", "minmax", "percentile"]},
+            "scope": {"enum": ["none", "global", "tile"]},
+            "low": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+            "high": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+            "clip": {"type": "boolean"},
+            "note": {"type": "string"}
+          }
+        },
+        "target_pixel_size_um": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "resample": {"enum": ["none", "backend"]}
+      }
+    },
+    "method": {
+      "type": "object",
+      "required": ["backend", "delegate", "mapping"],
+      "additionalProperties": false,
+      "properties": {
+        "backend": {"enum": ["segmantR-core", "python-stardist", "python-cellpose",
+                             "python-deepcell", "qupath-stardist"]},
+        "delegate": {"enum": ["sg_segment_threshold", "sg_segment_watershed",
+                              "sg_segment_propagate", "sg_cleanup_labels",
+                              "sg_segment_stardist", "sg_segment_cellpose",
+                              "sg_segment_mesmer"]},
+        "fixed_arguments": {"type": "object"},
+        "mapping": {
+          "type": "object",
+          "additionalProperties": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "postprocess": {
+      "type": "object",
+      "required": ["steps"],
+      "additionalProperties": false,
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["protocol", "parameters"],
+            "additionalProperties": false,
+            "properties": {
+              "protocol": {"const": "postprocess.label-cleanup.v1"},
+              "parameters": {"type": "object"}
+            }
+          }
+        }
+      }
+    },
+    "tiling": {
+      "type": "object",
+      "required": ["mode", "tile_size", "overlap"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {"enum": ["none", "backend"]},
+        "tile_size": {"type": ["integer", "null"], "minimum": 16},
+        "overlap": {"type": ["integer", "null"], "minimum": 0},
+        "max_pixels": {"type": ["integer", "null"], "minimum": 1},
+        "note": {"type": "string"}
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["mask_type", "dtype", "background", "connectivity",
+                   "label_order", "measurements", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "mask_type": {"enum": ["instance", "labelled", "binary"]},
+        "dtype": {"const": "int32"},
+        "background": {"const": 0},
+        "connectivity": {"enum": [4, 8, null]},
+        "label_order": {"enum": ["raster", "value", "backend"]},
+        "measurements": {
+          "type": "array",
+          "items": {"enum": ["area", "centroid", "bbox", "mean_intensity"]}
+        },
+        "status": {"enum": ["draft", "staged"]}
+      }
+    },
+    "runtime_profile": {
+      "type": "object",
+      "required": ["language", "requires_python", "python_modules",
+                   "r_packages", "gpu", "install_hint"],
+      "additionalProperties": false,
+      "properties": {
+        "language": {"const": "R"},
+        "requires_python": {"type": "boolean"},
+        "python_modules": {"type": "array", "items": {"type": "string"}},
+        "r_packages": {"type": "array", "items": {"type": "string"}},
+        "gpu": {"enum": ["never", "optional"]},
+        "install_hint": {"type": ["string", "null"]},
+        "qupath": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "min_version": {"type": "string"},
+            "extension": {"type": "string"},
+            "min_extension_version": {"type": "string"}
+          }
+        }
+      }
+    },
+    "seed_policy": {
+      "type": "object",
+      "required": ["policy", "seed", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "policy": {"enum": ["deterministic", "fixed", "backend"]},
+        "seed": {"type": ["integer", "null"]},
+        "note": {"type": "string"}
+      }
+    },
+    "provenance_policy": {
+      "type": "object",
+      "required": ["record", "hash"],
+      "additionalProperties": false,
+      "properties": {
+        "record": {
+          "type": "array",
+          "items": {"enum": ["protocol_digest", "parameters_digest", "input_digests",
+                             "runtime", "delegate_call", "mask_revision",
+                             "measurements_digest", "model_digest"]}
+        },
+        "hash": {"const": "sha256"}
+      }
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z][a-z0-9_]*$": {"$ref": "#/definitions/parameter"}
+      }
+    },
+    "extensions": {"$ref": "common.schema.json#/definitions/extensions"}
+  },
+  "definitions": {
+    "parameter": {
+      "type": "object",
+      "required": ["type", "default", "unit", "requires_calibration", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"enum": ["integer", "number", "boolean", "string"]},
+        "default": {},
+        "nullable": {"type": "boolean"},
+        "minimum": {"type": "number"},
+        "maximum": {"type": "number"},
+        "exclusive_minimum": {"type": "number"},
+        "enum": {"type": "array", "minItems": 1},
+        "odd": {"type": "boolean"},
+        "unit": {"enum": ["px", "px2", "um", "um2", "fraction", "percentile",
+                          "count", "index", "name", "nm", "intensity", "none"]},
+        "requires_calibration": {"type": "boolean"},
+        "description": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

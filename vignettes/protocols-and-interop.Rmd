@@ -1,0 +1,225 @@
+---
+title: "Standard protocols, DNN training and QuPath/StarDist exchange"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Standard protocols, DNN training and QuPath/StarDist exchange}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r}
+library(segmantR)
+```
+
+This vignette walks through the reproducible, exchangeable side of
+segmantR: versioned segmentation protocols, the neutral interchange format,
+training datasets and model bundles, and the QuPath/StarDist adapter.
+Everything executed here runs in R alone; steps that need Python or QuPath
+are shown but not run.
+
+## 1. Standard protocols
+
+Protocols are declarative JSON definitions with whitelisted parameters.
+
+```{r}
+protocols <- sg_protocol_list()
+protocols[, c("id", "version", "status", "backend")]
+```
+
+Each parameter has a type, bounds, unit and calibration requirement:
+
+```{r}
+spec <- sg_protocol_schema("threshold.otsu.v1")
+spec[!spec$name %in% c("band_a_nm", "band_b_nm", "band_min_nm",
+                       "band_max_nm"),
+     c("name", "type", "unit", "maps_to")]
+```
+
+Running a protocol delegates to the direct function with a recorded argument
+mapping. The run envelope makes declarative and direct runs comparable:
+
+```{r}
+img <- sg_example_image("fluorescence_nuclei")
+run <- sg_protocol_run(img, "threshold.otsu.v1", min_area = 5L,
+                       output = "run")
+run
+str(run$record$delegate$arguments)
+direct <- sg_segment_threshold(img, method = "otsu", min_area = 5L)
+identical(direct$labels, run$mask$labels)
+```
+
+Invalid input is refused with classified conditions instead of being
+guessed:
+
+```{r}
+res <- sg_protocol_validate("threshold.otsu.v1", img, min_area = -1L,
+                            error = FALSE)
+res$error$code
+try(sg_protocol_run(img, "mesmer.2d.v1"))
+```
+
+Post-processing is a protocol too:
+
+```{r}
+clean <- sg_protocol_run(run$mask, "postprocess.label-cleanup.v1",
+                         min_area = 40L, fill_holes = TRUE)
+clean$n_cells
+```
+
+### Hyperspectral channels
+
+Bands are selected by index, name, wavelength or a registered operation;
+value semantics are declared, never inferred.
+
+```{r}
+cube <- array(runif(32 * 32 * 3), dim = c(32, 32, 3))
+hsi <- new_sg_image(cube, channels = c("b460", "b550", "b650"),
+                    bands = data.frame(wavelength_nm = c(460, 550, 650)),
+                    value_semantics = "reflectance")
+nd <- sg_select_channel(hsi, band_operation = "normalized_difference",
+                        band_a_nm = 650, band_b_nm = 550)
+nd$provenance$band_selection[c("operation", "wavelength_nm")]
+```
+
+Optional DNN protocols check their backend when they run and never fall
+back to another method:
+
+```{r}
+dnn <- sg_protocol_run(img, "stardist.2d.v1", output = "run")
+dnn$record$status
+```
+
+## 2. Neutral interchange
+
+A bundle contains an integer label TIFF, exact pixel-edge GeoJSON with
+stable object ids, the legend, long-format measurements, a manifest and a
+SHA-256 inventory.
+
+```{r}
+dest <- file.path(tempdir(), "segmantR-bundle")
+unlink(dest, recursive = TRUE)
+bundle <- sg_export_interchange(run, dest, image = img)
+list.files(dest)
+bundle$bundle_digest
+```
+
+Imports verify integrity, schema, dtype, orientation, plane, legend and the
+agreement between GeoJSON and TIFF, and return a **staged** mask:
+
+```{r}
+imported <- sg_import_interchange(dest,
+                                  expected_digest = bundle$bundle_digest)
+imported$checks[, c("check", "status")]
+sg_mask_status(imported$mask)$status
+```
+
+Reviewed masks are protected:
+
+```{r}
+reviewed <- sg_review_mask(imported$mask,
+                           expected_revision = sg_mask_revision(imported$mask))
+candidate <- clean
+try(sg_replace_mask(reviewed, candidate))
+replaced <- sg_replace_mask(reviewed, candidate,
+                            expected_revision = sg_mask_revision(reviewed),
+                            overwrite = TRUE)
+sg_mask_status(replaced)$status
+```
+
+## 3. Training data, StarDist training and prediction
+
+Dataset manifests tile image/mask pairs and split them by origin so tiles of
+one subject never appear in two splits.
+
+```{r}
+mask <- sg_cleanup_labels(sg_example_mask("fluorescence_nuclei"),
+                          disconnected = "split")
+pairs <- lapply(c("A", "B", "C"), function(s) {
+  list(image = img, mask = mask, subject_id = s)
+})
+ts <- sg_prepare_training_data(pairs, tile_size = 32L,
+                               split = c(train = 0.34, validation = 0.33,
+                                         test = 0.33))
+ts
+sg_validate_training_manifest(ts$manifest, mask_type = "instance")$ok
+```
+
+A foreground/background mask is not accepted as instance training data:
+
+```{r}
+binary <- new_sg_mask(ifelse(mask$labels > 0L, 1L, 0L))
+try(sg_dataset_manifest(list(list(image = img, mask = binary,
+                                  subject_id = "A")), tile_size = 32L))
+```
+
+Training needs the Python `stardist` and `tensorflow` modules; all data
+checks run before Python is touched:
+
+```{r, eval = FALSE}
+model <- sg_train_stardist(ts, n_epochs = 50L, save_path = "models",
+                           model_card = list(
+                             data_domain = "synthetic fluorescence nuclei",
+                             limitations = "demonstration only",
+                             license = list(id = "CC-BY-4.0")))
+sg_package_model(model, "nuclei.segmantR")
+loaded <- sg_load_model("nuclei.segmantR")   # checksums verified
+pred <- sg_predict_model(loaded, img, output = "run")
+sg_mask_status(pred$mask)$status              # "staged"
+```
+
+## 4. QuPath and StarDist
+
+`sg_stardist_parameter_map()` shows how every protocol parameter maps to the
+QuPath StarDist extension, including what cannot be honoured:
+
+```{r}
+map <- sg_stardist_parameter_map("stardist.2d.v1", "qupath",
+                                 normalize_scope = "tile",
+                                 normalize_low = 1, normalize_high = 99)
+map[, c("parameter", "target_option", "status")]
+```
+
+A QuPath program contains `run.json`, the Groovy templates and hashed
+resources. segmantR never starts QuPath itself.
+
+```{r}
+calibrated <- img
+calibrated$resolution <- list(x_um = 0.5, y_um = 0.5)
+prog <- sg_export_qupath(run$mask, file.path(tempdir(), "qupath-import"),
+                         image = calibrated, image_name = "nuclei.tif",
+                         save_policy = "project", overwrite = TRUE)
+prog$commands
+```
+
+For StarDist in QuPath, pass a model file (`.pb`, SavedModel or bioimage.io)
+and an image describing the binding, then run the template headless or from
+the Script Editor and import the results:
+
+```{r, eval = FALSE}
+sd <- sg_export_qupath("stardist.2d.v1", "qupath-stardist",
+                       image = calibrated, image_name = "nuclei.tif",
+                       model = "dsb2018_heavy_augment.pb",
+                       normalize_scope = "tile", normalize_low = 1,
+                       normalize_high = 99, pixel_size_um = 0.5,
+                       save_policy = "project")
+# In a shell, from qupath-stardist/:
+#   QuPath script --project=project.qpproj --image="nuclei.tif" \
+#     --args=run.json --save segmantR_stardist.groovy
+back <- sg_import_qupath("qupath-stardist/out", image = calibrated,
+                         expected_run_id = sd$run$run_id)
+back$qupath$agreement
+```
+
+## 5. Capabilities
+
+```{r}
+caps <- sg_interchange_capabilities()
+vapply(caps$profiles, function(p) p$status, character(1))
+```
+
+See `system.file("interop", "INTEROP.md", package = "segmantR")` for the
+full contract, migration notes and security boundaries.

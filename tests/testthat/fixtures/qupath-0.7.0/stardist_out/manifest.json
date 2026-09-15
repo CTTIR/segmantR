@@ -1,0 +1,284 @@
+{
+  "schema": "segmantR-interchange-v1",
+  "schema_version": "1.0.0",
+  "kind": "qupath-export",
+  "id": "c9ca99a0-8e46-8127-9cca-93ee8d3508d9",
+  "created": "2026-09-14T21:14:44Z",
+  "producer": {
+    "name": "segmantR-qupath-template",
+    "version": "1.0.0",
+    "api_version": "1.0.0",
+    "source_revision": null,
+    "dirty": "unknown"
+  },
+  "coordinate_convention": {
+    "origin": "top_left",
+    "x_axis": "right",
+    "y_axis": "down",
+    "units": "px",
+    "pixel_centre": "half_integer",
+    "array_order": "y,x,channel",
+    "plane_index_base": 0
+  },
+  "image": {
+    "id": "nuclei",
+    "source_name": "nuclei.ome.tif",
+    "shape_yx": [
+      96,
+      128
+    ],
+    "n_channels": 1,
+    "array_order": "y,x,channel",
+    "dtype": "uint16",
+    "channels": [
+      "DAPI"
+    ],
+    "bands": null,
+    "plane": {
+      "level": 0,
+      "series": 0,
+      "c": null,
+      "z": 0,
+      "t": 0
+    },
+    "origin": {
+      "x": 0,
+      "y": 0,
+      "downsample": 1
+    },
+    "pixel_size": {
+      "x": 0.5,
+      "y": 0.5,
+      "unit": "um"
+    },
+    "value_semantics": "unknown",
+    "value_range": null,
+    "content_digest": null,
+    "source_digest": null,
+    "transform_digest": null,
+    "calibration_digest": null,
+    "read_accounting": null
+  },
+  "mask": {
+    "id": "qupath-c9ca99a0-8e46-8127-9cca-93ee8d3508d9",
+    "image_id": "nuclei",
+    "mask_type": "instance",
+    "dtype": "uint32",
+    "background": 0,
+    "shape_yx": [
+      96,
+      128
+    ],
+    "label_count": 14,
+    "max_label": 14,
+    "plane": {
+      "level": 0,
+      "series": 0,
+      "c": null,
+      "z": 0,
+      "t": 0
+    },
+    "origin": {
+      "x": 0,
+      "y": 0,
+      "downsample": 1
+    },
+    "connectivity": null,
+    "content_digest": "sha256:8eed13962a008e5dd3827eb86d9b594edf616207b67a65e4360b517fb56f9880",
+    "revision": "sha256:0074f9d1f2cc2ffc799a8fc3bfd54a306869c275c238286a89b64908b5946c5d",
+    "review": {
+      "status": "staged",
+      "revision": null,
+      "parent_revision": null,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "legend": [
+      {
+        "label": 1,
+        "object_id": "0ae9b354-9d57-451a-b0da-b3f617eaebb5",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 2,
+        "object_id": "1745f336-9f08-4d3f-9f88-42fd10bbc883",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 3,
+        "object_id": "2d7eb810-b90c-4b72-b01e-29f0a336ae0e",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 4,
+        "object_id": "3fb99ef9-20cc-4046-ae8a-7e12380e1349",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 5,
+        "object_id": "66300872-47c6-49a5-b534-8ad27a573e62",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 6,
+        "object_id": "66d4a34c-40aa-41b8-9ac3-45f8e1ca96cb",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 7,
+        "object_id": "8b577f64-b8c6-489f-81bb-58ade70afe64",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 8,
+        "object_id": "a288349d-ab5f-420e-86ba-3c308cb7484e",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 9,
+        "object_id": "b763ca00-e421-4493-b630-3591beff90be",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 10,
+        "object_id": "b8951b99-10e6-43c6-8805-fe52ee4c9f64",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 11,
+        "object_id": "d21667ff-ebc6-4401-88dc-3f927a48f716",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 12,
+        "object_id": "de38d237-c679-437f-a914-4b103cf9b0ed",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 13,
+        "object_id": "e62f211e-d8ba-4b3d-bd6b-5d8e5ac6e42c",
+        "class": "Nucleus",
+        "name": null
+      },
+      {
+        "label": 14,
+        "object_id": "ec949569-a009-438b-96fd-f4aad3b6ffbd",
+        "class": "Nucleus",
+        "name": null
+      }
+    ],
+    "classes": [
+      {
+        "name": "Nucleus",
+        "color": null
+      }
+    ],
+    "model_digest": "sha256:63758042981a73982f26b84c8c0b92aaabc447057ca8209bf1b12509289b47ee",
+    "transform_digest": null
+  },
+  "protocol": {
+    "digest": "sha256:136dc870c8bd8c8c8c652ff6799233ab6ff65dfc26c0fa71a849dff7ad9254fc",
+    "id": "stardist.2d.v1",
+    "version": "1.0.0"
+  },
+  "measurements": {
+    "n_rows": 168,
+    "namespace": "stored",
+    "columns": [
+      "image_id",
+      "object_id",
+      "label",
+      "name",
+      "namespace",
+      "value",
+      "value_state",
+      "unit",
+      "provider_id"
+    ],
+    "names": [
+      "Area µm^2",
+      "Circularity",
+      "DAPI: Max",
+      "DAPI: Mean",
+      "DAPI: Median",
+      "DAPI: Min",
+      "DAPI: Std.Dev.",
+      "Detection probability",
+      "Length µm",
+      "Max diameter µm",
+      "Min diameter µm",
+      "Solidity"
+    ]
+  },
+  "assets": [
+    {
+      "role": "qupath_geojson",
+      "path": "objects.geojson",
+      "media_type": "application/geo+json",
+      "size_bytes": 10155,
+      "sha256": "8e08bf3fe993dc81ef34d110bde93149061838298739cff99879683f9a30679d"
+    },
+    {
+      "role": "mask_tiff",
+      "path": "mask.tif",
+      "media_type": "image/tiff",
+      "size_bytes": 49286,
+      "sha256": "a2daae8a011af8bc9a22491236892b1ce23f443aad9c049150f5bc6e59b31cc2"
+    },
+    {
+      "role": "measurements_csv",
+      "path": "measurements.csv",
+      "media_type": "text/csv",
+      "size_bytes": 19688,
+      "sha256": "593900641f5dad6fcb5933e8ef5b5a143dd7584096a12c965c04b2a3eb887373"
+    },
+    {
+      "role": "other",
+      "path": "qupath_detections.tsv",
+      "media_type": "text/tab-separated-values",
+      "size_bytes": 3361,
+      "sha256": "e5128ba3cbdfec59fd479fad6b917cbe8d12e9fc2a7ef4ca7cf77b96e15493aa"
+    }
+  ],
+  "conversions": [
+    {
+      "from": "qupath-roi",
+      "to": "qupath-geojson",
+      "fidelity": "exact",
+      "notes": "QuPath GeoJSON export of the detected ROIs",
+      "count": 14
+    },
+    {
+      "from": "qupath-roi",
+      "to": "mask",
+      "fidelity": "approximated",
+      "notes": "Java2D pixel-centre fill of polygon ROIs with float vertices; later objects overwrite earlier ones",
+      "count": 14
+    }
+  ],
+  "integrity_file": "integrity.json",
+  "extensions": {
+    "qupath": {
+      "version": "0.7.0",
+      "stardist_extension_version": "0.6.0",
+      "template_version": "1.0.0",
+      "task": "stardist",
+      "run_id": "c9ca99a0-8e46-8127-9cca-93ee8d3508d9",
+      "region_policy": "whole_image",
+      "save_policy": "project",
+      "n_regions": 1
+    }
+  }
+}

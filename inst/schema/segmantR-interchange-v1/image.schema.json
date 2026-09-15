@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/image.schema.json",
+  "title": "segmantR image or tile description",
+  "type": "object",
+  "required": [
+    "id",
+    "shape_yx",
+    "n_channels",
+    "array_order",
+    "dtype",
+    "channels",
+    "plane",
+    "origin",
+    "pixel_size",
+    "value_semantics",
+    "content_digest",
+    "source_digest",
+    "transform_digest"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_name": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/definitions/basename"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "shape_yx": {
+      "$ref": "common.schema.json#/definitions/shape_yx"
+    },
+    "n_channels": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "array_order": {
+      "const": "y,x,channel"
+    },
+    "dtype": {
+      "enum": [
+        "uint8",
+        "uint16",
+        "uint32",
+        "int32",
+        "float32",
+        "float64"
+      ]
+    },
+    "channels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "bands": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "common.schema.json#/definitions/band"
+      }
+    },
+    "plane": {
+      "$ref": "common.schema.json#/definitions/plane"
+    },
+    "origin": {
+      "$ref": "common.schema.json#/definitions/origin"
+    },
+    "pixel_size": {
+      "$ref": "common.schema.json#/definitions/pixel_size"
+    },
+    "value_semantics": {
+      "$ref": "common.schema.json#/definitions/value_semantics"
+    },
+    "value_range": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "min",
+        "max",
+        "policy"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "min": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "max": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "policy": {
+          "enum": [
+            "observed",
+            "declared"
+          ]
+        }
+      }
+    },
+    "content_digest": {
+      "$ref": "common.schema.json#/definitions/nullable_digest"
+    },
+    "source_digest": {
+      "$ref": "common.schema.json#/definitions/nullable_digest"
+    },
+    "transform_digest": {
+      "$ref": "common.schema.json#/definitions/nullable_digest"
+    },
+    "calibration_digest": {
+      "$ref": "common.schema.json#/definitions/nullable_digest"
+    },
+    "read_accounting": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bytes_read": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "bands_read": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

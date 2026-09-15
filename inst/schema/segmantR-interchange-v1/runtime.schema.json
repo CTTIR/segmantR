@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/runtime.schema.json",
+  "title": "Runtime description (no absolute paths, no environment copies)",
+  "type": "object",
+  "required": ["language", "r_version", "platform", "segmantR_version",
+               "segmantR_api_version", "source_revision", "packages"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "segmantR-interchange-v1"},
+    "kind": {"const": "runtime"},
+    "language": {"const": "R"},
+    "r_version": {"type": "string"},
+    "platform": {"type": "string"},
+    "segmantR_version": {"type": "string"},
+    "segmantR_api_version": {"$ref": "common.schema.json#/definitions/semver"},
+    "source_revision": {
+      "type": "object",
+      "required": ["revision", "dirty", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "revision": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+        "dirty": {"enum": ["true", "false", "unknown"]},
+        "source": {"enum": ["RemoteSha", "git-head", "unavailable", "declared"]}
+      }
+    },
+    "packages": {
+      "type": "object",
+      "additionalProperties": {"type": ["string", "null"]}
+    },
+    "python": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "available": {"type": "boolean"},
+        "version": {"type": ["string", "null"]},
+        "modules": {"type": "object", "additionalProperties": {"type": ["string", "null"]}}
+      }
+    },
+    "qupath": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "version": {"type": ["string", "null"]},
+        "stardist_extension_version": {"type": ["string", "null"]}
+      }
+    },
+    "gpu": {"enum": ["unknown", "none", "available", "used"]},
+    "notes": {"type": "array", "items": {"type": "string"}}
+  }
+}

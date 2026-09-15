@@ -1,0 +1,19 @@
+{
+  "lane": "tests/testthat/test-dnn-runtime.R (Cellpose) and a direct protocol run with the same settings",
+  "command": "CUDA_VISIBLE_DEVICES= SEGMANTR_CELLPOSE_PYTHON=~/.venvs/qupath-cellpose3/bin/python Rscript -e 'devtools::test(filter = \"dnn-runtime\")'",
+  "exit_status": 0,
+  "protocol": "cellpose.2d.v1 1.0.0",
+  "parameters": {"model": "cyto3", "diameter": 10, "cytoplasm_channel": 0, "nucleus_channel": 0},
+  "input": "sg_example_image('fluorescence_nuclei') with 0.5 um/px",
+  "status": "succeeded",
+  "mask_status": "staged",
+  "n_objects": 10,
+  "metrics_vs_sg_example_mask": {
+    "dice": 0.9132, "jaccard": 0.8402, "aji": 0.5022, "panoptic_quality": 0.5541,
+    "ap50": 0.8, "ap75": 0.56, "f1_detection": 0.8
+  },
+  "revision": "sha256:615dea22028a799980c24e490700e585c6bc21e558108c09d39f7fe268e6eba5",
+  "runtime": {"cellpose": "3.1.1.3", "torch": "2.7.1+cu128", "python": "3.12", "device": "CPU (CUDA_VISIBLE_DEVICES empty)"},
+  "weights": {"file": "~/.cellpose/models/cyto3 (cached, not downloaded)", "sha256": "2dc3087a8abd7da46d1ab0ddd5824639933cc3ff63b382af3fa1939a392db93c"},
+  "finding": "sg_segment_cellpose() passed tile= to CellposeModel.eval(), which Cellpose 3.x no longer accepts; fixed by passing it only when eval() accepts it."
+}

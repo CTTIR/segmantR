@@ -1,0 +1,18 @@
+{
+  "description": "Expected labels for hand_features.geojson on an 8 x 8 image, computed by hand with the pixel-centre rule (pixel [r, c] has centre (c - 0.5, r - 0.5)). Supported polygon features are numbered in file order; the Point and LineString features are unsupported.",
+  "shape_yx": [8, 8],
+  "labels_row_major": [
+    0, 0, 0, 0, 2, 2, 2, 2,
+    0, 1, 1, 0, 0, 0, 0, 2,
+    0, 1, 1, 0, 0, 0, 0, 2,
+    0, 0, 0, 0, 0, 0, 0, 2,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    3, 3, 3, 0, 0, 4, 4, 4,
+    3, 0, 3, 0, 0, 0, 4, 4,
+    3, 3, 3, 0, 0, 0, 0, 4
+  ],
+  "object_ids": ["a-0001", "b-0002", "c-0003", "d-0004"],
+  "classes": ["Tumor", "Stroma", null, null],
+  "unsupported": 2,
+  "exact": false
+}

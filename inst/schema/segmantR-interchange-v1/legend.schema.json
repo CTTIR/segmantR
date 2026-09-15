@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/legend.schema.json",
+  "title": "segmantR label legend sidecar",
+  "type": "object",
+  "required": ["schema", "schema_version", "mask_type", "background", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "segmantR-interchange-v1"},
+    "schema_version": {"$ref": "common.schema.json#/definitions/semver_v1"},
+    "kind": {"const": "legend"},
+    "mask_type": {"enum": ["instance", "labelled", "binary"]},
+    "background": {"const": 0},
+    "image_id": {"type": ["string", "null"]},
+    "entries": {
+      "type": "array",
+      "items": {"$ref": "common.schema.json#/definitions/legend_entry"}
+    },
+    "extensions": {"$ref": "common.schema.json#/definitions/extensions"}
+  }
+}

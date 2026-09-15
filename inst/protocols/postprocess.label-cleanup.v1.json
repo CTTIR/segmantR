@@ -1,0 +1,239 @@
+{
+  "description": "Removes objects outside area limits, optionally fills holes, splits or prunes disconnected parts, removes border objects, separates touching objects (the higher label yields its contact pixels) and relabels. Steps run in this order: disconnected, fill_holes, touching, border, area filter, relabel. Delegates to sg_cleanup_labels().",
+  "extensions": {
+
+  },
+  "family": "postprocess",
+  "id": "postprocess.label-cleanup.v1",
+  "input_contract": {
+    "array_order": "y,x,channel",
+    "calibration": {
+      "parameters": [
+        "min_area_um2",
+        "max_area_um2"
+      ],
+      "required": "when_parameters_set"
+    },
+    "channel": null,
+    "inputs": [
+      {
+        "description": "Mask to clean.",
+        "required": true,
+        "role": "mask",
+        "type": "sg_mask"
+      },
+      {
+        "description": "Optional image providing pixel calibration (for the um2 limits) and intensities for measurements.",
+        "required": false,
+        "role": "reference",
+        "type": "sg_image"
+      }
+    ],
+    "min_shape_yx": [
+      1,
+      1
+    ],
+    "value_range": {
+      "max": null,
+      "min": null,
+      "policy": "observed"
+    },
+    "value_semantics": [
+      "unknown",
+      "intensity",
+      "raw",
+      "reflectance",
+      "radiance",
+      "absorbance",
+      "probability"
+    ]
+  },
+  "method": {
+    "backend": "segmantR-core",
+    "delegate": "sg_cleanup_labels",
+    "mapping": {
+      "border": "border",
+      "connectivity": "connectivity",
+      "disconnected": "disconnected",
+      "fill_holes": "fill_holes",
+      "max_area": "max_area",
+      "max_area_um2": "max_area_um2",
+      "min_area": "min_area",
+      "min_area_um2": "min_area_um2",
+      "relabel": "relabel",
+      "touching": "touching"
+    }
+  },
+  "output_contract": {
+    "background": 0,
+    "connectivity": null,
+    "dtype": "int32",
+    "label_order": "value",
+    "mask_type": "instance",
+    "measurements": [
+      "area",
+      "centroid",
+      "bbox"
+    ],
+    "status": "draft"
+  },
+  "parameters": {
+    "border": {
+      "default": "keep",
+      "description": "Objects touching the array border.",
+      "enum": [
+        "keep",
+        "remove"
+      ],
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "none"
+    },
+    "connectivity": {
+      "default": 4,
+      "description": "Object connectivity (4 or 8).",
+      "enum": [
+        4,
+        8
+      ],
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "none"
+    },
+    "disconnected": {
+      "default": "keep",
+      "description": "Labels made of several disconnected parts.",
+      "enum": [
+        "keep",
+        "split",
+        "keep_largest"
+      ],
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "none"
+    },
+    "fill_holes": {
+      "default": false,
+      "description": "Fill background holes enclosed by one label.",
+      "requires_calibration": false,
+      "type": "boolean",
+      "unit": "none"
+    },
+    "max_area": {
+      "default": null,
+      "description": "Maximum object area; null = no limit.",
+      "minimum": 1,
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "px2"
+    },
+    "max_area_um2": {
+      "default": null,
+      "description": "Maximum object area in square micrometres.",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": true,
+      "type": "number",
+      "unit": "um2"
+    },
+    "min_area": {
+      "default": 0,
+      "description": "Minimum object area.",
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "px2"
+    },
+    "min_area_um2": {
+      "default": null,
+      "description": "Minimum object area in square micrometres.",
+      "minimum": 0,
+      "nullable": true,
+      "requires_calibration": true,
+      "type": "number",
+      "unit": "um2"
+    },
+    "relabel": {
+      "default": "value",
+      "description": "Relabel to 1..N keeping label order (value), by raster order (raster) or not at all (none).",
+      "enum": [
+        "value",
+        "raster",
+        "none"
+      ],
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "none"
+    },
+    "touching": {
+      "default": "keep",
+      "description": "Touching objects of different labels.",
+      "enum": [
+        "keep",
+        "separate"
+      ],
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "none"
+    }
+  },
+  "postprocess": {
+    "steps": [
+
+    ]
+  },
+  "preprocess": {
+    "normalization": {
+      "clip": false,
+      "high": null,
+      "low": null,
+      "method": "none",
+      "note": "Operates on labels only.",
+      "scope": "none"
+    },
+    "resample": "none",
+    "target_pixel_size_um": null
+  },
+  "provenance_policy": {
+    "hash": "sha256",
+    "record": [
+      "protocol_digest",
+      "parameters_digest",
+      "input_digests",
+      "runtime",
+      "delegate_call",
+      "mask_revision",
+      "measurements_digest"
+    ]
+  },
+  "runtime_profile": {
+    "gpu": "never",
+    "install_hint": null,
+    "language": "R",
+    "python_modules": [
+
+    ],
+    "qupath": null,
+    "r_packages": [
+
+    ],
+    "requires_python": false
+  },
+  "schema": "segmantR-protocol-v1",
+  "seed_policy": {
+    "note": "The algorithm uses no random numbers.",
+    "policy": "deterministic",
+    "seed": null
+  },
+  "tiling": {
+    "max_pixels": 4194304,
+    "mode": "none",
+    "note": "Core protocols process the whole plane in memory; split larger images before running.",
+    "overlap": 0,
+    "tile_size": null
+  },
+  "title": "Label cleanup",
+  "version": "1.0.0"
+}
+

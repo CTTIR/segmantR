@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/integrity.schema.json",
+  "title": "Bundle inventory (identical to the qupflowR integrity.json rule)",
+  "description": "Every regular file except integrity.json itself, sorted by UTF-8 path. bundle_digest = SHA-256 of the canonical JSON of this document.",
+  "type": "object",
+  "required": ["format_version", "files"],
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {"const": "1.0"},
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "size_bytes", "sha256"],
+        "additionalProperties": false,
+        "properties": {
+          "path": {"$ref": "common.schema.json#/definitions/relpath"},
+          "size_bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"$ref": "common.schema.json#/definitions/sha256_hex"}
+        }
+      }
+    }
+  }
+}

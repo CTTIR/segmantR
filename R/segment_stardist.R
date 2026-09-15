@@ -67,6 +67,37 @@ sg_segment_stardist <- function(image,
     "i" = "Running StarDist segmentation with model {.val {model}}."
   ))
 
+  # Extract single channel
+  ch <- .extract_channel(image, channel)
+
+  # Normalise to [0, 1]
+  rng <- range(ch, na.rm = TRUE)
+  if (rng[2] - rng[1] > 0) {
+    ch <- (ch - rng[1]) / (rng[2] - rng[1])
+  }
+
+  mask <- .sg_stardist_predict(ch, model = model,
+                               custom_model_path = custom_model_path,
+                               prob_thresh = prob_thresh,
+                               nms_thresh = nms_thresh, scale = scale,
+                               n_tiles = n_tiles)
+
+  n_cells <- mask$n_cells
+  cli::cli_inform(c(
+    "v" = "StarDist segmented {n_cells} cell{?s}."
+  ))
+
+  mask
+}
+
+#' StarDist inference on an already normalised single-channel matrix
+#'
+#' Shared by [sg_segment_stardist()] and the `stardist.2d.v1` protocol so
+#' that declarative runs can apply the normalisation the protocol declares.
+#' @noRd
+.sg_stardist_predict <- function(ch, model, custom_model_path = NULL,
+                                 prob_thresh = 0.5, nms_thresh = 0.4,
+                                 scale = NULL, n_tiles = NULL) {
   # Import stardist
   stardist_mod <- reticulate::import("stardist.models")
 
@@ -78,15 +109,6 @@ sg_segment_stardist <- function(image,
     )
   } else {
     stardist_mod$StarDist2D$from_pretrained(model)
-  }
-
-  # Extract single channel
-  ch <- .extract_channel(image, channel)
-
-  # Normalise to [0, 1]
-  rng <- range(ch, na.rm = TRUE)
-  if (rng[2] - rng[1] > 0) {
-    ch <- (ch - rng[1]) / (rng[2] - rng[1])
   }
 
   # Convert to numpy
@@ -120,16 +142,9 @@ sg_segment_stardist <- function(image,
   labels <- result[[1]]
   details <- if (length(result) > 1L) result[[2]] else NULL
 
-  mask <- .stardist_to_sg(labels, details = details, model_info = list(
+  .stardist_to_sg(labels, details = details, model_info = list(
     method = paste0("stardist:", model),
     prob_thresh = prob_thresh,
     nms_thresh = nms_thresh
   ))
-
-  n_cells <- mask$n_cells
-  cli::cli_inform(c(
-    "v" = "StarDist segmented {n_cells} cell{?s}."
-  ))
-
-  mask
 }

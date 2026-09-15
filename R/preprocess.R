@@ -80,12 +80,32 @@ sg_preprocess <- function(image,
     }
   }
 
-  new_sg_image(
+  origin <- .sg_image_origin(image)
+  if (!identical(resolution, image$resolution) &&
+      is.finite(image$resolution$x_um %||% NA_real_)) {
+    origin$downsample <- origin$downsample * resolution$x_um /
+      image$resolution$x_um
+  }
+  added <- setdiff(history, image$history)
+  out <- new_sg_image(
     pixels = pixels,
     channels = image$channels,
     resolution = resolution,
-    metadata = image$metadata
+    metadata = image$metadata,
+    id = image$id,
+    plane = image$plane,
+    origin = origin,
+    bands = if (is.null(image$bands)) NULL else
+      image$bands[, setdiff(names(image$bands), c("channel", "c"))],
+    value_semantics = image$value_semantics %||% "unknown",
+    source_digest = image$source_digest,
+    transform_digest = if (length(added)) .sg_digest_json(list(
+      parent = image$transform_digest %||% "identity",
+      steps = I(added))) else image$transform_digest,
+    provenance = image$provenance %||% list()
   )
+  out$history <- history
+  out
 }
 
 #' Separate H&E stain channels by colour deconvolution

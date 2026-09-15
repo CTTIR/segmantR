@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/stardist-model.schema.json",
+  "title": "StarDist model manifest",
+  "type": "object",
+  "required": ["schema", "schema_version", "kind", "name", "representation",
+               "files", "digest", "channels", "n_channels_in",
+               "pixel_size_um", "normalization", "license", "source",
+               "compatibility", "extensions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "segmantR-interchange-v1"},
+    "schema_version": {"$ref": "common.schema.json#/definitions/semver_v1"},
+    "kind": {"const": "stardist-model"},
+    "name": {"type": "string", "minLength": 1},
+    "representation": {"enum": ["pb", "savedmodel", "bioimageio", "keras", "directory", "file", "unknown"]},
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path", "size_bytes", "sha256"],
+        "additionalProperties": false,
+        "properties": {
+          "path": {"$ref": "common.schema.json#/definitions/relpath"},
+          "size_bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"$ref": "common.schema.json#/definitions/sha256_hex"}
+        }
+      }
+    },
+    "digest": {"$ref": "common.schema.json#/definitions/digest"},
+    "channels": {"type": ["array", "null"], "items": {"type": "string"}},
+    "n_channels_in": {"type": ["integer", "null"], "minimum": 1},
+    "pixel_size_um": {"type": ["number", "null"], "exclusiveMinimum": 0},
+    "normalization": {"type": ["object", "null"]},
+    "license": {
+      "type": "object",
+      "required": ["id", "file"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": ["string", "null"]},
+        "file": {"oneOf": [{"$ref": "common.schema.json#/definitions/relpath"}, {"type": "null"}]}
+      }
+    },
+    "source": {"type": ["string", "null"]},
+    "compatibility": {
+      "type": "object",
+      "required": ["python_stardist", "qupath_opencv", "qupath_tensorflow", "qupath_bioimageio"],
+      "additionalProperties": false,
+      "properties": {
+        "python_stardist": {"type": "boolean"},
+        "qupath_opencv": {"type": "boolean"},
+        "qupath_tensorflow": {"type": "boolean"},
+        "qupath_bioimageio": {"type": "boolean"}
+      }
+    },
+    "extensions": {"$ref": "common.schema.json#/definitions/extensions"}
+  }
+}

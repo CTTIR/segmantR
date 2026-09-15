@@ -10,7 +10,10 @@ sg_package_model(
   name = NULL,
   description = NULL,
   include_training_data = FALSE,
-  format = c("segmantR", "cellpose", "both")
+  format = c("segmantR", "cellpose", "both"),
+  embed_weights = TRUE,
+  license = NULL,
+  overwrite = TRUE
 )
 }
 \arguments{
@@ -23,10 +26,19 @@ sg_package_model(
 \item{description}{Character or \code{NULL}. Short description of the model.}
 
 \item{include_training_data}{Logical. Include training data in the archive?
-Default \code{FALSE}.}
+Default \code{FALSE}. When \code{TRUE}, the dataset manifest (not the pixels) is
+included; tiles stay in their own integrity-checked dataset directory.}
 
 \item{format}{Character. Archive format: \code{"segmantR"} (default),
 \code{"cellpose"}, or \code{"both"}.}
+
+\item{embed_weights}{Logical; copy weights into the archive (default) or
+record them as a hashed reference relative to the archive directory.}
+
+\item{license}{Optional license list (\code{id}, \code{name}, \code{source}, \code{text});
+defaults to \code{trained_model$license}.}
+
+\item{overwrite}{Logical; replace an existing archive.}
 }
 \value{
 The output file path, returned invisibly.
@@ -34,6 +46,15 @@ The output file path, returned invisibly.
 \description{
 Creates a \code{.segmantR} archive (ZIP format) containing model weights,
 a \code{model_card.json}, and optionally training data.
+}
+\details{
+The archive keeps relative paths and contains a versioned
+\code{model_card.json} (schema \code{segmantR-model-card-v1}, still carrying the
+fields written by segmantR 0.1.0), \code{runtime.json}, \code{dataset_manifest.json}
+when the model has one, \code{license.json} when a license is given, the
+weights under \verb{weights/} (or a hashed relative reference when
+\code{embed_weights = FALSE}) and \code{checksums.sha256} covering every file.
+Python environments are never copied into a bundle.
 }
 \examples{
 \donttest{

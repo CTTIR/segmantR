@@ -1,0 +1,283 @@
+{
+  "assets": [
+    {
+      "media_type": "image/tiff",
+      "path": "mask.tif",
+      "role": "mask_tiff",
+      "sha256": "001d20cb20200ad0fd9d5669816bc5179e1b775b74baec834b0261da69b6dc96",
+      "size_bytes": 12948
+    },
+    {
+      "media_type": "application/json",
+      "path": "mask.legend.json",
+      "role": "legend",
+      "sha256": "4072749861e3d86917a003585094baf7bc59c2825ad6ba06625ee0df6e4bf55a",
+      "size_bytes": 2030
+    },
+    {
+      "media_type": "application/geo+json",
+      "path": "objects.geojson",
+      "role": "geojson",
+      "sha256": "1c1c5ff66a5f9e5f898daa775e18db740a807e72f6256366d73a5411fe92f2a4",
+      "size_bytes": 10693
+    },
+    {
+      "media_type": "text/csv",
+      "path": "measurements.csv",
+      "role": "measurements_csv",
+      "sha256": "8f1f7163bce8e8e79de2b333eeac12678f8d70928932e9557e539acf2e629597",
+      "size_bytes": 13513
+    }
+  ],
+  "conversions": [
+    {
+      "count": 14,
+      "fidelity": "exact",
+      "from": "mask",
+      "notes": "Pixel-edge polygons; pixel-centre rasterisation restores the labels.",
+      "to": "geojson"
+    }
+  ],
+  "coordinate_convention": {
+    "array_order": "y,x,channel",
+    "origin": "top_left",
+    "pixel_centre": "half_integer",
+    "plane_index_base": 0,
+    "units": "px",
+    "x_axis": "right",
+    "y_axis": "down"
+  },
+  "created": "2026-09-14T21:15:00Z",
+  "extensions": {
+
+  },
+  "id": "mask-96dcb5dd51eee3ca",
+  "image": {
+    "array_order": "y,x,channel",
+    "bands": null,
+    "calibration_digest": null,
+    "channels": [
+      "DAPI"
+    ],
+    "content_digest": "sha256:2f896f7670136f1c04a9963d51cfbf10351869ce5378ea7f06a3596a41139dda",
+    "dtype": "float64",
+    "id": "nuclei",
+    "n_channels": 1,
+    "origin": {
+      "downsample": 1,
+      "x": 0,
+      "y": 0
+    },
+    "pixel_size": {
+      "unit": "um",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "plane": {
+      "c": null,
+      "level": 0,
+      "series": 0,
+      "t": 0,
+      "z": 0
+    },
+    "read_accounting": null,
+    "shape_yx": [
+      96,
+      128
+    ],
+    "source_digest": null,
+    "source_name": null,
+    "transform_digest": null,
+    "value_range": {
+      "max": 2551,
+      "min": 93,
+      "policy": "observed"
+    },
+    "value_semantics": "raw"
+  },
+  "integrity_file": "integrity.json",
+  "kind": "mask",
+  "mask": {
+    "background": 0,
+    "classes": [
+
+    ],
+    "connectivity": null,
+    "content_digest": "sha256:2d4da71e594115918223b5ec5aaa394c6030a5f3942e4e8e4ffa4b3471b4f610",
+    "dtype": "uint8",
+    "id": "mask-96dcb5dd51eee3ca",
+    "image_id": "nuclei",
+    "label_count": 14,
+    "legend": [
+      {
+        "class": null,
+        "label": 1,
+        "name": null,
+        "object_id": "1b919ddc-4f83-8ce5-99df-c257a38b6764"
+      },
+      {
+        "class": null,
+        "label": 2,
+        "name": null,
+        "object_id": "81748058-330d-87cd-929e-882543905b7c"
+      },
+      {
+        "class": null,
+        "label": 3,
+        "name": null,
+        "object_id": "b7a4ea32-4965-8ca8-a877-31d693cd2714"
+      },
+      {
+        "class": null,
+        "label": 4,
+        "name": null,
+        "object_id": "e7e59b1c-0155-891d-ab2a-38c47e06098a"
+      },
+      {
+        "class": null,
+        "label": 5,
+        "name": null,
+        "object_id": "15ead2c2-a0d5-8bd1-a006-dbf71688e286"
+      },
+      {
+        "class": null,
+        "label": 6,
+        "name": null,
+        "object_id": "bdefb0f9-8bfe-84ed-bbda-cbe7e870c617"
+      },
+      {
+        "class": null,
+        "label": 7,
+        "name": null,
+        "object_id": "083e8538-a81a-8dec-8d9a-5c045d596643"
+      },
+      {
+        "class": null,
+        "label": 8,
+        "name": null,
+        "object_id": "0b3b4fc1-d6fa-808d-b0fd-b9f214b04555"
+      },
+      {
+        "class": null,
+        "label": 9,
+        "name": null,
+        "object_id": "00b33acd-2d42-8d16-b5ed-35981317a33a"
+      },
+      {
+        "class": null,
+        "label": 10,
+        "name": null,
+        "object_id": "011b9ad4-88c9-80f1-92c1-cb519568884d"
+      },
+      {
+        "class": null,
+        "label": 11,
+        "name": null,
+        "object_id": "8967eb00-af32-8099-81d6-21f30530108a"
+      },
+      {
+        "class": null,
+        "label": 12,
+        "name": null,
+        "object_id": "43e6c571-8616-8641-b4bd-3ecb19131886"
+      },
+      {
+        "class": null,
+        "label": 13,
+        "name": null,
+        "object_id": "59093553-1c96-820a-80c8-1edcbdb87df2"
+      },
+      {
+        "class": null,
+        "label": 14,
+        "name": null,
+        "object_id": "4fac76d7-62ba-836c-a628-104397b9fcbe"
+      }
+    ],
+    "mask_type": "instance",
+    "max_label": 14,
+    "model_digest": null,
+    "origin": {
+      "downsample": 1,
+      "x": 0,
+      "y": 0
+    },
+    "plane": {
+      "c": null,
+      "level": 0,
+      "series": 0,
+      "t": 0,
+      "z": 0
+    },
+    "review": {
+      "parent_revision": null,
+      "reviewed_at": null,
+      "reviewer": null,
+      "revision": null,
+      "status": "draft"
+    },
+    "revision": "sha256:96dcb5dd51eee3ca315d6f525b44f4170929122de20ca26454bcc4b1917212be",
+    "shape_yx": [
+      96,
+      128
+    ],
+    "transform_digest": null
+  },
+  "measurements": {
+    "columns": [
+      "image_id",
+      "object_id",
+      "label",
+      "name",
+      "namespace",
+      "value",
+      "value_state",
+      "unit",
+      "provider_id"
+    ],
+    "n_rows": 14,
+    "names": [
+      "area_px",
+      "area_um2",
+      "centroid_x_px",
+      "centroid_y_px",
+      "bbox_x_px",
+      "bbox_y_px",
+      "bbox_width_px",
+      "bbox_height_px",
+      "mean_intensity_DAPI"
+    ],
+    "namespace": "derived"
+  },
+  "producer": {
+    "api_version": "1.0.0",
+    "dirty": "unknown",
+    "name": "segmantR",
+    "source_revision": "87b524a6eabba5062f6f4d98b7ba98ca5dc8c26d",
+    "version": "0.1.0.9000"
+  },
+  "runtime": {
+    "language": "R",
+    "packages": {
+      "EBImage": null,
+      "digest": "0.6.39",
+      "nanoparquet": "0.5.1",
+      "openssl": "2.4.2",
+      "reticulate": "1.46.0",
+      "sf": "1.1.2",
+      "tiff": "0.1.12"
+    },
+    "platform": "x86_64-pc-linux-gnu",
+    "r_version": "4.6.1",
+    "segmantR_api_version": "1.0.0",
+    "segmantR_version": "0.1.0.9000",
+    "source_revision": {
+      "dirty": "unknown",
+      "revision": "87b524a6eabba5062f6f4d98b7ba98ca5dc8c26d",
+      "source": "git-head"
+    }
+  },
+  "schema": "segmantR-interchange-v1",
+  "schema_version": "1.0.0"
+}
+

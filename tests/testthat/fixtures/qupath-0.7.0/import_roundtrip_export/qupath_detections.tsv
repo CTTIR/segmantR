@@ -1,0 +1,15 @@
+Image	Object ID	Object type	Name	Classification	Parent	ROI	Centroid X µm	Centroid Y µm	area_px	area_um2	bbox_height_px	bbox_width_px	bbox_x_px	bbox_y_px	centroid_x_px	centroid_y_px	mean_intensity_DAPI
+nuclei.ome.tif	1b919ddc-4f83-8ce5-99df-c257a38b6764	Detection			Root object (Image)	Polygon	26.75	23.25	149	37.25	15	15	46	39	53.5	46.5	1963.557
+nuclei.ome.tif	81748058-330d-87cd-929e-882543905b7c	Detection			Root object (Image)	Polygon	43.75	13.75	81	20.25	11	11	82	22	87.5	27.5	1516.1605
+nuclei.ome.tif	b7a4ea32-4965-8ca8-a877-31d693cd2714	Detection			Root object (Image)	Polygon	31.25	9.25	113	28.25	13	13	56	12	62.5	18.5	1683.708
+nuclei.ome.tif	e7e59b1c-0155-891d-ab2a-38c47e06098a	Detection			Root object (Image)	Polygon	50.75	21.25	81	20.25	11	11	96	37	101.5	42.5	2102.5432
+nuclei.ome.tif	15ead2c2-a0d5-8bd1-a006-dbf71688e286	Detection			Root object (Image)	Polygon	54.75	32.25	149	37.25	15	15	102	57	109.5	64.5	2087.2751
+nuclei.ome.tif	bdefb0f9-8bfe-84ed-bbda-cbe7e870c617	Detection			Root object (Image)	Polygon	53.75	5.75	113	28.25	13	13	101	5	107.5	11.5	2256.9912
+nuclei.ome.tif	083e8538-a81a-8dec-8d9a-5c045d596643	Detection			Root object (Image)	Polygon	58.75	40.75	113	28.25	13	13	111	75	117.5	81.5	2385.469
+nuclei.ome.tif	0b3b4fc1-d6fa-808d-b0fd-b9f214b04555	Detection			Root object (Image)	Polygon	17.75	39.75	113	28.25	13	13	29	73	35.5	79.5	1704.1062
+nuclei.ome.tif	00b33acd-2d42-8d16-b5ed-35981317a33a	Detection			Root object (Image)	Polygon	36.25	38.25	149	37.25	15	15	65	69	72.5	76.5	1966.6174
+nuclei.ome.tif	011b9ad4-88c9-80f1-92c1-cb519568884d	Detection			Root object (Image)	Polygon	8.75	8.25	149	37.25	15	15	10	9	17.5	16.5	1878.6711
+nuclei.ome.tif	8967eb00-af32-8099-81d6-21f30530108a	Detection			Root object (Image)	Polygon	16.75	22.25	149	37.25	15	15	26	37	33.5	44.5	2468.3826
+nuclei.ome.tif	43e6c571-8616-8641-b4bd-3ecb19131886	Detection			Root object (Image)	Polygon	6.25	26.75	81	20.25	11	11	7	48	12.5	53.5	2258.9382
+nuclei.ome.tif	59093553-1c96-820a-80c8-1edcbdb87df2	Detection			Root object (Image)	Polygon	15.75	29.75	81	20.25	11	11	26	54	31.5	59.5	1674.5927
+nuclei.ome.tif	4fac76d7-62ba-836c-a628-104397b9fcbe	Detection			Root object (Image)	Polygon	22.25	30.75	81	20.25	11	11	39	56	44.5	61.5	1661.037

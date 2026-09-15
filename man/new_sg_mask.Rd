@@ -4,7 +4,18 @@
 \alias{new_sg_mask}
 \title{Create a new sg_mask object}
 \usage{
-new_sg_mask(labels, image_id = NULL, model_info = NULL)
+new_sg_mask(
+  labels,
+  image_id = NULL,
+  model_info = NULL,
+  mask_type = c("instance", "labelled", "binary"),
+  legend = NULL,
+  plane = NULL,
+  origin = NULL,
+  status = c("draft", "staged", "reviewed"),
+  provenance = list(),
+  id = NULL
+)
 }
 \arguments{
 \item{labels}{Integer matrix of cell labels. 0 = background,
@@ -13,6 +24,23 @@ new_sg_mask(labels, image_id = NULL, model_info = NULL)
 \item{image_id}{Optional character string identifying the source image.}
 
 \item{model_info}{Optional named list of model metadata.}
+
+\item{mask_type}{One of \code{"instance"}, \code{"labelled"} or \code{"binary"}.}
+
+\item{legend}{Optional data frame with one row per positive label and
+columns \code{label}, \code{object_id}, \code{class}, \code{name}. Missing legends are
+generated deterministically when needed (see \code{\link[=sg_mask_legend]{sg_mask_legend()}}).}
+
+\item{plane}{Optional plane list (see \code{\link[=new_sg_image]{new_sg_image()}}).}
+
+\item{origin}{Optional origin list (see \code{\link[=new_sg_image]{new_sg_image()}}).}
+
+\item{status}{Review status: \code{"draft"} (default), \code{"staged"} or
+\code{"reviewed"}. See \code{\link[=sg_review_mask]{sg_review_mask()}}.}
+
+\item{provenance}{Named list of provenance records.}
+
+\item{id}{Optional mask identifier.}
 }
 \value{
 An object of class \code{sg_mask}.
@@ -21,6 +49,12 @@ An object of class \code{sg_mask}.
 Constructor for the \code{sg_mask} S3 class, which stores an integer label
 matrix where 0 represents background and positive integers represent
 individual cell IDs.
+}
+\details{
+Masks follow the segmantR mask contract: integer values, \code{0} is the
+background, positive integers are object instances (\code{mask_type = "instance"}, the default and historic meaning), class codes
+(\code{"labelled"}) or foreground (\code{"binary"}, values 0/1 only). All arguments
+after \code{model_info} are optional interchange fields.
 }
 \examples{
 labels <- matrix(c(0L, 0L, 1L, 1L, 0L, 2L, 2L, 0L, 0L), nrow = 3)

@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "segmantR-interchange-v1/capabilities.schema.json",
+  "title": "segmantR interchange capability report",
+  "type": "object",
+  "required": ["schema", "schema_version", "kind", "producer", "api_version",
+               "profiles", "formats", "protocols", "backends", "limits", "digest"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "segmantR-interchange-v1"},
+    "schema_version": {"$ref": "common.schema.json#/definitions/semver_v1"},
+    "kind": {"const": "capabilities"},
+    "producer": {"$ref": "common.schema.json#/definitions/producer"},
+    "api_version": {"$ref": "common.schema.json#/definitions/semver"},
+    "profiles": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/definitions/status_entry"}
+    },
+    "formats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["format", "read", "write", "status", "requires"],
+        "additionalProperties": false,
+        "properties": {
+          "format": {"type": "string"},
+          "read": {"type": "boolean"},
+          "write": {"type": "boolean"},
+          "status": {"enum": ["supported", "planned", "unavailable"]},
+          "requires": {"type": "array", "items": {"type": "string"}},
+          "reason": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "protocols": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "version", "status", "available", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string"},
+          "version": {"type": "string"},
+          "status": {"enum": ["supported", "planned", "unavailable"]},
+          "available": {"type": "boolean"},
+          "reason": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "backends": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "available", "version", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {"type": "string"},
+          "available": {"type": "boolean"},
+          "checked": {"type": "boolean"},
+          "version": {"type": ["string", "null"]},
+          "reason": {"type": ["string", "null"]},
+          "install_hint": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "limits": {"type": "object"},
+    "digest": {"$ref": "common.schema.json#/definitions/digest"}
+  },
+  "definitions": {
+    "status_entry": {
+      "type": "object",
+      "required": ["status", "implemented", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {"enum": ["supported", "planned", "unavailable"]},
+        "implemented": {"type": "boolean"},
+        "reason": {"type": ["string", "null"]},
+        "evidence": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

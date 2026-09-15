@@ -1,0 +1,76 @@
+{
+  "created": "2026-09-14T21:15:01Z",
+  "expected_files": [
+    "import_report/import_report.json"
+  ],
+  "extensions": {
+    "detected_qupath": "0.7.0",
+    "detected_stardist_extension": "0.6.0"
+  },
+  "image_binding": {
+    "channels": [
+      "DAPI"
+    ],
+    "height": 96,
+    "image_id": "nuclei",
+    "image_name": "nuclei.ome.tif",
+    "pixel_size_um": {
+      "tolerance": 0.000001,
+      "x": 0.5,
+      "y": 0.5
+    },
+    "plane": {
+      "c": null,
+      "level": 0,
+      "series": 0,
+      "t": 0,
+      "z": 0
+    },
+    "require_calibration": true,
+    "width": 128
+  },
+  "import": {
+    "geojson": "bundle/objects.geojson",
+    "geojson_sha256": "1c1c5ff66a5f9e5f898daa775e18db740a807e72f6256366d73a5411fe92f2a4",
+    "manifest": "bundle/manifest.json",
+    "object_type": "detection",
+    "replace_existing": false
+  },
+  "outputs": {
+    "directory": "import_report",
+    "geojson": null,
+    "manifest": "manifest.json",
+    "mask_tiff": null,
+    "measurements": null,
+    "native_measurements": null,
+    "object_types": [
+      "detection"
+    ]
+  },
+  "parameters_digest": null,
+  "producer": {
+    "api_version": "1.0.0",
+    "dirty": "unknown",
+    "name": "segmantR",
+    "source_revision": "87b524a6eabba5062f6f4d98b7ba98ca5dc8c26d",
+    "version": "0.1.0.9000"
+  },
+  "protocol": null,
+  "qupath": {
+    "extension": null,
+    "min_version": "0.5.0",
+    "tested_version": null
+  },
+  "region_policy": "whole_image",
+  "run_id": "31dd10fc-d375-8334-9376-e48de281076f",
+  "save_policy": "project",
+  "schema": "segmantR-qupath-run-v1",
+  "schema_version": "1.0.0",
+  "stardist": null,
+  "task": "import",
+  "template_version": "1.0.0",
+  "unsupported": [
+
+  ]
+}
+

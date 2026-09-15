@@ -119,6 +119,10 @@ sg_segment_watershed <- function(image,
 #'   membranes. Default is `0.01`.
 #' @param expand_max Integer; maximum number of propagation
 #'   iterations. Default is `20L`.
+#' @param engine `"auto"` (default, historic behaviour: EBImage when it is
+#'   installed and no membrane image is given, otherwise pure R),
+#'   `"voronoi_r"` (always the pure-R engine) or `"ebimage"` (always
+#'   EBImage; errors instead of falling back).
 #'
 #' @return An `sg_mask` object with expanded cell labels.
 #' @export
@@ -136,12 +140,14 @@ sg_segment_propagate <- function(image,
                                  nuclear_mask,
                                  membrane_image = NULL,
                                  lambda = 0.01,
-                                 expand_max = 20L) {
+                                 expand_max = 20L,
+                                 engine = c("auto", "voronoi_r", "ebimage")) {
 
   stopifnot(inherits(image, "sg_image"))
   stopifnot(inherits(nuclear_mask, "sg_mask"))
   stopifnot(is.numeric(lambda), length(lambda) == 1L, lambda >= 0)
   expand_max <- as.integer(expand_max)
+  engine <- match.arg(engine)
 
   seeds <- nuclear_mask$labels
 
@@ -152,8 +158,21 @@ sg_segment_propagate <- function(image,
     membrane <- .extract_channel(membrane_image, 1L)
   }
 
+  if (engine == "ebimage") {
+    if (!.check_ebimage()) {
+      .sg_abort_unavailable(
+        "EBImage propagation",
+        "Install the Bioconductor package {.pkg EBImage} or use engine = 'voronoi_r'."
+      )
+    }
+    if (!is.null(membrane_image)) {
+      .sg_abort("The EBImage engine does not use a membrane image.",
+                code = "VALIDATION_FAILED")
+    }
+  }
+
   # Try EBImage::propagate for speed
-  if (.check_ebimage() && is.null(membrane_image)) {
+  if (engine != "voronoi_r" && .check_ebimage() && is.null(membrane_image)) {
     ch <- .extract_channel(image, 1L)
     labels <- tryCatch({
       eb_result <- .ebimage_propagate(ch, seeds = seeds, lambda = lambda)
@@ -161,6 +180,12 @@ sg_segment_propagate <- function(image,
       dim(eb_labels) <- dim(seeds)
       eb_labels
     }, error = function(e) {
+      if (engine == "ebimage") {
+        .sg_abort(c("EBImage::propagate() failed.",
+                    "x" = "{conditionMessage(e)}"),
+                  class = "sg_capability_error",
+                  code = "CAPABILITY_UNAVAILABLE")
+      }
       cli::cli_inform(c(
         "!" = "EBImage::propagate() failed; using pure-R fallback.",
         "i" = "{conditionMessage(e)}"

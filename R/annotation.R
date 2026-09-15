@@ -215,6 +215,16 @@ sg_apply_corrections <- function(mask, corrections) {
     "i" = "Result: {length(unique_ids)} cell{?s}."
   ))
 
-  new_sg_mask(new_labels, image_id = mask$image_id,
-              model_info = mask$model_info)
+  # Carry image binding, legend (object ids follow their labels) and review
+  # history; corrections of staged or reviewed masks become staged revisions.
+  label_map <- stats::setNames(seq_along(unique_ids), unique_ids)
+  label_map <- label_map[as.integer(names(label_map)) <=
+                           max(mask$labels, 0L, na.rm = TRUE)]
+  out <- .sg_mask_derive(mask, new_labels, label_map = label_map,
+                         operation = "corrections")
+  out$provenance$corrections <- c(mask$provenance$corrections, list(list(
+    n_applied = n_applied, parent_revision = sg_mask_revision(mask),
+    at = .sg_utc_now()
+  )))
+  out
 }

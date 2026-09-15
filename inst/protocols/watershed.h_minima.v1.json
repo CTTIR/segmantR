@@ -1,0 +1,261 @@
+{
+  "description": "Otsu foreground, distance-transform seeds (h fraction), greedy 4-neighbour flooding and optional expansion. Delegates to sg_segment_watershed(seed_method = 'h_minima'). The min_distance argument of the direct function is not used by the core implementation and is therefore not a protocol parameter. In segmantR 0.1.x the h_minima seed rule uses the same distance-transform fraction as watershed.distance.v1; both protocols are kept so recorded runs stay unambiguous.",
+  "extensions": {
+
+  },
+  "family": "watershed",
+  "id": "watershed.h_minima.v1",
+  "input_contract": {
+    "array_order": "y,x,channel",
+    "calibration": {
+      "parameters": [
+
+      ],
+      "required": "never"
+    },
+    "channel": {
+      "min_channels": 1,
+      "operation": "single",
+      "parameters": [
+        "channel",
+        "channel_name",
+        "wavelength_nm",
+        "band_operation"
+      ]
+    },
+    "inputs": [
+      {
+        "description": "Image providing the segmentation channel.",
+        "required": true,
+        "role": "image",
+        "type": "sg_image"
+      }
+    ],
+    "min_shape_yx": [
+      3,
+      3
+    ],
+    "value_range": {
+      "max": null,
+      "min": null,
+      "policy": "observed"
+    },
+    "value_semantics": [
+      "unknown",
+      "intensity",
+      "raw",
+      "reflectance",
+      "radiance",
+      "absorbance",
+      "probability"
+    ]
+  },
+  "method": {
+    "backend": "segmantR-core",
+    "delegate": "sg_segment_watershed",
+    "fixed_arguments": {
+      "seed_method": "h_minima"
+    },
+    "mapping": {
+      "channel": "channel",
+      "expand_method": "expand_method",
+      "expand_pixels": "expand_pixels",
+      "h": "h",
+      "membrane_channel": "membrane_channel"
+    }
+  },
+  "output_contract": {
+    "background": 0,
+    "connectivity": 4,
+    "dtype": "int32",
+    "label_order": "raster",
+    "mask_type": "instance",
+    "measurements": [
+      "area",
+      "centroid",
+      "bbox",
+      "mean_intensity"
+    ],
+    "status": "draft"
+  },
+  "parameters": {
+    "band_a_nm": {
+      "default": null,
+      "description": "Wavelength of band a for ratio/normalized_difference.",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "nm"
+    },
+    "band_b_nm": {
+      "default": null,
+      "description": "Wavelength of band b for ratio/normalized_difference.",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "nm"
+    },
+    "band_max_nm": {
+      "default": null,
+      "description": "Upper wavelength bound for band_mean.",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "nm"
+    },
+    "band_min_nm": {
+      "default": null,
+      "description": "Lower wavelength bound for band_mean.",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "nm"
+    },
+    "band_operation": {
+      "default": "none",
+      "description": "Registered band operation producing the single input channel: none (use the selected channel), band_mean (mean of bands within [band_min_nm, band_max_nm]), ratio (a / b) or normalized_difference ((a - b) / (a + b)) of the bands nearest band_a_nm and band_b_nm.",
+      "enum": [
+        "none",
+        "band_mean",
+        "ratio",
+        "normalized_difference"
+      ],
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "none"
+    },
+    "channel": {
+      "default": 1,
+      "description": "1-based channel (band) position in the [y, x, channel] array. Used when channel_name, wavelength_nm and band_operation are not set.",
+      "minimum": 1,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "index"
+    },
+    "channel_name": {
+      "default": null,
+      "description": "Channel or band name to select instead of an index.",
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "name"
+    },
+    "expand_method": {
+      "default": "voronoi",
+      "description": "Region expansion after flooding.",
+      "enum": [
+        "voronoi",
+        "dilation"
+      ],
+      "requires_calibration": false,
+      "type": "string",
+      "unit": "none"
+    },
+    "expand_pixels": {
+      "default": 3,
+      "description": "Expansion distance after flooding.",
+      "maximum": 1000,
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "px"
+    },
+    "h": {
+      "default": 0.05,
+      "description": "Fraction of the maximum distance-transform value above which pixels become seeds.",
+      "maximum": 1,
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "fraction"
+    },
+    "membrane_channel": {
+      "default": null,
+      "description": "1-based channel used as flooding surface; null uses the inverted segmentation channel.",
+      "minimum": 1,
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "index"
+    },
+    "wavelength_nm": {
+      "default": null,
+      "description": "Centre wavelength of the band to select (requires band wavelengths in the image metadata).",
+      "exclusive_minimum": 0,
+      "nullable": true,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "nm"
+    },
+    "wavelength_tolerance_nm": {
+      "default": 5,
+      "description": "Maximum distance between wavelength_nm and the nearest band centre.",
+      "minimum": 0,
+      "requires_calibration": false,
+      "type": "number",
+      "unit": "nm"
+    }
+  },
+  "postprocess": {
+    "steps": [
+
+    ]
+  },
+  "preprocess": {
+    "normalization": {
+      "clip": false,
+      "high": null,
+      "low": null,
+      "method": "none",
+      "note": "Thresholds are computed on the selected values; Otsu and triangle are invariant to affine scaling.",
+      "scope": "none"
+    },
+    "resample": "none",
+    "target_pixel_size_um": null
+  },
+  "provenance_policy": {
+    "hash": "sha256",
+    "record": [
+      "protocol_digest",
+      "parameters_digest",
+      "input_digests",
+      "runtime",
+      "delegate_call",
+      "mask_revision",
+      "measurements_digest"
+    ]
+  },
+  "runtime_profile": {
+    "gpu": "never",
+    "install_hint": null,
+    "language": "R",
+    "python_modules": [
+
+    ],
+    "qupath": null,
+    "r_packages": [
+
+    ],
+    "requires_python": false
+  },
+  "schema": "segmantR-protocol-v1",
+  "seed_policy": {
+    "note": "The algorithm uses no random numbers.",
+    "policy": "deterministic",
+    "seed": null
+  },
+  "tiling": {
+    "max_pixels": 4194304,
+    "mode": "none",
+    "note": "Core protocols process the whole plane in memory; split larger images before running.",
+    "overlap": 0,
+    "tile_size": null
+  },
+  "title": "Marker-controlled watershed, h_minima seeds",
+  "version": "1.0.0"
+}
+

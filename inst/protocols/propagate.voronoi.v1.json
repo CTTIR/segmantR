@@ -1,0 +1,149 @@
+{
+  "description": "Expands seed labels (for example nuclei) by 4-neighbour majority propagation for at most expand_max iterations. An optional membrane image restricts growth to pixels below its 90th percentile. Always uses the pure-R engine (sg_segment_propagate(engine = 'voronoi_r')) so the result does not depend on whether EBImage is installed.",
+  "extensions": {
+
+  },
+  "family": "propagate",
+  "id": "propagate.voronoi.v1",
+  "input_contract": {
+    "array_order": "y,x,channel",
+    "calibration": {
+      "parameters": [
+
+      ],
+      "required": "never"
+    },
+    "channel": null,
+    "inputs": [
+      {
+        "description": "Image the seeds belong to (defines the grid).",
+        "required": true,
+        "role": "image",
+        "type": "sg_image"
+      },
+      {
+        "description": "Instance mask with one label per seed.",
+        "mask_type": "instance",
+        "required": true,
+        "role": "seeds",
+        "type": "sg_mask"
+      },
+      {
+        "description": "Optional single-channel membrane image.",
+        "required": false,
+        "role": "membrane",
+        "type": "sg_image"
+      }
+    ],
+    "min_shape_yx": [
+      3,
+      3
+    ],
+    "value_range": {
+      "max": null,
+      "min": null,
+      "policy": "observed"
+    },
+    "value_semantics": [
+      "unknown",
+      "intensity",
+      "raw",
+      "reflectance",
+      "radiance",
+      "absorbance",
+      "probability"
+    ]
+  },
+  "method": {
+    "backend": "segmantR-core",
+    "delegate": "sg_segment_propagate",
+    "fixed_arguments": {
+      "engine": "voronoi_r"
+    },
+    "mapping": {
+      "expand_max": "expand_max"
+    }
+  },
+  "output_contract": {
+    "background": 0,
+    "connectivity": 4,
+    "dtype": "int32",
+    "label_order": "value",
+    "mask_type": "instance",
+    "measurements": [
+      "area",
+      "centroid",
+      "bbox"
+    ],
+    "status": "draft"
+  },
+  "parameters": {
+    "expand_max": {
+      "default": 20,
+      "description": "Maximum number of propagation iterations.",
+      "maximum": 10000,
+      "minimum": 1,
+      "requires_calibration": false,
+      "type": "integer",
+      "unit": "count"
+    }
+  },
+  "postprocess": {
+    "steps": [
+
+    ]
+  },
+  "preprocess": {
+    "normalization": {
+      "clip": false,
+      "high": null,
+      "low": null,
+      "method": "none",
+      "note": "Pixel values are not used.",
+      "scope": "none"
+    },
+    "resample": "none",
+    "target_pixel_size_um": null
+  },
+  "provenance_policy": {
+    "hash": "sha256",
+    "record": [
+      "protocol_digest",
+      "parameters_digest",
+      "input_digests",
+      "runtime",
+      "delegate_call",
+      "mask_revision",
+      "measurements_digest"
+    ]
+  },
+  "runtime_profile": {
+    "gpu": "never",
+    "install_hint": null,
+    "language": "R",
+    "python_modules": [
+
+    ],
+    "qupath": null,
+    "r_packages": [
+
+    ],
+    "requires_python": false
+  },
+  "schema": "segmantR-protocol-v1",
+  "seed_policy": {
+    "note": "The algorithm uses no random numbers.",
+    "policy": "deterministic",
+    "seed": null
+  },
+  "tiling": {
+    "max_pixels": 4194304,
+    "mode": "none",
+    "note": "Core protocols process the whole plane in memory; split larger images before running.",
+    "overlap": 0,
+    "tile_size": null
+  },
+  "title": "Voronoi propagation from seed labels",
+  "version": "1.0.0"
+}
+

@@ -3,8 +3,13 @@
 #' Launch the segmantR Shiny application
 #'
 #' Starts the interactive Shiny application for cell segmentation,
-#' annotation, and model training. The app is bundled under
-#' `inst/shiny/segmantR/`.
+#' annotation, and model training. The app is built by [sg_app()] from
+#' package code; `inst/shiny/segmantR/app.R` is a thin wrapper for
+#' `shiny::runApp()` on the installed directory.
+#'
+#' For compatibility with code that starts the bundled app directory
+#' directly, the pre-loaded objects are also stored in the option
+#' `segmantR.app_env`; [sg_app()] itself does not use options.
 #'
 #' @param image An `sg_image` object to pre-load, or `NULL`.
 #' @param mask An `sg_mask` object to pre-load, or `NULL`.
@@ -21,18 +26,14 @@
 sg_run_app <- function(image = NULL, mask = NULL, port = NULL,
                        launch.browser = TRUE) {
 
-  app_dir <- system.file("shiny", "segmantR", package = "segmantR")
-  if (!nzchar(app_dir)) {
-    cli::cli_abort("Could not locate the bundled Shiny app directory.")
-  }
-
-  # Pass objects via options so the app can retrieve them on startup
+  # Legacy integration channel kept for direct launches of inst/shiny.
   .sg_env <- new.env(parent = emptyenv())
   .sg_env$image <- image
   .sg_env$mask <- mask
   options(segmantR.app_env = .sg_env)
 
-  run_args <- list(appDir = app_dir, launch.browser = launch.browser)
+  app <- sg_app(input = list(image = image, mask = mask))
+  run_args <- list(appDir = app, launch.browser = launch.browser)
   if (!is.null(port)) {
     run_args$port <- as.integer(port)
   }

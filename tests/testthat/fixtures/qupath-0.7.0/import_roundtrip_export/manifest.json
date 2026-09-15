@@ -1,0 +1,271 @@
+{
+  "schema": "segmantR-interchange-v1",
+  "schema_version": "1.0.0",
+  "kind": "qupath-export",
+  "id": "31dd10fc-d375-8334-9376-e48de281076f-export",
+  "created": "2026-09-14T21:15:08Z",
+  "producer": {
+    "name": "segmantR-qupath-template",
+    "version": "1.0.0",
+    "api_version": "1.0.0",
+    "source_revision": null,
+    "dirty": "unknown"
+  },
+  "coordinate_convention": {
+    "origin": "top_left",
+    "x_axis": "right",
+    "y_axis": "down",
+    "units": "px",
+    "pixel_centre": "half_integer",
+    "array_order": "y,x,channel",
+    "plane_index_base": 0
+  },
+  "image": {
+    "id": "nuclei",
+    "source_name": "nuclei.ome.tif",
+    "shape_yx": [
+      96,
+      128
+    ],
+    "n_channels": 1,
+    "array_order": "y,x,channel",
+    "dtype": "uint16",
+    "channels": [
+      "DAPI"
+    ],
+    "bands": null,
+    "plane": {
+      "level": 0,
+      "series": 0,
+      "c": null,
+      "z": 0,
+      "t": 0
+    },
+    "origin": {
+      "x": 0,
+      "y": 0,
+      "downsample": 1
+    },
+    "pixel_size": {
+      "x": 0.5,
+      "y": 0.5,
+      "unit": "um"
+    },
+    "value_semantics": "unknown",
+    "value_range": null,
+    "content_digest": null,
+    "source_digest": null,
+    "transform_digest": null,
+    "calibration_digest": null,
+    "read_accounting": null
+  },
+  "mask": {
+    "id": "qupath-31dd10fc-d375-8334-9376-e48de281076f-export",
+    "image_id": "nuclei",
+    "mask_type": "instance",
+    "dtype": "uint32",
+    "background": 0,
+    "shape_yx": [
+      96,
+      128
+    ],
+    "label_count": 14,
+    "max_label": 14,
+    "plane": {
+      "level": 0,
+      "series": 0,
+      "c": null,
+      "z": 0,
+      "t": 0
+    },
+    "origin": {
+      "x": 0,
+      "y": 0,
+      "downsample": 1
+    },
+    "connectivity": null,
+    "content_digest": "sha256:2fac9c78e8e8ce841e22e6a67d07abad7a153493675fc2910616173069ab5ed3",
+    "revision": "sha256:9a48b1f6647d2452f75054f3afecb1834fc7116d625dd29de8bfd355c11c5554",
+    "review": {
+      "status": "staged",
+      "revision": null,
+      "parent_revision": null,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "legend": [
+      {
+        "label": 1,
+        "object_id": "00b33acd-2d42-8d16-b5ed-35981317a33a",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 2,
+        "object_id": "011b9ad4-88c9-80f1-92c1-cb519568884d",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 3,
+        "object_id": "083e8538-a81a-8dec-8d9a-5c045d596643",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 4,
+        "object_id": "0b3b4fc1-d6fa-808d-b0fd-b9f214b04555",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 5,
+        "object_id": "15ead2c2-a0d5-8bd1-a006-dbf71688e286",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 6,
+        "object_id": "1b919ddc-4f83-8ce5-99df-c257a38b6764",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 7,
+        "object_id": "43e6c571-8616-8641-b4bd-3ecb19131886",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 8,
+        "object_id": "4fac76d7-62ba-836c-a628-104397b9fcbe",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 9,
+        "object_id": "59093553-1c96-820a-80c8-1edcbdb87df2",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 10,
+        "object_id": "81748058-330d-87cd-929e-882543905b7c",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 11,
+        "object_id": "8967eb00-af32-8099-81d6-21f30530108a",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 12,
+        "object_id": "b7a4ea32-4965-8ca8-a877-31d693cd2714",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 13,
+        "object_id": "bdefb0f9-8bfe-84ed-bbda-cbe7e870c617",
+        "class": null,
+        "name": null
+      },
+      {
+        "label": 14,
+        "object_id": "e7e59b1c-0155-891d-ab2a-38c47e06098a",
+        "class": null,
+        "name": null
+      }
+    ],
+    "classes": [],
+    "model_digest": null,
+    "transform_digest": null
+  },
+  "measurements": {
+    "n_rows": 126,
+    "namespace": "stored",
+    "columns": [
+      "image_id",
+      "object_id",
+      "label",
+      "name",
+      "namespace",
+      "value",
+      "value_state",
+      "unit",
+      "provider_id"
+    ],
+    "names": [
+      "area_px",
+      "area_um2",
+      "bbox_height_px",
+      "bbox_width_px",
+      "bbox_x_px",
+      "bbox_y_px",
+      "centroid_x_px",
+      "centroid_y_px",
+      "mean_intensity_DAPI"
+    ]
+  },
+  "assets": [
+    {
+      "role": "qupath_geojson",
+      "path": "objects.geojson",
+      "media_type": "application/geo+json",
+      "size_bytes": 9852,
+      "sha256": "b4e163c0823afa3f181c9b6e8998ebc1c574f5c2679a05cc90f92fc453d0eaa0"
+    },
+    {
+      "role": "mask_tiff",
+      "path": "mask.tif",
+      "media_type": "image/tiff",
+      "size_bytes": 49286,
+      "sha256": "1eea56794fdf69c54ebaea8aaa849fc624afa879818f18e390ff1d38cd66c8d7"
+    },
+    {
+      "role": "measurements_csv",
+      "path": "measurements.csv",
+      "media_type": "text/csv",
+      "size_bytes": 13769,
+      "sha256": "757905db4227782f94443c193b34026fdb924878853c72c7b01d39b6f4621261"
+    },
+    {
+      "role": "other",
+      "path": "qupath_detections.tsv",
+      "media_type": "text/tab-separated-values",
+      "size_bytes": 2237,
+      "sha256": "346ebde34955da48fe7d4e7a60607ad41d7949213a88f01417ea1e80f5190871"
+    }
+  ],
+  "conversions": [
+    {
+      "from": "qupath-roi",
+      "to": "qupath-geojson",
+      "fidelity": "exact",
+      "notes": "QuPath GeoJSON export of the selected ROIs",
+      "count": 14
+    },
+    {
+      "from": "qupath-roi",
+      "to": "mask",
+      "fidelity": "approximated",
+      "notes": "Java2D pixel-centre fill of polygon ROIs with float vertices; later objects overwrite earlier ones",
+      "count": 14
+    }
+  ],
+  "integrity_file": "integrity.json",
+  "extensions": {
+    "qupath": {
+      "version": "0.7.0",
+      "stardist_extension_version": "0.6.0",
+      "template_version": "1.0.0",
+      "task": "export",
+      "run_id": "31dd10fc-d375-8334-9376-e48de281076f-export",
+      "region_policy": "whole_image",
+      "save_policy": "none",
+      "n_regions": 0
+    }
+  }
+}
