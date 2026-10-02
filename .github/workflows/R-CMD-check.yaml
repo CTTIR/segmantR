@@ -17,3 +17,4 @@ jobs:
       # Suggests Bioconductor packages that pak cannot solve without the
       # Bioconductor repository declared.
       bioc-repository: true
+      macos-xquartz: true
