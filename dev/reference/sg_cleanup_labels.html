@@ -115,7 +115,8 @@ pixels of the higher label to background (4-neighbourhood).</p></dd>
 
 <dt id="arg-disconnected">disconnected<a class="anchor" aria-label="anchor" href="#arg-disconnected"></a></dt>
 <dd><p><code>"keep"</code>, <code>"split"</code> (new labels for extra parts) or
-<code>"keep_largest"</code> for labels consisting of several parts.</p></dd>
+<code>"keep_largest"</code> for labels consisting of several parts. Splitting fails
+if the additional labels would exceed the supported signed-integer range.</p></dd>
 
 
 <dt id="arg-relabel">relabel<a class="anchor" aria-label="anchor" href="#arg-relabel"></a></dt>

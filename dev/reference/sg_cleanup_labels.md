@@ -63,7 +63,8 @@ sg_cleanup_labels(
 - disconnected:
 
   `"keep"`, `"split"` (new labels for extra parts) or `"keep_largest"`
-  for labels consisting of several parts.
+  for labels consisting of several parts. Splitting fails if the
+  additional labels would exceed the supported signed-integer range.
 
 - relabel:
 
