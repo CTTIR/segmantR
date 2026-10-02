@@ -12,9 +12,13 @@
 #'   for denoising. Default is `FALSE`.
 #' @param contrast Character string specifying contrast enhancement.
 #'   One of `"none"` (default), `"clahe"`, or `"stretch"`.
-#' @param target_resolution Numeric scalar or `NULL`. If not `NULL`,
-#'   the image is resampled to this target resolution (microns per
-#'   pixel) using bilinear interpolation.
+#' @param target_resolution Finite positive numeric scalar or `NULL`. If
+#'   supplied, resample to this many microns per current array pixel using
+#'   bilinear interpolation. Requested resampling of anisotropic pixels is
+#'   unsupported and raises an error; leave `NULL` to retain them unchanged.
+#'   Both pixel sizes must be finite and positive to resample. Partial or
+#'   invalid calibration raises an error; if both sizes are unknown, the
+#'   existing message-and-skip behavior is retained.
 #'
 #' @return A new `sg_image` object with its `history` field updated to
 #'   record the preprocessing steps applied.
@@ -34,6 +38,40 @@ sg_preprocess <- function(image,
   stain_normalize <- match.arg(stain_normalize)
   contrast <- match.arg(contrast)
   stopifnot(is.logical(denoise), length(denoise) == 1L)
+  if (!is.null(target_resolution)) {
+    valid_target <- is.numeric(target_resolution) &&
+      is.null(dim(target_resolution)) && length(target_resolution) == 1L &&
+      is.finite(target_resolution) && target_resolution > 0
+    if (!valid_target) {
+      .sg_abort(
+        "{.arg target_resolution} must be a finite positive numeric scalar.",
+        code = "PARAMETER_OUT_OF_RANGE"
+      )
+    }
+    px <- image$resolution$x_um
+    py <- image$resolution$y_um
+    valid_size <- function(x) {
+      is.numeric(x) && is.null(dim(x)) && length(x) == 1L &&
+        is.finite(x) && x > 0
+    }
+    unknown_size <- function(x) {
+      is.null(x) || (is.numeric(x) && is.null(dim(x)) && length(x) == 1L &&
+                       is.na(x) && !is.nan(x))
+    }
+    if (!(valid_size(px) && valid_size(py))) {
+      if (!(unknown_size(px) && unknown_size(py))) {
+        .sg_abort(
+          "Resampling requires finite positive x/y pixel sizes.",
+          class = "sg_calibration_error", code = "CALIBRATION_MISSING",
+          details = list(reason = "invalid_pixel_calibration")
+        )
+      }
+    } else if (px != py) {
+      .sg_abort("Resampling anisotropic pixels is unsupported.",
+                code = "PARAMETER_OUT_OF_RANGE",
+                details = list(reason = "unsupported_anisotropic_resampling"))
+    }
+  }
 
   pixels <- image$pixels
   history <- image$history
@@ -63,10 +101,8 @@ sg_preprocess <- function(image,
 
   # --- Resolution resampling ----------------------------------------------
   if (!is.null(target_resolution)) {
-    stopifnot(is.numeric(target_resolution), length(target_resolution) == 1L,
-              target_resolution > 0)
     current_res <- resolution$x_um
-    if (!is.na(current_res) && current_res > 0) {
+    if (valid_size(current_res)) {
       scale_factor <- current_res / target_resolution
       pixels <- .resample_bilinear(pixels, scale_factor)
       resolution$x_um <- target_resolution

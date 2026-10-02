@@ -1,5 +1,11 @@
 # segmantR (development version)
 
+* Physical areas use current array pixel calibration once after resampling.
+  Level-0 geometry and OME spacing are unchanged; corrected downsampled
+  measurement assets have new digests and require explicit revalidation.
+  Resampling rejects nonfinite targets and unsupported anisotropic pixels
+  before interpolation.
+
 * PNG mask previews allocate colors for present labels, including sparse IDs.
   Label cleanup avoids unnecessary integer overflow and rejects splits that
   would exhaust the supported label range before changing labels.

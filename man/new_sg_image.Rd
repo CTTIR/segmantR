@@ -26,7 +26,9 @@ new_sg_image(
 \item{channels}{Character vector of channel names. If \code{NULL}, defaults to
 \code{ch1}, \code{ch2}, etc.}
 
-\item{resolution}{Named list with \code{x_um} and \code{y_um} (microns per pixel).}
+\item{resolution}{Named list with \code{x_um} and \code{y_um}: microns per current
+array pixel. Divide these by \code{origin$downsample} for the full-resolution
+reference pixel sizes.}
 
 \item{metadata}{Named list of additional image metadata.}
 

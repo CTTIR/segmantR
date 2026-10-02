@@ -301,7 +301,7 @@
 #' @param pixels Optional matrix or array `[y, x, channel]` for intensity.
 #' @param channels Channel names for `pixels`.
 #' @param origin List with `x`, `y`, `downsample`.
-#' @param pixel_size List with `x`, `y` in um (NA if unknown).
+#' @param pixel_size Current array pixel sizes `x`, `y` in um (NA if unknown).
 #' @param which Measurement names to compute.
 #' @return Wide tibble (one row per label).
 #' @noRd
@@ -329,7 +329,7 @@
     out$area_px <- area * ds * ds
     if (is.finite(pixel_size$x %||% NA_real_) &&
         is.finite(pixel_size$y %||% NA_real_)) {
-      out$area_um2 <- out$area_px * pixel_size$x * pixel_size$y
+      out$area_um2 <- area * pixel_size$x * pixel_size$y
     }
   }
   if ("centroid" %in% which) {

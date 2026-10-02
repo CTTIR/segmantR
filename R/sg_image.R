@@ -12,7 +12,9 @@
 #'   (multi-channel).
 #' @param channels Character vector of channel names. If `NULL`, defaults to
 #'   `ch1`, `ch2`, etc.
-#' @param resolution Named list with `x_um` and `y_um` (microns per pixel).
+#' @param resolution Named list with `x_um` and `y_um`: microns per current
+#'   array pixel. Divide these by `origin$downsample` for the full-resolution
+#'   reference pixel sizes.
 #' @param metadata Named list of additional image metadata.
 #' @param id Optional stable image identifier (string). Absolute file paths
 #'   must not be used as identity.

@@ -52,6 +52,11 @@ only with a real qupflowR/annotatR consumer and QuPath/StarDist evidence.
   y down, unit px. Array cell `[r, c]` covers `[c-1, c) x [r-1, r)` before
   the image `origin` (`x`, `y`, `downsample`) is applied; the pixel centre is
   at half-integers. GeoJSON uses these image coordinates (no CRS).
+* **Calibration**: image `resolution$x_um/y_um` and manifest image
+  `pixel_size` are micrometres per current array pixel. OME PhysicalSizeX/Y
+  use the same spacing. Divide it by `origin$downsample` to obtain the
+  level-0 reference spacing. `area_px` uses level-0 square pixels;
+  `area_um2` equals occupied array pixels times the two current pixel sizes.
 * **Planes**: `level`, `series`, `c`, `z`, `t` are zero-based; `c = null`
   means all channels. Image and mask planes must agree; unknown planes are
   rejected, never set to 0.
@@ -77,6 +82,20 @@ only with a real qupflowR/annotatR consumer and QuPath/StarDist evidence.
   by UTF-8 path, with `size_bytes` and `sha256`; the bundle digest is the
   SHA-256 of its canonical JSON (keys sorted by code point, no whitespace,
   ECMAScript number format). Model archives use `checksums.sha256`.
+
+### Physical area correction boundary
+
+The development version corrects physical areas for downsampled arrays:
+current-array-pixel calibration must not be multiplied by downsample a
+second time. Pixel labels, level-0 geometry, `area_px`, OME spacing and
+protocol definitions are unchanged. Corrected `area_um2` values change
+measurement assets and bundle digests when downsample differs from one.
+Existing authenticated bundles are not rewritten; re-export and revalidate
+explicitly when adopting corrected measurements. Callers that supplied
+level-0 spacing as `resolution` for a downsampled array must first multiply
+it by downsample to supply the documented current-array-pixel calibration.
+Requested anisotropic resampling is refused under the scalar-downsample
+model; anisotropic images remain supported without resampling.
 
 ### Canonical number correction boundary
 

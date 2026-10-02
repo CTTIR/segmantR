@@ -25,9 +25,13 @@ for denoising. Default is \code{FALSE}.}
 \item{contrast}{Character string specifying contrast enhancement.
 One of \code{"none"} (default), \code{"clahe"}, or \code{"stretch"}.}
 
-\item{target_resolution}{Numeric scalar or \code{NULL}. If not \code{NULL},
-the image is resampled to this target resolution (microns per
-pixel) using bilinear interpolation.}
+\item{target_resolution}{Finite positive numeric scalar or \code{NULL}. If
+supplied, resample to this many microns per current array pixel using
+bilinear interpolation. Requested resampling of anisotropic pixels is
+unsupported and raises an error; leave \code{NULL} to retain them unchanged.
+Both pixel sizes must be finite and positive to resample. Partial or
+invalid calibration raises an error; if both sizes are unknown, the
+existing message-and-skip behavior is retained.}
 }
 \value{
 A new \code{sg_image} object with its \code{history} field updated to
