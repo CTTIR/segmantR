@@ -326,12 +326,14 @@ sg_export_mask <- function(mask, path, format = c("tiff", "png", "geojson",
       tiff::writeTIFF(labels / max_val, path, bits.per.sample = 16L)
     },
     png = {
-      max_val <- max(labels)
-      if (max_val == 0L) max_val <- 1L
+      ids <- sort(unique(labels[labels > 0L]))
+      display_labels <- labels
+      display_labels[labels > 0L] <- match(labels[labels > 0L], ids)
+      n_colours <- max(1L, length(ids))
       grDevices::png(path, width = ncol(labels), height = nrow(labels))
       graphics::par(mar = c(0, 0, 0, 0))
-      graphics::image(t(labels[rev(seq_len(nrow(labels))), ]),
-                      col = c("black", grDevices::rainbow(max_val)),
+      graphics::image(t(display_labels[rev(seq_len(nrow(labels))), ]),
+                      col = c("black", grDevices::rainbow(n_colours)),
                       axes = FALSE)
       grDevices::dev.off()
     },

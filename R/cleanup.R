@@ -18,7 +18,8 @@
 #' @param touching `"keep"` or `"separate"`; `"separate"` sets contact
 #'   pixels of the higher label to background (4-neighbourhood).
 #' @param disconnected `"keep"`, `"split"` (new labels for extra parts) or
-#'   `"keep_largest"` for labels consisting of several parts.
+#'   `"keep_largest"` for labels consisting of several parts. Splitting fails
+#'   if the additional labels would exceed the supported signed-integer range.
 #' @param relabel `"value"` (1..N keeping order), `"raster"` (1..N by first
 #'   appearance) or `"none"`.
 #' @param pixel_size Optional list with `x` and `y` in micrometres.

@@ -41,7 +41,8 @@ disconnected-part handling.}
 pixels of the higher label to background (4-neighbourhood).}
 
 \item{disconnected}{\code{"keep"}, \code{"split"} (new labels for extra parts) or
-\code{"keep_largest"} for labels consisting of several parts.}
+\code{"keep_largest"} for labels consisting of several parts. Splitting fails
+if the additional labels would exceed the supported signed-integer range.}
 
 \item{relabel}{\code{"value"} (1..N keeping order), \code{"raster"} (1..N by first
 appearance) or \code{"none"}.}

@@ -168,7 +168,6 @@
                              policy = c("split", "keep_largest", "keep")) {
   policy <- match.arg(policy)
   if (policy == "keep" || !any(labels > 0L)) return(labels)
-  offset <- max(labels) + 1L
   # Components of the label image: two pixels join only if equal labels.
   comp <- .sg_components_by_value(labels, connectivity)
   pos <- labels > 0L
@@ -185,12 +184,20 @@
     }
     return(labels)
   }
-  next_id <- offset
+  needed <- nrow(pairs) - length(unique(pairs[, 1]))
+  largest <- as.double(max(labels))
+  if (largest + needed > .Machine$integer.max) {
+    .sg_abort(
+      "Instance label range exhausted: splitting needs unrepresentable labels.",
+      details = list(reason = "label_range_exhausted", new_labels = needed)
+    )
+  }
+  next_id <- largest + 1
   for (lab in multi) {
     parts <- sort(pairs[pairs[, 1] == lab, 2])
     for (p in parts[-1]) {
-      labels[comp == p] <- next_id
-      next_id <- next_id + 1L
+      labels[comp == p] <- as.integer(next_id)
+      next_id <- next_id + 1
     }
   }
   labels

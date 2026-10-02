@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* PNG mask previews allocate colors for present labels, including sparse IDs.
+  Label cleanup avoids unnecessary integer overflow and rejects splits that
+  would exhaust the supported label range before changing labels.
+
 * Generate canonical numeric digits from the exact binary64 value and apply
   explicit ties-to-even rounding, avoiding platform-dependent printf behavior.
   Exact binary inputs cover Windows halfway cases and display-separator changes.
