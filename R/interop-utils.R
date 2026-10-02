@@ -69,15 +69,13 @@
     )
   }
   if (x == 0) return("0")
-  if (x == trunc(x) && abs(x) < 1e21) {
-    return(formatC(x, format = "f", digits = 0, big.mark = ""))
-  }
   sgn <- if (x < 0) "-" else ""
   ax <- abs(x)
   s <- NULL
   for (d in 1:17) {
-    s <- formatC(ax, digits = d - 1L, format = "e")
-    if (as.numeric(s) == ax) break
+    s <- formatC(ax, digits = d - 1L, format = "e", decimal.mark = ".")
+    # Compare binary64 values using the JSON parser, not display conversion.
+    if (jsonlite::parse_json(s) == ax) break
   }
   parts <- strsplit(s, "e", fixed = TRUE)[[1]]
   digits <- gsub(".", "", parts[1], fixed = TRUE)

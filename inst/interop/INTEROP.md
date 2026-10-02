@@ -78,6 +78,26 @@ only with a real qupflowR/annotatR consumer and QuPath/StarDist evidence.
   SHA-256 of its canonical JSON (keys sorted by code point, no whitespace,
   ECMAScript number format). Model archives use `checksums.sha256`.
 
+### Canonical number correction boundary
+
+The numeric serializer correction in the development version retains the
+existing canonical JSON contract: shortest round-tripping ECMAScript decimal
+strings for the exact binary64 input, with `.` as the decimal separator.
+For example, the binary64 value represented by `1000000000000000128` must
+serialize as `1000000000000000100`. Earlier versions emitted the longer integer
+form and could choose excess digits on some platforms. This correction does
+not change the schema or reinterpret numeric values, but changes canonical
+bytes and derived digests wherever the previous output was incorrect.
+
+Keep original bundles and their receipts immutable. Re-export affected
+manifests, protocols or model records as new versioned artifacts, recording
+both source and corrected digests in the caller's migration record. Do not
+patch checksums to bypass an integrity or expected-revision failure. Correctly
+canonicalized historical data retains its bytes; the existing independent
+fixture and digest expectations remain unchanged. The generator and exact
+binary64 test vectors under `data-raw/interop-fixtures/` and
+`tests/testthat/fixtures/canonical-numbers/` specify the correction boundary.
+
 ## 4. Protocols and runtimes
 
 Protocols are JSON data. The delegate is chosen from a fixed whitelist and

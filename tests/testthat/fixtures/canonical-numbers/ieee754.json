@@ -1,0 +1,2502 @@
+{
+  "generator": "Node v24.19.0",
+  "endianness": "little",
+  "encoding": "IEEE754 binary64",
+  "vectors": [
+    {
+      "hex": "0000000000000000",
+      "expected": "0",
+      "group": "boundary"
+    },
+    {
+      "hex": "0100000000000000",
+      "expected": "5e-324",
+      "group": "boundary"
+    },
+    {
+      "hex": "0200000000000000",
+      "expected": "1e-323",
+      "group": "boundary"
+    },
+    {
+      "hex": "0000000000000080",
+      "expected": "0",
+      "group": "boundary"
+    },
+    {
+      "hex": "0100000000000080",
+      "expected": "-5e-324",
+      "group": "boundary"
+    },
+    {
+      "hex": "0200000000000080",
+      "expected": "-1e-323",
+      "group": "boundary"
+    },
+    {
+      "hex": "0300000000000000",
+      "expected": "1.5e-323",
+      "group": "boundary"
+    },
+    {
+      "hex": "fdffffffffffef7f",
+      "expected": "1.7976931348623153e+308",
+      "group": "boundary"
+    },
+    {
+      "hex": "feffffffffffef7f",
+      "expected": "1.7976931348623155e+308",
+      "group": "boundary"
+    },
+    {
+      "hex": "ffffffffffffef7f",
+      "expected": "1.7976931348623157e+308",
+      "group": "boundary"
+    },
+    {
+      "hex": "fdffffffffff3fc3",
+      "expected": "-9007199254740989",
+      "group": "boundary"
+    },
+    {
+      "hex": "feffffffffff3fc3",
+      "expected": "-9007199254740990",
+      "group": "boundary"
+    },
+    {
+      "hex": "ffffffffffff3fc3",
+      "expected": "-9007199254740991",
+      "group": "boundary"
+    },
+    {
+      "hex": "00000000000040c3",
+      "expected": "-9007199254740992",
+      "group": "boundary"
+    },
+    {
+      "hex": "01000000000040c3",
+      "expected": "-9007199254740994",
+      "group": "boundary"
+    },
+    {
+      "hex": "fdffffffffff3f43",
+      "expected": "9007199254740989",
+      "group": "boundary"
+    },
+    {
+      "hex": "feffffffffff3f43",
+      "expected": "9007199254740990",
+      "group": "boundary"
+    },
+    {
+      "hex": "ffffffffffff3f43",
+      "expected": "9007199254740991",
+      "group": "boundary"
+    },
+    {
+      "hex": "0000000000004043",
+      "expected": "9007199254740992",
+      "group": "boundary"
+    },
+    {
+      "hex": "0100000000004043",
+      "expected": "9007199254740994",
+      "group": "boundary"
+    },
+    {
+      "hex": "323333333333d33f",
+      "expected": "0.29999999999999993",
+      "group": "boundary"
+    },
+    {
+      "hex": "333333333333d33f",
+      "expected": "0.3",
+      "group": "boundary"
+    },
+    {
+      "hex": "343333333333d33f",
+      "expected": "0.30000000000000004",
+      "group": "boundary"
+    },
+    {
+      "hex": "353333333333d33f",
+      "expected": "0.3000000000000001",
+      "group": "boundary"
+    },
+    {
+      "hex": "363333333333d33f",
+      "expected": "0.30000000000000016",
+      "group": "boundary"
+    },
+    {
+      "hex": "019300aa4bdd4d7e",
+      "expected": "2.4999999999999995e+300",
+      "group": "boundary"
+    },
+    {
+      "hex": "029300aa4bdd4d7e",
+      "expected": "2.4999999999999998e+300",
+      "group": "boundary"
+    },
+    {
+      "hex": "039300aa4bdd4d7e",
+      "expected": "2.5e+300",
+      "group": "boundary"
+    },
+    {
+      "hex": "049300aa4bdd4d7e",
+      "expected": "2.5000000000000004e+300",
+      "group": "boundary"
+    },
+    {
+      "hex": "059300aa4bdd4d7e",
+      "expected": "2.5000000000000007e+300",
+      "group": "boundary"
+    },
+    {
+      "hex": "ffc74e676dc1ab43",
+      "expected": "999999999999999900",
+      "group": "boundary"
+    },
+    {
+      "hex": "00c84e676dc1ab43",
+      "expected": "1000000000000000000",
+      "group": "boundary"
+    },
+    {
+      "hex": "01c84e676dc1ab43",
+      "expected": "1000000000000000100",
+      "group": "boundary"
+    },
+    {
+      "hex": "02c84e676dc1ab43",
+      "expected": "1000000000000000300",
+      "group": "boundary"
+    },
+    {
+      "hex": "03c84e676dc1ab43",
+      "expected": "1000000000000000400",
+      "group": "boundary"
+    },
+    {
+      "hex": "f44ae1c7022db544",
+      "expected": "9.999999999999996e+22",
+      "group": "boundary"
+    },
+    {
+      "hex": "f54ae1c7022db544",
+      "expected": "9.999999999999997e+22",
+      "group": "boundary"
+    },
+    {
+      "hex": "f64ae1c7022db544",
+      "expected": "1e+23",
+      "group": "boundary"
+    },
+    {
+      "hex": "f74ae1c7022db544",
+      "expected": "1.0000000000000001e+23",
+      "group": "boundary"
+    },
+    {
+      "hex": "f84ae1c7022db544",
+      "expected": "1.0000000000000003e+23",
+      "group": "boundary"
+    },
+    {
+      "hex": "5355555543deb341",
+      "expected": "333333333.3333332",
+      "group": "boundary"
+    },
+    {
+      "hex": "5455555543deb341",
+      "expected": "333333333.33333325",
+      "group": "boundary"
+    },
+    {
+      "hex": "5555555543deb341",
+      "expected": "333333333.3333333",
+      "group": "boundary"
+    },
+    {
+      "hex": "5655555543deb341",
+      "expected": "333333333.3333334",
+      "group": "boundary"
+    },
+    {
+      "hex": "5755555543deb341",
+      "expected": "333333333.33333343",
+      "group": "boundary"
+    },
+    {
+      "hex": "5709cbc1f33f1443",
+      "expected": "1424953923781205.8",
+      "group": "boundary"
+    },
+    {
+      "hex": "5809cbc1f33f1443",
+      "expected": "1424953923781206",
+      "group": "boundary"
+    },
+    {
+      "hex": "5909cbc1f33f1443",
+      "expected": "1424953923781206.2",
+      "group": "boundary"
+    },
+    {
+      "hex": "5a09cbc1f33f1443",
+      "expected": "1424953923781206.5",
+      "group": "boundary"
+    },
+    {
+      "hex": "5b09cbc1f33f1443",
+      "expected": "1424953923781206.8",
+      "group": "boundary"
+    },
+    {
+      "hex": "0400000000000000",
+      "expected": "2e-323",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "d0e81978d6300700",
+      "expected": "9.99999999999999e-309",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "d1e81978d6300700",
+      "expected": "9.999999999999994e-309",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "d2e81978d6300700",
+      "expected": "1e-308",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "d3e81978d6300700",
+      "expected": "1.0000000000000004e-308",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "d4e81978d6300700",
+      "expected": "1.000000000000001e-308",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "2e058ee42eff2b2b",
+      "expected": "9.999999999999998e-101",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "2f058ee42eff2b2b",
+      "expected": "9.999999999999999e-101",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "30058ee42eff2b2b",
+      "expected": "1e-100",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "31058ee42eff2b2b",
+      "expected": "1.0000000000000001e-100",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "32058ee42eff2b2b",
+      "expected": "1.0000000000000003e-100",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "4fb21240b32d283b",
+      "expected": "9.999999999999997e-24",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "50b21240b32d283b",
+      "expected": "9.999999999999998e-24",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "51b21240b32d283b",
+      "expected": "1e-23",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "52b21240b32d283b",
+      "expected": "1.0000000000000001e-23",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "53b21240b32d283b",
+      "expected": "1.0000000000000003e-23",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "e45e171020395e3b",
+      "expected": "9.999999999999998e-23",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "e55e171020395e3b",
+      "expected": "9.999999999999999e-23",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "e65e171020395e3b",
+      "expected": "1e-22",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "e75e171020395e3b",
+      "expected": "1.0000000000000002e-22",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "e85e171020395e3b",
+      "expected": "1.0000000000000003e-22",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "4d9b0e0ab4e3923b",
+      "expected": "9.999999999999995e-22",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "4e9b0e0ab4e3923b",
+      "expected": "9.999999999999997e-22",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "4f9b0e0ab4e3923b",
+      "expected": "1e-21",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "509b0e0ab4e3923b",
+      "expected": "1.0000000000000001e-21",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "519b0e0ab4e3923b",
+      "expected": "1.0000000000000003e-21",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "46afbc9af2d77a3e",
+      "expected": "9.999999999999997e-8",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "47afbc9af2d77a3e",
+      "expected": "9.999999999999998e-8",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "48afbc9af2d77a3e",
+      "expected": "1e-7",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "49afbc9af2d77a3e",
+      "expected": "1.0000000000000001e-7",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "4aafbc9af2d77a3e",
+      "expected": "1.0000000000000002e-7",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "8bedb5a0f7c6b03e",
+      "expected": "9.999999999999995e-7",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "8cedb5a0f7c6b03e",
+      "expected": "9.999999999999997e-7",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "8dedb5a0f7c6b03e",
+      "expected": "0.000001",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "8eedb5a0f7c6b03e",
+      "expected": "0.0000010000000000000002",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "8fedb5a0f7c6b03e",
+      "expected": "0.0000010000000000000004",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "ef68e388b5f8e43e",
+      "expected": "0.000009999999999999997",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "f068e388b5f8e43e",
+      "expected": "0.000009999999999999999",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "f168e388b5f8e43e",
+      "expected": "0.00001",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "f268e388b5f8e43e",
+      "expected": "0.000010000000000000003",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "f368e388b5f8e43e",
+      "expected": "0.000010000000000000004",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "989999999999b93f",
+      "expected": "0.09999999999999998",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "999999999999b93f",
+      "expected": "0.09999999999999999",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "9a9999999999b93f",
+      "expected": "0.1",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "9b9999999999b93f",
+      "expected": "0.10000000000000002",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "9c9999999999b93f",
+      "expected": "0.10000000000000003",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "feffffffffffef3f",
+      "expected": "0.9999999999999998",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "ffffffffffffef3f",
+      "expected": "0.9999999999999999",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "000000000000f03f",
+      "expected": "1",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "010000000000f03f",
+      "expected": "1.0000000000000002",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "020000000000f03f",
+      "expected": "1.0000000000000004",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "feffffffffff2340",
+      "expected": "9.999999999999996",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "ffffffffffff2340",
+      "expected": "9.999999999999998",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "0000000000002440",
+      "expected": "10",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "0100000000002440",
+      "expected": "10.000000000000002",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "0200000000002440",
+      "expected": "10.000000000000004",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "feffffff7f842e41",
+      "expected": "999999.9999999998",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "ffffffff7f842e41",
+      "expected": "999999.9999999999",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "0000000080842e41",
+      "expected": "1000000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "0100000080842e41",
+      "expected": "1000000.0000000001",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "0200000080842e41",
+      "expected": "1000000.0000000002",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "feff3326f56b0c43",
+      "expected": "999999999999999.8",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "ffff3326f56b0c43",
+      "expected": "999999999999999.9",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "00003426f56b0c43",
+      "expected": "1000000000000000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "01003426f56b0c43",
+      "expected": "1000000000000000.1",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "02003426f56b0c43",
+      "expected": "1000000000000000.2",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "fe7fe03779c34143",
+      "expected": "9999999999999996",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "ff7fe03779c34143",
+      "expected": "9999999999999998",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "0080e03779c34143",
+      "expected": "10000000000000000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "0180e03779c34143",
+      "expected": "10000000000000002",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "0280e03779c34143",
+      "expected": "10000000000000004",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "fe9fd88557347643",
+      "expected": "99999999999999970",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "ff9fd88557347643",
+      "expected": "99999999999999980",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "00a0d88557347643",
+      "expected": "100000000000000000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "01a0d88557347643",
+      "expected": "100000000000000020",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "02a0d88557347643",
+      "expected": "100000000000000030",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "fec74e676dc1ab43",
+      "expected": "999999999999999700",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "fe3c9160e458e143",
+      "expected": "9999999999999996000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "ff3c9160e458e143",
+      "expected": "9999999999999998000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "003d9160e458e143",
+      "expected": "10000000000000000000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "013d9160e458e143",
+      "expected": "10000000000000002000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "023d9160e458e143",
+      "expected": "10000000000000004000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "3e8cb5781daf1544",
+      "expected": "99999999999999970000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "3f8cb5781daf1544",
+      "expected": "99999999999999980000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "408cb5781daf1544",
+      "expected": "100000000000000000000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "418cb5781daf1544",
+      "expected": "100000000000000020000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "428cb5781daf1544",
+      "expected": "100000000000000030000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "4eefe2d6e41a4b44",
+      "expected": "999999999999999700000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "4fefe2d6e41a4b44",
+      "expected": "999999999999999900000",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "50efe2d6e41a4b44",
+      "expected": "1e+21",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "51efe2d6e41a4b44",
+      "expected": "1.0000000000000001e+21",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "52efe2d6e41a4b44",
+      "expected": "1.0000000000000003e+21",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "90d54d06cff08044",
+      "expected": "9.999999999999996e+21",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "91d54d06cff08044",
+      "expected": "9.999999999999998e+21",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "92d54d06cff08044",
+      "expected": "1e+22",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "93d54d06cff08044",
+      "expected": "1.0000000000000002e+22",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "94d54d06cff08044",
+      "expected": "1.0000000000000004e+22",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "b29dd9794378ea44",
+      "expected": "9.999999999999997e+23",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "b39dd9794378ea44",
+      "expected": "9.999999999999998e+23",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "b49dd9794378ea44",
+      "expected": "1e+24",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "b59dd9794378ea44",
+      "expected": "1.0000000000000001e+24",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "b69dd9794378ea44",
+      "expected": "1.0000000000000003e+24",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "7bc39425ad49b254",
+      "expected": "9.999999999999996e+99",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "7cc39425ad49b254",
+      "expected": "9.999999999999998e+99",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "7dc39425ad49b254",
+      "expected": "1e+100",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "7ec39425ad49b254",
+      "expected": "1.0000000000000002e+100",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "7fc39425ad49b254",
+      "expected": "1.0000000000000004e+100",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "9a7500883ce4377e",
+      "expected": "9.999999999999998e+299",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "9b7500883ce4377e",
+      "expected": "9.999999999999999e+299",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "9c7500883ce4377e",
+      "expected": "1e+300",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "9d7500883ce4377e",
+      "expected": "1.0000000000000002e+300",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "9e7500883ce4377e",
+      "expected": "1.0000000000000003e+300",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "9ec8eb85f3cce17f",
+      "expected": "9.999999999999996e+307",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "9fc8eb85f3cce17f",
+      "expected": "9.999999999999998e+307",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "a0c8eb85f3cce17f",
+      "expected": "1e+308",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "a1c8eb85f3cce17f",
+      "expected": "1.0000000000000002e+308",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "a2c8eb85f3cce17f",
+      "expected": "1.0000000000000004e+308",
+      "group": "decimal_exponent"
+    },
+    {
+      "hex": "feffffffffff0700",
+      "expected": "1.1125369292535997e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffff0700",
+      "expected": "1.1125369292536e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0000000000000800",
+      "expected": "1.1125369292536007e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0100000000000800",
+      "expected": "1.112536929253601e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0200000000000800",
+      "expected": "1.1125369292536017e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffff0f00",
+      "expected": "2.2250738585072004e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffff0f00",
+      "expected": "2.225073858507201e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0000000000001000",
+      "expected": "2.2250738585072014e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0100000000001000",
+      "expected": "2.225073858507202e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0200000000001000",
+      "expected": "2.2250738585072024e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffff1f00",
+      "expected": "4.450147717014402e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffff1f00",
+      "expected": "4.4501477170144023e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0000000000002000",
+      "expected": "4.450147717014403e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0100000000002000",
+      "expected": "4.450147717014404e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0200000000002000",
+      "expected": "4.450147717014405e-308",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffff9f3c",
+      "expected": "1.1102230246251563e-16",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffff9f3c",
+      "expected": "1.1102230246251564e-16",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "000000000000a03c",
+      "expected": "1.1102230246251565e-16",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "010000000000a03c",
+      "expected": "1.1102230246251568e-16",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "020000000000a03c",
+      "expected": "1.110223024625157e-16",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffffaf3c",
+      "expected": "2.2204460492503126e-16",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffffaf3c",
+      "expected": "2.2204460492503128e-16",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "000000000000b03c",
+      "expected": "2.220446049250313e-16",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "010000000000b03c",
+      "expected": "2.2204460492503136e-16",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "020000000000b03c",
+      "expected": "2.220446049250314e-16",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffffdf3f",
+      "expected": "0.4999999999999999",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffffdf3f",
+      "expected": "0.49999999999999994",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "000000000000e03f",
+      "expected": "0.5",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "010000000000e03f",
+      "expected": "0.5000000000000001",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "020000000000e03f",
+      "expected": "0.5000000000000002",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffffff3f",
+      "expected": "1.9999999999999996",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffffff3f",
+      "expected": "1.9999999999999998",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0000000000000040",
+      "expected": "2",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0100000000000040",
+      "expected": "2.0000000000000004",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0200000000000040",
+      "expected": "2.000000000000001",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffff1f43",
+      "expected": "2251799813685247.5",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffff1f43",
+      "expected": "2251799813685247.8",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0000000000002043",
+      "expected": "2251799813685248",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0100000000002043",
+      "expected": "2251799813685248.5",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0200000000002043",
+      "expected": "2251799813685249",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffff2f43",
+      "expected": "4503599627370495",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffff2f43",
+      "expected": "4503599627370495.5",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0000000000003043",
+      "expected": "4503599627370496",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0100000000003043",
+      "expected": "4503599627370497",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0200000000003043",
+      "expected": "4503599627370498",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0200000000004043",
+      "expected": "9007199254740996",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffff4f43",
+      "expected": "18014398509481980",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffff4f43",
+      "expected": "18014398509481982",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0000000000005043",
+      "expected": "18014398509481984",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0100000000005043",
+      "expected": "18014398509481988",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0200000000005043",
+      "expected": "18014398509481990",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffffdf43",
+      "expected": "9223372036854774000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffffdf43",
+      "expected": "9223372036854775000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "000000000000e043",
+      "expected": "9223372036854776000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "010000000000e043",
+      "expected": "9223372036854778000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "020000000000e043",
+      "expected": "9223372036854780000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffffef43",
+      "expected": "18446744073709548000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffffef43",
+      "expected": "18446744073709550000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "000000000000f043",
+      "expected": "18446744073709552000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "010000000000f043",
+      "expected": "18446744073709556000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "020000000000f043",
+      "expected": "18446744073709560000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffffff43",
+      "expected": "36893488147419095000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffffff43",
+      "expected": "36893488147419100000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0000000000000044",
+      "expected": "36893488147419103000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0100000000000044",
+      "expected": "36893488147419110000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "0200000000000044",
+      "expected": "36893488147419120000",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffffcf7f",
+      "expected": "4.494232837155789e+307",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffffcf7f",
+      "expected": "4.4942328371557893e+307",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "000000000000d07f",
+      "expected": "4.49423283715579e+307",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "010000000000d07f",
+      "expected": "4.494232837155791e+307",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "020000000000d07f",
+      "expected": "4.494232837155792e+307",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "feffffffffffdf7f",
+      "expected": "8.988465674311578e+307",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "ffffffffffffdf7f",
+      "expected": "8.988465674311579e+307",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "000000000000e07f",
+      "expected": "8.98846567431158e+307",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "010000000000e07f",
+      "expected": "8.988465674311582e+307",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "020000000000e07f",
+      "expected": "8.988465674311584e+307",
+      "group": "binary_exponent"
+    },
+    {
+      "hex": "dbd2feefb1062872",
+      "expected": "8.01033661867104e+241",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "bef9b25aa5946afc",
+      "expected": "-2.0722940993781247e+291",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "cd3314849004ba28",
+      "expected": "1.6904125343683114e-112",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ea48bdb7e8088ce0",
+      "expected": "-1.2028327265234996e+157",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "fb486bb1197d1419",
+      "expected": "7.357606408382628e-188",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "aac090302b46dfdc",
+      "expected": "-2.3276773806105172e+139",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ab8b824dd0a1801c",
+      "expected": "2.1518855230433976e-171",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "7c0436d4ac64cab2",
+      "expected": "-5.012380177528801e-64",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "74f778aef7c00f7c",
+      "expected": "3.8681318815593007e+289",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "9a5bc376bc94bcab",
+      "expected": "-5.226835754554389e-98",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ad7bd12246e7f8a1",
+      "expected": "-4.985870406275513e-145",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "1a928b112568deba",
+      "expected": "-3.92998880799085e-25",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "be4373cc9ee93588",
+      "expected": "-4.1477959799719045e-269",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b98a3e90e9368d4d",
+      "expected": "3.8458076148905994e+65",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ec79336e319f49a3",
+      "expected": "-1.0757775031579636e-138",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "1fe432278b33ab4a",
+      "expected": "5.088615162307262e+51",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "1766686d4fa104eb",
+      "expected": "-3.3116829064574816e+207",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "1bd35f03a85c2453",
+      "expected": "3.318240130749262e+92",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "7dca34eae7c3f4a5",
+      "expected": "-7.669007135938487e-126",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "a99ccf08e74d4b60",
+      "expected": "7.32181795911466e+155",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "d0090c15ff4eaa8e",
+      "expected": "-5.050226332513596e-238",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c36598e23a15f748",
+      "expected": "3.2172908446554553e+43",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c8456cb60392f278",
+      "expected": "4.01843178001024e+274",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "43ef2e7c56c4e828",
+      "expected": "1.2873126918024888e-111",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5d023f02cec28aaf",
+      "expected": "-1.1284771788648689e-79",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "194b8267ec4725bf",
+      "expected": "-0.00016236077113215215",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "cfa92245f357e3e2",
+      "expected": "-2.2813078933624162e+168",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5c7f83405f795e83",
+      "expected": "-1.9086014506453128e-292",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "a22e72ec011836b8",
+      "expected": "-6.492778204168195e-38",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "7f220bf22e2449e8",
+      "expected": "-2.2941175374206358e+194",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "fb4b9ede4bf1630a",
+      "expected": "1.2970440513350887e-258",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ace996f41050b84b",
+      "expected": "5.9614710917549645e+56",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "7f2f0e73ff610735",
+      "expected": "3.051598321237031e-53",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "e10c4e9299e98925",
+      "expected": "7.476548575583228e-128",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b88805e28c484444",
+      "expected": "748325366510115600000",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "a9ade6900ce80432",
+      "expected": "9.693287787416162e-68",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b22abd3056bb934f",
+      "expected": "2.2312348470951176e+75",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "67bc0e6e3aa2fe27",
+      "expected": "4.859159949403588e-116",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "df584fffc60116ca",
+      "expected": "-8.040795700058337e+48",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ae1120696b171c0d",
+      "expected": "1.6070826382586813e-245",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "0dfad9013c7399bf",
+      "expected": "-0.024853646862988344",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b96a97e52b6f1f8d",
+      "expected": "-1.7983194317649261e-245",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "2cca89ae1d9247af",
+      "expected": "-6.212191865160179e-81",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b8d293ab4432b802",
+      "expected": "1.47990660979235e-295",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "1d5b5d0ab63e0888",
+      "expected": "-5.736611820794589e-270",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "eb86aa57fbf6c50a",
+      "expected": "9.142825276914744e-257",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "26093509c49f1ee7",
+      "expected": "-5.329916739630223e+188",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b4ea29b85c083191",
+      "expected": "-7.189949830055775e-226",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "6194b71e8c869465",
+      "expected": "2.1292798838017353e+181",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "09c3f1df973c0fea",
+      "expected": "-7.65124556011552e+202",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "cfc2c1b1589448f4",
+      "expected": "-1.4078586387275984e+252",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "8a129f6d7294c6ed",
+      "expected": "-6.376587099120264e+220",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "2fce8f90d151d2af",
+      "expected": "-2.47204980632344e-78",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "73ba7e9d36602c82",
+      "expected": "-3.38971301395281e-298",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c7bb2a0fb717cac3",
+      "expected": "-3760345290439626000",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "70ff02027b76439f",
+      "expected": "-4.429940849713182e-158",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "8e264b66b95841ec",
+      "expected": "-2.9198516104223456e+213",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "43d31944a71de977",
+      "expected": "4.146424217867567e+269",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "2550c796d42369c9",
+      "expected": "-4.485119202014051e+45",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c577b08b1a5e15c0",
+      "expected": "-5.341898138662093",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "6a4696d0f61be52d",
+      "expected": "1.3264282474797766e-87",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "66b0a7b0b0564963",
+      "expected": "1.912541020268243e+170",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "86262a43696246b5",
+      "expected": "-4.674084710438571e-52",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "4b1363397263c9c0",
+      "expected": "-12998.892376312657",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ad67e6286ea55339",
+      "expected": "1.5134891312953022e-32",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "22e09fc1059f0174",
+      "expected": "6.308141579237105e+250",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "6297247fb9469e8d",
+      "expected": "-4.43410376832941e-243",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "cc468bdba957ddb2",
+      "expected": "-1.1144923391675584e-63",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "4163b6c469381a60",
+      "expected": "8.788940074881765e+154",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c7ff410961c3a47a",
+      "expected": "6.030318083664169e+282",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "f86d247f253a1604",
+      "expected": "5.702005760785639e-289",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "235b38c716d200a3",
+      "expected": "-4.414027749336548e-140",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "55836e296dd1f8a5",
+      "expected": "-9.165789097661771e-126",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "132bd02e442ffa03",
+      "expected": "1.6793092882453082e-289",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "852fef4801a00859",
+      "expected": "7.948494234439424e+120",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "9ab071f585b08f7d",
+      "expected": "6.476520386854879e+296",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "7b3512feff19e7ea",
+      "expected": "-9.271038641613568e+206",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "d12f6e9c69d028a6",
+      "expected": "-7.33146114782694e-125",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ce27bbde6d8a1aed",
+      "expected": "-3.6597371760118876e+217",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "0162340bb5019c82",
+      "expected": "-4.28238520777692e-296",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "85aa707567b58be9",
+      "expected": "-2.651196223170684e+200",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "904ac067bef0e4b4",
+      "expected": "-6.83212603089855e-54",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "056e453ea01edb9e",
+      "expected": "-4.822432054741246e-160",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "99c590c91f8241f2",
+      "expected": "-2.3349116133976566e+242",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "52a225ced86a313c",
+      "expected": "9.44197556824137e-19",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "963db739cc22bc5e",
+      "expected": "2.2485323451991363e+148",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "6df663c7c2393206",
+      "expected": "8.03242230844414e-279",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c10a5ff156bc51aa",
+      "expected": "-7.73303350569113e-105",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "94240fa3f7009335",
+      "expected": "1.2698157226836445e-50",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "dd9fa8545a39d88b",
+      "expected": "-1.3216306793736854e-251",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "a29999ea9326bba7",
+      "expected": "-2.6916751385854812e-117",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "11823c5c4a3901d0",
+      "expected": "-2.492973415847967e+77",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "555f4ce9e48d96b2",
+      "expected": "-5.3541409559659895e-65",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "abb2359d2bb435ea",
+      "expected": "-4.25297348201705e+203",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "0e132a176ec40d10",
+      "expected": "2.3966954874087113e-231",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "a844b1ca4481dda4",
+      "expected": "-4.1567783693206017e-131",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "210ca2dfe27d99f0",
+      "expected": "-2.532889108101172e+234",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "7960e8736e0a2e06",
+      "expected": "6.6197984755260556e-279",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "f98eea44aab1dbc1",
+      "expected": "-1858513171.6649764",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "a4c557f0fad20bff",
+      "expected": "-9.540418281365305e+303",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "2f83acee0cf48dcf",
+      "expected": "-1.693534068538975e+75",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "e9f1e62f63e9fb93",
+      "expected": "-2.072759371718603e-212",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "4a66ac02f6bf07a8",
+      "expected": "-7.53446647268427e-116",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "06ec7511af1fff45",
+      "expected": "1.541174198575372e+29",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5ec6102323b7b377",
+      "expected": "4.068565382503617e+268",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "52b008d9be0f9af8",
+      "expected": "-8.811616650858008e+272",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b2f5f81b0fee72a6",
+      "expected": "-1.7897423727004063e-123",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "d928f6b4e2a1912c",
+      "expected": "5.283137839607915e-94",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c8d29e2c8fbeb941",
+      "expected": "431918892.62040377",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "6d5df075fe15d161",
+      "expected": "1.5373610848309784e+163",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "97468f73b4fb054e",
+      "expected": "7.408331232766028e+67",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "da1ddf2bf8b3cdd6",
+      "expected": "-1.39517546715888e+110",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "619536e5074caec7",
+      "expected": "-2.0135807285902671e+37",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "0b80e3752b06b2d5",
+      "expected": "-6.459101547794919e+104",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "cb257f6094d1d198",
+      "expected": "-3.999245123150508e-189",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "40c94f21bffce795",
+      "expected": "-3.8253761579924424e-203",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "d20673f80913eb9b",
+      "expected": "-3.420825281508527e-174",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5f1426bf6f17c688",
+      "expected": "-2.1410164887722916e-266",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b7af3834e7612b24",
+      "expected": "1.8836664329800346e-134",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "28d3dd47756b5a18",
+      "expected": "2.3162829306623945e-191",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "8ea25fa58e6a8d01",
+      "expected": "3.431638218745358e-301",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "4b7e3ae7013037a3",
+      "expected": "-4.8678421043311364e-139",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "77f84c95baa94380",
+      "expected": "-2.1875817293238736e-307",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "479cd814484a54d1",
+      "expected": "-6.158916760121857e+83",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "bfdc2018ff3028bc",
+      "expected": "-6.557090056844104e-19",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c6523c503c57fac3",
+      "expected": "-30368833332272980000",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "e35b161a21bd0c45",
+      "expected": "4.342882604602167e+24",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "94efe0c9cee2b34d",
+      "expected": "2.094236845641212e+66",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "4b4b2ca7f18c83ee",
+      "expected": "-2.261445055588012e+224",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "1da12344578feb98",
+      "expected": "-1.2371169687066935e-188",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "1f015e94dc49ea22",
+      "expected": "1.7246390041818488e-140",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "dd1a6fcf4b8dc59a",
+      "expected": "-1.0387688714719891e-179",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "a8d33cc796eda471",
+      "expected": "2.725561571368312e+239",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "0f40ed3ffd66f9df",
+      "expected": "-2.1286823956114685e+154",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "4f795d6404a1c5eb",
+      "expected": "-1.4221417349674778e+211",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "7d701834104ef390",
+      "expected": "-5.09321038580876e-227",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ddffd9e3c512c7ac",
+      "expected": "-5.530719904807147e-93",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "621b5e97d7d2c56d",
+      "expected": "6.163015713438969e+220",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "d43f32534847c8ea",
+      "expected": "-2.4358355044539493e+206",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ab2eb715769e8dfc",
+      "expected": "-9.236683255531474e+291",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "368aee657c392ffb",
+      "expected": "-2.321572018773107e+285",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "a21a850228db6c75",
+      "expected": "4.3327500119185804e+257",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "17f8bca0eb69497e",
+      "expected": "2.1274260648254703e+300",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "27648f0f457a5db8",
+      "expected": "-3.4650771417432526e-37",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "2f9393ac98e53cf7",
+      "expected": "-2.3294149117770936e+266",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c99fd9f47d798db4",
+      "expected": "-1.5025827872975214e-55",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b6fec2f73497471f",
+      "expected": "5.369479995699009e-158",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "cb16d21c5729c47b",
+      "expected": "1.535000054399868e+288",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "2660fb04369ea2d1",
+      "expected": "-1.8084316151847034e+85",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "665fe28448e248af",
+      "expected": "-6.558280006588812e-81",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "58822062103c0550",
+      "expected": "3.0735019896240745e+77",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5c5537702a8b018a",
+      "expected": "-1.782842095046784e-260",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "f6ec451af58b5fa3",
+      "expected": "-2.6490860097238873e-138",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "af9acae9c5d35c87",
+      "expected": "-3.330481223198655e-273",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5a445ecbf5a15c51",
+      "expected": "8.691214315404845e+83",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "52ae76630aa3b67d",
+      "expected": "3.701112187309043e+297",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "8e97cd5019bff029",
+      "expected": "1.1408934312742817e-106",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "212fbabdda753a5a",
+      "expected": "4.4778969208524715e+126",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "3fb3d0457467fa54",
+      "expected": "2.310097043259746e+101",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "993d22b431580794",
+      "expected": "-3.467191255606494e-212",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "a23f32e7845c2ea7",
+      "expected": "-5.8788661775486685e-120",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5df33d83ed76a317",
+      "expected": "8.332540666246652e-195",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "fbffdad65e69820f",
+      "expected": "5.790618968450165e-234",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c4d4bf2b8de4e983",
+      "expected": "-8.302958179000348e-290",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "6d1a5f1073f8f4dc",
+      "expected": "-6.243195141076818e+139",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "199fc63ca56ae59d",
+      "expected": "-1.1622045672858787e-164",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "67f4357c50879f6d",
+      "expected": "1.1129640877669013e+220",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "4f66a2a3bfbdc15b",
+      "expected": "1.0074214940405518e+134",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "435133da32541e26",
+      "expected": "4.480417502849633e-125",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "210739579c8d9593",
+      "expected": "-2.5008876750737565e-214",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "6f9decbb104989b4",
+      "expected": "-1.289023509648867e-55",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "95ff3b0df2ec338d",
+      "expected": "-4.559678873933278e-245",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "2acd78425646531d",
+      "expected": "2.0429195151622258e-167",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "30360a05d16f780f",
+      "expected": "3.8427967685016526e-234",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5caef3ff790d5a95",
+      "expected": "-8.114742811632691e-206",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "005e2c39bad29964",
+      "expected": "4.087584676254906e+176",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "bc86f180a7131a4f",
+      "expected": "1.151841818881298e+73",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b14a2456f2b88971",
+      "expected": "8.374885396583465e+238",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "648e04ae4bb8bffd",
+      "expected": "-5.186180266182117e+297",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "789e47157ff3834a",
+      "expected": "9.330767972789202e+50",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "448fcd577f5b6da7",
+      "expected": "-9.095142061596428e-119",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5a455d613763d165",
+      "expected": "2.8859986655237595e+182",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "50e9c522c9002189",
+      "expected": "-1.0546324731366886e-264",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "8236d4d1782ddb01",
+      "expected": "1.0145555389549369e-299",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "6f7e742f7878e5da",
+      "expected": "-7.441354656013533e+129",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "53ed5e579cb2da27",
+      "expected": "1.0587063267844933e-116",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "496473adc5e16425",
+      "expected": "1.5062683170803751e-128",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c1b0fb7730c0a861",
+      "expected": "2.7837860923011453e+162",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "e057203092acf85f",
+      "expected": "2.0676604338866455e+154",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "4fef37c810127834",
+      "expected": "6.135460494802893e-56",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "51b3177f6b4c56c8",
+      "expected": "-3.0351166213791705e+40",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "7768814a10a1452a",
+      "expected": "4.7153189194670324e-105",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "67978ec991a97a51",
+      "expected": "3.237261109363169e+84",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "89b3463c28b74207",
+      "expected": "1.0811212470877196e-273",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "aefcbf5206a887ae",
+      "expected": "-1.5221550736003494e-84",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "d768dedf75701a82",
+      "expected": "-1.5791894721663203e-298",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c6016d0ddbffbe09",
+      "expected": "9.844588705239719e-262",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "456a859454957dfd",
+      "expected": "-3.0230316144573944e+296",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "d1511c12b7cadf1c",
+      "expected": "1.3162498538993738e-169",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "323d720b89d80891",
+      "expected": "-1.3110129382605875e-226",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c8d5dd298fce241f",
+      "expected": "1.1839656138873834e-158",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "631c84c267353f04",
+      "expected": "3.202422668251261e-288",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "9b6cbcf6b9b50c36",
+      "expected": "2.4555111759079258e-48",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "8252dd02cab30b59",
+      "expected": "8.94178298580436e+120",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "a708929ace01c103",
+      "expected": "1.3634003636395606e-290",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "76e5dd285ae7cc65",
+      "expected": "2.3987286793564587e+182",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "3cc32391b2c3df22",
+      "expected": "1.0419413858727244e-140",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "bacbe253984b775e",
+      "expected": "1.1635527587229118e+147",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ada0da8366cca524",
+      "expected": "3.8388161382297437e-132",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ac9e38d1e4965800",
+      "expected": "5.471329560669012e-307",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "91c44acc0b8e151b",
+      "expected": "3.3245122198008406e-178",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5855413b8f7d5a17",
+      "expected": "3.543826462836706e-196",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "f2812ddc41f2ffc3",
+      "expected": "-36831596375229540000",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "71e62928c06f6371",
+      "expected": "1.582068295521162e+238",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "fd09348d8c6183a4",
+      "expected": "-8.532754350697529e-133",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "aebe4f25ed25b7e2",
+      "expected": "-3.4125096709201917e+167",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "534a99cf38228a2e",
+      "expected": "1.6815577445172681e-84",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "078c106981436029",
+      "expected": "2.1640672915914e-109",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "df4cdfa7bc32aebd",
+      "expected": "-1.3732547430804777e-11",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "8625d48bbbd419d1",
+      "expected": "-4.900493591012759e+82",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "4d2ce0d57ea24c9b",
+      "expected": "-3.533181321674449e-177",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "555f63eba1d57bf3",
+      "expected": "-1.9461660811257836e+248",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "abecdec20d40e466",
+      "expected": "4.405516649516976e+187",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b21b11844c557588",
+      "expected": "-6.461001591337492e-268",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "05952310160813da",
+      "expected": "-8.051804130590082e+125",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "6f3398200a656b69",
+      "expected": "6.552898875569195e+199",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c9382a652b9c776f",
+      "expected": "8.948977013530777e+228",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "f87e87c3816915b7",
+      "expected": "-2.400383495890222e-43",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "05ce0a525387b42c",
+      "expected": "2.460373299198857e-93",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "d9fa6fda730fb61c",
+      "expected": "2.2833636779806293e-170",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "6cb3a63f2b764e55",
+      "expected": "8.528275332986593e+102",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "0aa50c1ccdab4495",
+      "expected": "-3.2192635678128886e-206",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c0be3c6c255185e4",
+      "expected": "-1.6871476953678353e+176",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "bd7769517dc38b30",
+      "expected": "7.672684691062381e-75",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "12ea450b411f700b",
+      "expected": "1.3743739016436592e-253",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "46a5e7af82c42214",
+      "expected": "1.1149675763249243e-211",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "8cfbe150afbb92a4",
+      "expected": "-1.6495010060761163e-132",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "7b5bb9bf8e8d20cc",
+      "expected": "-5.195230516839482e+58",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "0d97e54932b7b02d",
+      "expected": "1.312935955043971e-88",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "633f3498169ec59c",
+      "expected": "-4.475057030586619e-170",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "ddef5de0453c4da8",
+      "expected": "-1.4839569885876707e-114",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "420399c774894719",
+      "expected": "6.761805397403513e-187",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "c4a1b6abd913f06e",
+      "expected": "2.3804351759307964e+226",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "873d7f5a0072960d",
+      "expected": "3.2872238020089454e-243",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "3c42cca6d5902b69",
+      "expected": "4.121137754001146e+198",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b8d5a69de92b8f97",
+      "expected": "-3.336038009123892e-195",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "13f6b9115207cc8a",
+      "expected": "-1.1666888610783714e-256",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "3f615b27a5c3ed19",
+      "expected": "8.75603397757237e-184",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "3d78902754fadb0b",
+      "expected": "1.5264336034463056e-251",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "8df7dc8bd695cecc",
+      "expected": "-9.829738029460566e+61",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "220d43552a320046",
+      "expected": "1.603970035302187e+29",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "b883fe376e9323a4",
+      "expected": "-1.3466467800874598e-134",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "bf9038e5b7419745",
+      "expected": "1.7994009564031533e+27",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "5e2e7d8ae8532f50",
+      "expected": "1.813753798562057e+78",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "8283ed66f1256277",
+      "expected": "1.1703616459910351e+267",
+      "group": "seeded_bits"
+    },
+    {
+      "hex": "05f83a7f5fafc651",
+      "expected": "8.813908547577783e+85",
+      "group": "seeded_bits"
+    }
+  ]
+}
