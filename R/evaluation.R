@@ -73,8 +73,8 @@ sg_evaluate_segmentation <- function(predicted, ground_truth,
   }
 
   # Build IoU matrix for instance-level metrics
-  pred_ids <- seq_len(predicted$n_cells)
-  gt_ids <- seq_len(ground_truth$n_cells)
+  pred_ids <- .sg_label_ids(pred_lab)
+  gt_ids <- .sg_label_ids(gt_lab)
 
   iou_matrix <- NULL
   if (any(c("aji", "panoptic_quality", "ap50", "ap75", "f1_detection") %in% metrics)) {

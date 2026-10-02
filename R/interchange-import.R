@@ -171,7 +171,10 @@ sg_validate_interchange <- function(path_or_object, ...) {
 print.sg_import_report <- function(x, ...) {
   cli::cli_text("{.cls sg_import_report} ({x$format}): {if (x$ok) 'ok' else 'failed'}")
   if (!is.null(x$mask)) {
-    cli::cli_text("Mask: {nrow(x$mask$labels)} x {ncol(x$mask$labels)}, {x$mask$n_cells} max label, {sg_mask_status(x$mask)$status}")
+    cli::cli_text(paste0(
+      "Mask: {nrow(x$mask$labels)} x {ncol(x$mask$labels)}, ",
+      "{x$mask$n_cells} objects, {sg_mask_status(x$mask)$status}"
+    ))
   }
   bad <- x$checks[x$checks$status != "ok", , drop = FALSE]
   for (i in seq_len(nrow(bad))) {

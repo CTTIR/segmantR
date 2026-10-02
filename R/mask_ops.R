@@ -37,7 +37,7 @@ sg_filter_cells <- function(mask, min_area = 50L, max_area = 5000L,
   max_area <- as.integer(max_area)
 
   labels <- mask$labels
-  cell_ids <- seq_len(mask$n_cells)
+  cell_ids <- .sg_label_ids(labels)
   if (length(cell_ids) == 0L) {
     return(mask)
   }
@@ -101,7 +101,9 @@ sg_filter_cells <- function(mask, min_area = 50L, max_area = 5000L,
                                                         keep_ids),
                             operation = "filter_cells")
   if (border_cells == "flag") {
-    result$border_cell_ids <- flagged_ids
+    result$border_cell_ids <- as.integer(stats::na.omit(
+      match(flagged_ids, keep_ids)
+    ))
   }
   result
 }
@@ -149,7 +151,7 @@ sg_merge_masks <- function(nuclear_mask, cell_mask,
 
   if (method == "assign") {
     # For each nucleus, find the most common overlapping cell label
-    nuc_ids <- seq_len(nuclear_mask$n_cells)
+    nuc_ids <- .sg_label_ids(nuc_lab)
     mapping <- vapply(nuc_ids, function(nid) {
       overlap <- cell_lab[nuc_lab == nid]
       overlap <- overlap[overlap > 0L]
@@ -217,7 +219,7 @@ sg_mask_to_polygons <- function(mask, simplify = TRUE, tolerance = 1.0) {
   }
 
   labels <- mask$labels
-  cell_ids <- seq_len(mask$n_cells)
+  cell_ids <- .sg_label_ids(labels)
   if (length(cell_ids) == 0L) {
     cli::cli_inform("Mask contains no cells.")
     return(tibble::tibble(cell_id = integer(0), row = numeric(0),
@@ -343,7 +345,7 @@ sg_export_mask <- function(mask, path, format = c("tiff", "png", "geojson",
     },
     qupath = {
       # QuPath-compatible GeoJSON
-      cell_ids <- seq_len(mask$n_cells)
+      cell_ids <- .sg_label_ids(labels)
       features <- lapply(cell_ids, function(cid) {
         coords <- which(labels == cid, arr.ind = TRUE)
         if (nrow(coords) < 3L) return(NULL)
@@ -370,7 +372,7 @@ sg_export_mask <- function(mask, path, format = c("tiff", "png", "geojson",
       jsonlite::write_json(geojson, path, auto_unbox = TRUE, pretty = TRUE)
     },
     csv = {
-      cell_ids <- seq_len(mask$n_cells)
+      cell_ids <- .sg_label_ids(labels)
       rows <- lapply(cell_ids, function(cid) {
         morph <- .compute_morphology(labels, cid)
         morph$cell_id <- cid

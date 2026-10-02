@@ -11,7 +11,9 @@
 #' after `model_info` are optional interchange fields.
 #'
 #' @param labels Integer matrix of cell labels. 0 = background,
-#'   1..N = cell IDs.
+#'   positive values = cell IDs (gaps are allowed). Values must be finite
+#'   whole numbers from 0 to 2147483647; larger uint32 IDs are unsupported
+#'   and rejected before integer conversion.
 #' @param image_id Optional character string identifying the source image.
 #' @param model_info Optional named list of model metadata.
 #' @param mask_type One of `"instance"`, `"labelled"` or `"binary"`.
@@ -44,9 +46,16 @@ new_sg_mask <- function(labels, image_id = NULL, model_info = NULL,
   }
   mask_type <- match.arg(mask_type)
   status <- match.arg(status)
+  if (any(!is.finite(labels)) || any(labels < 0) ||
+        any(labels > .Machine$integer.max) || any(labels != trunc(labels))) {
+    cli::cli_abort(paste(
+      "{.arg labels} must contain finite whole numbers",
+      "between 0 and 2147483647.",
+      "Larger uint32 labels are not supported."
+    ))
+  }
   labels <- matrix(as.integer(labels), nrow = nrow(labels), ncol = ncol(labels))
-  n <- max(labels, na.rm = TRUE)
-  if (is.na(n) || n < 0L) n <- 0L
+  n <- length(.sg_label_ids(labels))
   mask <- structure(
     list(
       labels = labels,

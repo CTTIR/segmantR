@@ -75,7 +75,7 @@ sg_extract_features <- function(image, mask,
     ch_idx <- seq_len(n_ch)
   }
 
-  cell_ids <- seq_len(mask$n_cells)
+  cell_ids <- .sg_label_ids(labels)
   if (length(cell_ids) == 0L) {
     cli::cli_inform("Mask contains no cells. Returning empty tibble.")
     return(tibble::tibble(cell_id = integer(0)))

@@ -3,6 +3,12 @@
 # segmantR mask contract: integer, 0 = background, positive integers =
 # objects (instances) or class codes (labelled masks).
 
+#' Present positive labels, without assuming contiguous instance IDs
+#' @noRd
+.sg_label_ids <- function(labels) {
+  sort(unique(as.vector(labels[labels > 0L])))
+}
+
 #' Shift a matrix by one pixel, padding with a fill value
 #' @param dr,dc Row/column offset of the neighbour to read.
 #' @noRd
