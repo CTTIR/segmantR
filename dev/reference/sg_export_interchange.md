@@ -74,5 +74,5 @@ list.files(out$path)
 #> [1] "integrity.json"   "manifest.json"    "mask.legend.json" "mask.tif"        
 #> [5] "measurements.csv" "objects.geojson" 
 out$bundle_digest
-#> [1] "sha256:35b1d981c65406e931a2d7950f51f63040728b9eeab11af05f8b7aeed7e751c1"
+#> [1] "sha256:fee434822dcfda6fd59c49de697fbe95919b231abb0ed3bb134be756c0257605"
 ```

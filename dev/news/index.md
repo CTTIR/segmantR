@@ -2,6 +2,11 @@
 
 ## segmantR (development version)
 
+- Generate canonical numeric digits from the exact binary64 value and
+  apply explicit ties-to-even rounding, avoiding platform-dependent
+  printf behavior. Exact binary inputs cover Windows halfway cases and
+  display-separator changes.
+
 - Canonical JSON numbers now use the shortest round-tripping decimal for
   large integer-valued doubles, use JSON parsing consistently across
   platforms, and ignore the display decimal separator. Corrected text
