@@ -58,6 +58,75 @@
   }, character(1), USE.NAMES = FALSE)
 }
 
+#' Expand a positive binary64 value into exact decimal digits
+#' @noRd
+# Base-1e9 limbs stay below 1e9. Multiplication by 2^k or 5^k, k <= 9,
+# stays below 2^51, so every operation is exact in binary64. Each factor
+# divides the radix; adding the preceding carry cannot create another carry.
+.sg_binary64_decimal <- function(x) {
+  bytes <- as.integer(writeBin(as.double(x), raw(), size = 8L,
+                               endian = "little"))
+  exponent <- (bytes[8L] %% 128L) * 16L + bytes[7L] %/% 16L
+  mantissa <- sum(bytes[1:6] * 256^(0:5)) +
+    (bytes[7L] %% 16L) * 256^6
+  if (exponent == 0L) {
+    exponent <- -1074L
+  } else {
+    mantissa <- mantissa + 2^52
+    exponent <- exponent - 1075L
+  }
+  radix <- 1e9
+  limbs <- c(mantissa %% radix, floor(mantissa / radix))
+  if (utils::tail(limbs, 1L) == 0) limbs <- utils::head(limbs, -1L)
+  left <- abs(exponent)
+  multiplier <- if (exponent < 0L) 5 else 2
+  while (left > 0L) {
+    count <- min(left, 9L)
+    factor <- multiplier^count
+    scaled <- limbs * factor
+    carry <- floor(scaled / radix)
+    limbs <- scaled %% radix + c(0, utils::head(carry, -1L))
+    if (utils::tail(carry, 1L) > 0) limbs <- c(limbs, utils::tail(carry, 1L))
+    left <- left - count
+  }
+  chunks <- rev(as.character(as.integer(limbs)))
+  if (length(chunks) > 1L) {
+    chunks[-1L] <- paste0(strrep("0", 9L - nchar(chunks[-1L])), chunks[-1L])
+  }
+  digits <- paste0(chunks, collapse = "")
+  list(digits = digits, n = nchar(digits) + min(exponent, 0L))
+}
+
+#' Round exact decimal digits to nearest, choosing an even last digit at ties
+#' @noRd
+.sg_round_decimal <- function(exact, precision) {
+  digits <- exact$digits
+  n <- exact$n
+  if (nchar(digits) > precision) {
+    kept <- substring(digits, 1L, precision)
+    discarded <- substring(digits, precision + 1L)
+    next_digit <- as.integer(substring(discarded, 1L, 1L))
+    odd <- as.integer(substring(kept, precision)) %% 2L == 1L
+    past_half <- grepl("[1-9]", substring(discarded, 2L))
+    upward <- next_digit > 5L || (next_digit == 5L && (past_half || odd))
+    digits <- kept
+    if (upward) {
+      d <- as.integer(strsplit(kept, "", fixed = TRUE)[[1L]])
+      idx <- which(d != 9L)
+      if (!length(idx)) {
+        digits <- "1"
+        n <- n + 1L
+      } else {
+        last <- utils::tail(idx, 1L)
+        d[last] <- d[last] + 1L
+        if (last < length(d)) d[(last + 1L):length(d)] <- 0L
+        digits <- paste0(d, collapse = "")
+      }
+    }
+  }
+  list(digits = sub("0+$", "", digits), n = n)
+}
+
 #' Format a finite double like ECMAScript Number.prototype.toString
 #' @noRd
 .sg_json_number <- function(x) {
@@ -71,18 +140,18 @@
   if (x == 0) return("0")
   sgn <- if (x < 0) "-" else ""
   ax <- abs(x)
-  s <- NULL
-  for (d in 1:17) {
-    s <- formatC(ax, digits = d - 1L, format = "e", decimal.mark = ".")
-    # Compare binary64 values using the JSON parser, not display conversion.
-    if (jsonlite::parse_json(s) == ax) break
+  exact <- .sg_binary64_decimal(ax)
+  for (precision in 1:17) {
+    rounded <- .sg_round_decimal(exact, precision)
+    digits <- rounded$digits
+    n <- rounded$n
+    k <- nchar(digits)
+    mantissa <- paste0(
+      substring(digits, 1L, 1L),
+      if (k > 1L) paste0(".", substring(digits, 2L)) else ""
+    )
+    if (jsonlite::parse_json(paste0(mantissa, "e", n - 1L)) == ax) break
   }
-  parts <- strsplit(s, "e", fixed = TRUE)[[1]]
-  digits <- gsub(".", "", parts[1], fixed = TRUE)
-  digits <- sub("0+$", "", digits)
-  if (!nzchar(digits)) digits <- "0"
-  k <- nchar(digits)
-  n <- as.integer(parts[2]) + 1L
   body <- if (k <= n && n <= 21L) {
     paste0(digits, strrep("0", n - k))
   } else if (n > 0L && n <= 21L) {
