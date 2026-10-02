@@ -2,6 +2,13 @@
 
 ## segmantR (development version)
 
+- Canonical JSON numbers now use the shortest round-tripping decimal for
+  large integer-valued doubles, use JSON parsing consistently across
+  platforms, and ignore the display decimal separator. Corrected text
+  changes digests for affected values; re-export affected manifests as
+  new versions rather than rewriting historical checksums. Existing
+  authenticated fixtures are unchanged.
+
 - Count and process only present mask labels without phantom feature or
   export rows. Filtering still renumbers retained objects and now maps
   border flags to those output labels. Reject non-finite, fractional,
