@@ -2,6 +2,11 @@
 
 ## segmantR (development version)
 
+- Preserve the exact bytes of authenticated synthetic QuPath fixtures
+  during Git checkout, including when automatic CRLF conversion is
+  enabled. Existing fixture contents and integrity digests are
+  unchanged.
+
 All additions are backward compatible: existing functions keep their
 signatures and defaults, and objects created by segmantR 0.1.0 remain
 valid. See `system.file("interop", "INTEROP.md", package = "segmantR")`
