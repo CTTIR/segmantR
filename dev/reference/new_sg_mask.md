@@ -25,7 +25,10 @@ new_sg_mask(
 
 - labels:
 
-  Integer matrix of cell labels. 0 = background, 1..N = cell IDs.
+  Integer matrix of cell labels. 0 = background, positive values = cell
+  IDs (gaps are allowed). Values must be finite whole numbers from 0 to
+  2147483647; larger uint32 IDs are unsupported and rejected before
+  integer conversion.
 
 - image_id:
 

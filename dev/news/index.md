@@ -2,6 +2,12 @@
 
 ## segmantR (development version)
 
+- Count and process only present mask labels without phantom feature or
+  export rows. Filtering still renumbers retained objects and now maps
+  border flags to those output labels. Reject non-finite, fractional,
+  negative and out-of-range labels before integer conversion; full
+  uint32 IDs above 2147483647 remain unsupported.
+
 - Preserve the exact bytes of authenticated synthetic QuPath fixtures
   during Git checkout, including when automatic CRLF conversion is
   enabled. Existing fixture contents and integrity digests are
