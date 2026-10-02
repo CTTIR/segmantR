@@ -16,3 +16,8 @@
 ^_coverage$
 ^codecov\.yml$
 ^planning$
+^instructions$
+^\.git$
+^\.gitattributes$
+^\.zenodo\.json$
+^CITATION\.cff$

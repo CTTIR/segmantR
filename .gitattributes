@@ -1,0 +1,2 @@
+# Preserve authenticated synthetic QuPath fixture bytes on every platform.
+tests/testthat/fixtures/qupath-0.7.0/** -text
