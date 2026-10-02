@@ -88,9 +88,13 @@ One of <code>"none"</code> (default), <code>"clahe"</code>, or <code>"stretch"</
 
 
 <dt id="arg-target-resolution">target_resolution<a class="anchor" aria-label="anchor" href="#arg-target-resolution"></a></dt>
-<dd><p>Numeric scalar or <code>NULL</code>. If not <code>NULL</code>,
-the image is resampled to this target resolution (microns per
-pixel) using bilinear interpolation.</p></dd>
+<dd><p>Finite positive numeric scalar or <code>NULL</code>. If
+supplied, resample to this many microns per current array pixel using
+bilinear interpolation. Requested resampling of anisotropic pixels is
+unsupported and raises an error; leave <code>NULL</code> to retain them unchanged.
+Both pixel sizes must be finite and positive to resample. Partial or
+invalid calibration raises an error; if both sizes are unknown, the
+existing message-and-skip behavior is retained.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -36,7 +36,9 @@ new_sg_image(
 
 - resolution:
 
-  Named list with `x_um` and `y_um` (microns per pixel).
+  Named list with `x_um` and `y_um`: microns per current array pixel.
+  Divide these by `origin$downsample` for the full-resolution reference
+  pixel sizes.
 
 - metadata:
 

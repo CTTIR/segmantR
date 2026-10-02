@@ -82,7 +82,9 @@ multi-channel image with associated metadata.</p>
 
 
 <dt id="arg-resolution">resolution<a class="anchor" aria-label="anchor" href="#arg-resolution"></a></dt>
-<dd><p>Named list with <code>x_um</code> and <code>y_um</code> (microns per pixel).</p></dd>
+<dd><p>Named list with <code>x_um</code> and <code>y_um</code>: microns per current
+array pixel. Divide these by <code>origin$downsample</code> for the full-resolution
+reference pixel sizes.</p></dd>
 
 
 <dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
