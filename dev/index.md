@@ -2,6 +2,24 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21889962.svg)](https://doi.org/10.5281/zenodo.21889962)
 
+segmantR segments microscopy images, records reproducible segmentation
+protocols, and exchanges masks and measurements with downstream tools.
+The core threshold and watershed workflows use R; optional external
+engines require their own runtimes and model validation.
+
+## Installation
+
+``` r
+
+install.packages("remotes")
+remotes::install_github("CTTIR/segmantR", build_vignettes = TRUE)
+```
+
+See the declared R and package requirements in
+[DESCRIPTION](https://cttir.github.io/segmantR/dev/DESCRIPTION).
+Installing the R package does not install Python engines or download
+models.
+
 ## Reproducible protocols and exchange
 
 Besides the direct segmentation functions
@@ -53,24 +71,6 @@ See
 [`vignette("protocols-and-interop", package = "segmantR")`](https://cttir.github.io/segmantR/dev/articles/protocols-and-interop.md)
 and `system.file("interop", "INTEROP.md", package = "segmantR")`.
 
-## Use of LLM tools
-
-Portions of this package were prepared with assistance from large
-language model tooling for narrowly defined, non-authorial tasks:
-copyediting, prose smoothing, Markdown/LaTeX formatting, scaffolding of
-boilerplate files (CI configs, build scripts), code refactoring. The
-tools used were [Chat
-AI](https://kisski.gwdg.de/leistungen/2-02-llm-service/), the LLM
-service of KISSKI (GWDG), and a self-hosted **Mistral Small (24B,
-Apache-2.0)** run locally via [Ollama](https://ollama.com/) and the
-`ollamar` R package — local inference only, with no data sent to third
-parties for the self-hosted model.
-
-All scientific claims, methodological choices, analyses,
-interpretations, and conclusions are the author’s own. No LLM-generated
-text was incorporated without review and revision, and every reference
-was verified against its DOI, arXiv ID, or ISBN.
-
 ## Citation
 
 If you use this software, please cite it as:
@@ -80,3 +80,15 @@ If you use this software, please cite it as:
 > software\]. Zenodo. <https://doi.org/10.5281/zenodo.21889962>
 
 DOI: [10.5281/zenodo.21889962](https://doi.org/10.5281/zenodo.21889962)
+
+## Documentation and support
+
+Start with the [protocols and interoperability
+vignette](https://cttir.github.io/segmantR/dev/vignettes/protocols-and-interop.Rmd)
+or
+[`vignette("protocols-and-interop", package = "segmantR")`](https://cttir.github.io/segmantR/dev/articles/protocols-and-interop.md).
+Use
+[`help(package = "segmantR")`](https://cttir.github.io/segmantR/reference)
+for the API and <https://github.com/CTTIR/segmantR/issues> for
+reproducible bug reports. The package is MIT licensed; see
+[LICENSE](https://cttir.github.io/segmantR/dev/LICENSE).

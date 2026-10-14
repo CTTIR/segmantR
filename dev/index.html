@@ -73,6 +73,15 @@
 <p><a href="https://doi.org/10.5281/zenodo.21889962" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21889962.svg" alt="DOI"></a></p>
 <!-- badges: start -->
 
+<p>segmantR segments microscopy images, records reproducible segmentation protocols, and exchanges masks and measurements with downstream tools. The core threshold and watershed workflows use R; optional external engines require their own runtimes and model validation.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"CTTIR/segmantR"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>See the declared R and package requirements in <a href="DESCRIPTION">DESCRIPTION</a>. Installing the R package does not install Python engines or download models.</p>
+</div>
 <div class="section level2">
 <h2 id="reproducible-protocols-and-exchange">Reproducible protocols and exchange<a class="anchor" aria-label="anchor" href="#reproducible-protocols-and-exchange"></a>
 </h2>
@@ -87,7 +96,7 @@
 <li>
 <strong>QuPath programs</strong>: readable Groovy templates driven by <code>run.json</code> for the Script Editor and <code>QuPath script</code>, and a StarDist parameter adapter.</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cttir/segmantR" class="external-link">segmantR</a></span><span class="op">)</span></span>
 <span><span class="va">img</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sg_example_image.html">sg_example_image</a></span><span class="op">(</span><span class="st">"fluorescence_nuclei"</span><span class="op">)</span></span>
 <span><span class="va">run</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sg_protocol_run.html">sg_protocol_run</a></span><span class="op">(</span><span class="va">img</span>, <span class="st">"threshold.otsu.v1"</span>, min_area <span class="op">=</span> <span class="fl">5L</span>, output <span class="op">=</span> <span class="st">"run"</span><span class="op">)</span></span>
@@ -130,12 +139,6 @@
 <p>See <code><a href="articles/protocols-and-interop.html">vignette("protocols-and-interop", package = "segmantR")</a></code> and <code>system.file("interop", "INTEROP.md", package = "segmantR")</code>.</p>
 </div>
 <div class="section level2">
-<h2 id="use-of-llm-tools">Use of LLM tools<a class="anchor" aria-label="anchor" href="#use-of-llm-tools"></a>
-</h2>
-<p>Portions of this package were prepared with assistance from large language model tooling for narrowly defined, non-authorial tasks: copyediting, prose smoothing, Markdown/LaTeX formatting, scaffolding of boilerplate files (CI configs, build scripts), code refactoring. The tools used were <a href="https://kisski.gwdg.de/leistungen/2-02-llm-service/" class="external-link">Chat AI</a>, the LLM service of KISSKI (GWDG), and a self-hosted <strong>Mistral Small (24B, Apache-2.0)</strong> run locally via <a href="https://ollama.com/" class="external-link">Ollama</a> and the <code>ollamar</code> R package — local inference only, with no data sent to third parties for the self-hosted model.</p>
-<p>All scientific claims, methodological choices, analyses, interpretations, and conclusions are the author’s own. No LLM-generated text was incorporated without review and revision, and every reference was verified against its DOI, arXiv ID, or ISBN.</p>
-</div>
-<div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>If you use this software, please cite it as:</p>
@@ -143,6 +146,11 @@
 <p>Heller, R. (2026). <em>segmantR: Cell segmentation of histology slides with human-in-the-loop training</em> (Version 0.1.0) [Computer software]. Zenodo. <a href="https://doi.org/10.5281/zenodo.21889962" class="external-link uri">https://doi.org/10.5281/zenodo.21889962</a></p>
 </blockquote>
 <p>DOI: <a href="https://doi.org/10.5281/zenodo.21889962" class="external-link">10.5281/zenodo.21889962</a></p>
+</div>
+<div class="section level2">
+<h2 id="documentation-and-support">Documentation and support<a class="anchor" aria-label="anchor" href="#documentation-and-support"></a>
+</h2>
+<p>Start with the <a href="vignettes/protocols-and-interop.Rmd">protocols and interoperability vignette</a> or <code><a href="articles/protocols-and-interop.html">vignette("protocols-and-interop", package = "segmantR")</a></code>. Use <code><a href="https://cttir.github.io/segmantR/reference">help(package = "segmantR")</a></code> for the API and <a href="https://github.com/CTTIR/segmantR/issues" class="external-link uri">https://github.com/CTTIR/segmantR/issues</a> for reproducible bug reports. The package is MIT licensed; see <a href="LICENSE">LICENSE</a>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
