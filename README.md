@@ -22,7 +22,7 @@ install.packages("remotes")
 remotes::install_github("CTTIR/segmantR", build_vignettes = TRUE)
 ```
 
-See the declared R and package requirements in [DESCRIPTION](DESCRIPTION).
+See the declared R and package requirements in [DESCRIPTION](https://github.com/CTTIR/segmantR/blob/main/DESCRIPTION).
 Installing the R package does not install Python engines or download models.
 
 ## Reproducible protocols and exchange
@@ -79,11 +79,11 @@ DOI: [10.5281/zenodo.21889962](https://doi.org/10.5281/zenodo.21889962)
 
 ## Documentation and support
 
-Start with the [protocols and interoperability vignette](vignettes/protocols-and-interop.Rmd)
+Start with the [protocols and interoperability vignette](https://github.com/CTTIR/segmantR/blob/main/vignettes/protocols-and-interop.Rmd)
 or `vignette("protocols-and-interop", package = "segmantR")`.
 Use `help(package = "segmantR")` for the API and
 <https://github.com/CTTIR/segmantR/issues> for reproducible bug reports.
-The package is MIT licensed; see [LICENSE](LICENSE).
+The package is MIT licensed; see [LICENSE](https://github.com/CTTIR/segmantR/blob/main/LICENSE).
 
 ## Use of LLM tools
 
