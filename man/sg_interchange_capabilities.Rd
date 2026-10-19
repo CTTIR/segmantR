@@ -28,7 +28,7 @@ measurements, integrity inventory); \code{I1} versioned protocols and run
 envelopes; \code{models} model bundles with runtime and checksums;
 \code{qupath_programs} Groovy templates and \code{run.json}; \code{stardist_qupath} the
 StarDist extension adapter; \code{control} the local control service
-(\code{segmantR-control-v1}); \code{partner_qupflowR} and \code{partner_annotatR} the
+(\code{segmantR-control-v1}); \code{partner_qupflowR} and \code{partner_hyperannotatR} the
 partner contracts, which stay \code{planned} until a real consumer and QuPath
 evidence exist.
 }

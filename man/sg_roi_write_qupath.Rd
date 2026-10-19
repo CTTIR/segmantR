@@ -38,7 +38,7 @@ natively (verified with QuPath 0.7.0): \code{objectType}, \code{classification} 
 an \verb{[r, g, b]} colour, \code{isLocked} for locked ROIs, a deterministic UUID per
 ROI as the feature id (QuPath replaces non-UUID ids), and segmantR's own ROI
 id, layer, source and level in \code{properties.metadata}. \code{dialect = "legacy"}
-writes the segmantR 0.1 form (\code{object_type}, signed \code{colorRGB}), which QuPath
+writes the annotatR 0.1 form (\code{object_type}, signed \code{colorRGB}), which QuPath
 still reads with a deprecation warning.
 }
 \details{

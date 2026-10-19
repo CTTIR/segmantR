@@ -72,7 +72,7 @@ test_that("QuPath's bare-array export reads identically to the FeatureCollection
                    lapply(b$rois, function(r) sf::st_as_binary(r$geometry)))
 })
 
-test_that("QuPath understood segmantR's legacy dialect but dropped non-UUID ids", {
+test_that("QuPath understood annotatR's legacy dialect but dropped non-UUID ids", {
   q <- jsonlite::read_json(fx("qupath_reads_annotatr.json"))
   expect_identical(q$n_objects_read, 4L)
   expect_false(any(vapply(q$objects, `[[`, logical(1), "id_equals_input")))
@@ -106,7 +106,7 @@ test_that("the QuPath dialect writes what QuPath 0.7.0 reads natively and keeps 
   expect_identical(back$rois[[2]]$label, "Tumor: Positive")
 })
 
-test_that("QuPath 0.7.0 keeps segmantR 0.2 ids and metadata through its own read and re-export", {
+test_that("QuPath 0.7.0 keeps annotatR 0.2 ids and metadata through its own read and re-export", {
   q <- jsonlite::read_json(fx("qupath_reads_annotatr020.json"))
   sent <- jsonlite::read_json(fx("annotatr_020_qupath_dialect.geojson"))$features
   expect_identical(vapply(q$objects, function(o) o$id, character(1)),

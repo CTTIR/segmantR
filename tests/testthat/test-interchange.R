@@ -21,7 +21,7 @@ test_that("capabilities are schema-valid and conservative", {
   expect_s3_class(caps, "sg_capabilities")
   expect_equal(caps$profiles$I0$status, "supported")
   expect_equal(caps$profiles$I1$status, "supported")
-  for (p in c("control", "partner_qupflowR", "partner_annotatR",
+  for (p in c("control", "partner_qupflowR", "partner_hyperannotatR",
               "qupath_programs")) {
     expect_equal(caps$profiles[[p]]$status, "planned")
   }

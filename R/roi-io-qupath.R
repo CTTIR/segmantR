@@ -11,7 +11,7 @@
 # deterministic UUID per ROI and keeps segmantR's own id in
 # `properties.metadata`.
 #
-# The legacy segmantR 0.1 dialect (`object_type`, signed 32-bit `colorRGB`) is
+# The legacy annotatR 0.1 dialect (`object_type`, signed 32-bit `colorRGB`) is
 # still readable and can still be written with `dialect = "legacy"`. QuPath's
 # colorRGB packs 0xFFRRGGBB into a signed int, so the hex <-> int conversion
 # uses modular arithmetic to avoid integer overflow.
@@ -117,7 +117,7 @@
 #' an `[r, g, b]` colour, `isLocked` for locked ROIs, a deterministic UUID per
 #' ROI as the feature id (QuPath replaces non-UUID ids), and segmantR's own ROI
 #' id, layer, source and level in `properties.metadata`. `dialect = "legacy"`
-#' writes the segmantR 0.1 form (`object_type`, signed `colorRGB`), which QuPath
+#' writes the annotatR 0.1 form (`object_type`, signed `colorRGB`), which QuPath
 #' still reads with a deprecation warning.
 #'
 #' QuPath keeps one colour per classification name, so identical labels with
@@ -226,7 +226,7 @@ sg_roi_write_qupath <- function(project, path, layer = NULL, level = 0L,
 #' Read ROIs from a QuPath GeoJSON file
 #'
 #' Reads QuPath 0.4+ exports (a FeatureCollection or a bare feature array) and
-#' the legacy segmantR 0.1 dialect. `classification.name` (or the joined
+#' the legacy annotatR 0.1 dialect. `classification.name` (or the joined
 #' `names` of a derived class, e.g. `"Tumor: Positive"`) becomes the ROI label,
 #' the classification colour the layer style colour, and features without a
 #' classification are labelled `"unclassified"`. Everything else QuPath carries

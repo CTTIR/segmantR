@@ -39,7 +39,7 @@
 #' envelopes; `models` model bundles with runtime and checksums;
 #' `qupath_programs` Groovy templates and `run.json`; `stardist_qupath` the
 #' StarDist extension adapter; `control` the local control service
-#' (`segmantR-control-v1`); `partner_qupflowR` and `partner_annotatR` the
+#' (`segmantR-control-v1`); `partner_qupflowR` and `partner_hyperannotatR` the
 #' partner contracts, which stay `planned` until a real consumer and QuPath
 #' evidence exist.
 #'
@@ -179,8 +179,8 @@ sg_interchange_capabilities <- function(check_backends = FALSE) {
                     reason = "sg_app() builder has server tests; no browser/consumer contract tests yet."),
       partner_qupflowR = profile("planned", FALSE,
                                  reason = "No qupflowR consumer exists yet."),
-      partner_annotatR = profile("planned", FALSE,
-                                 reason = "annotatR interop is not implemented on the annotatR side yet.")
+      partner_hyperannotatR = profile("planned", FALSE,
+                                      reason = "segmantR interop is not implemented on the hyperannotatR side yet.")
     ),
     formats = formats,
     protocols = unname(proto_rows),

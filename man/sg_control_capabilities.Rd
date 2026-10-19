@@ -12,7 +12,7 @@ A list with \code{schema}, \code{status} (\code{"planned"}), \code{implemented}
 \code{security_requirements}.
 }
 \description{
-The local control service lets a partner (qupflowR, annotatR) drive a
+The local control service lets a partner (qupflowR, hyperannotatR) drive a
 running segmantR app through typed commands. It is \strong{planned} and not
 implemented; this function reports the planned contract so partners can
 check for it without guessing. It never starts a server.

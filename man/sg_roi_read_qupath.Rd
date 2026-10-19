@@ -25,7 +25,7 @@ An \link{sg_roi_layer}.
 }
 \description{
 Reads QuPath 0.4+ exports (a FeatureCollection or a bare feature array) and
-the legacy segmantR 0.1 dialect. \code{classification.name} (or the joined
+the legacy annotatR 0.1 dialect. \code{classification.name} (or the joined
 \code{names} of a derived class, e.g. \code{"Tumor: Positive"}) becomes the ROI label,
 the classification colour the layer style colour, and features without a
 classification are labelled \code{"unclassified"}. Everything else QuPath carries

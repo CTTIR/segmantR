@@ -4,8 +4,9 @@ Source provenance is recorded in source-provenance.json. The original MIT-licens
 ROI geometry, layer, project, rasterization and QuPath modules were transferred
 from annotatR at the recorded revision. Public names use sg_roi_*; internal
 helpers and classes are isolated from segmantR's existing sg_image/sg_mask APIs.
-No annotatR runtime dependency exists. Existing QuPath UUID seed and annotatr_*
-metadata keys remain wire compatibility details, not a runtime dependency.
+No hyperannotatR (formerly annotatR) runtime dependency exists. Existing QuPath
+UUID seed and annotatr_* metadata keys remain wire compatibility details, not a
+runtime dependency.
 
 The frame constructor is metadata-only. No HSI image readers, spectral cubes,
 Shiny annotation UI, control service, training/handoff service or image backend

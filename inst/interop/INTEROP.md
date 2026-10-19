@@ -1,9 +1,9 @@
 # segmantR interoperability, migration and security notes
 
 This document describes the contracts segmantR offers to partner software
-(qupflowR — working title of the QuPath workflow kit: qupathR —, annotatR,
-QuPath with the StarDist extension). It is installed with the package:
-`system.file("interop", "INTEROP.md", package = "segmantR")`.
+(qupflowR — working title of the QuPath workflow kit: qupathR —, hyperannotatR
+(formerly annotatR), QuPath with the StarDist extension). It is installed with
+the package: `system.file("interop", "INTEROP.md", package = "segmantR")`.
 
 ## 1. Versions
 
@@ -37,17 +37,17 @@ minor or major version, never a silent change.
 | StarDist via QuPath | planned | parameter map checked against extension 0.6.0; no partner consumer |
 | StarDist via Python | unavailable unless `stardist` + `tensorflow` are installed | checked at the point of use |
 | control service | planned | not implemented |
-| partner contracts qupflowR / annotatR | planned | no consumer exists yet |
+| partner contracts qupflowR / hyperannotatR | planned | no consumer exists yet |
 
 `sg_interchange_capabilities()` reports the live status. Nothing is reported
 as `supported` without tests, and the partner contract becomes `supported`
-only with a real qupflowR/annotatR consumer and QuPath/StarDist evidence.
+only with a real qupflowR/hyperannotatR consumer and QuPath/StarDist evidence.
 
 ## 3. Data invariants
 
 * **Arrays**: `[y, x, channel]`; the first array row is the top image row.
   A two-dimensional array is one channel. Hyperspectral cubes use the same
-  order with bands as channels (`[y, x, band]`), identical to annotatR.
+  order with bands as channels (`[y, x, band]`), identical to hyperannotatR.
 * **Coordinates**: full-resolution pixel grid, origin top-left, x right,
   y down, unit px. Array cell `[r, c]` covers `[c-1, c) x [r-1, r)` before
   the image `origin` (`x`, `y`, `downsample`) is applied; the pixel centre is
