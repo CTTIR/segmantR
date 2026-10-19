@@ -12,12 +12,19 @@
   : Create a new sg_mask object
 - [`new_sg_trained_model()`](https://cttir.github.io/segmantR/dev/reference/new_sg_trained_model.md)
   : Create a new sg_trained_model object
+- [`sgCanvasOutput()`](https://cttir.github.io/segmantR/dev/reference/sgCanvasOutput.md)
+  [`renderSgCanvas()`](https://cttir.github.io/segmantR/dev/reference/sgCanvasOutput.md)
+  : Shiny bindings for the cell canvas
 - [`sg_active_learning_loop()`](https://cttir.github.io/segmantR/dev/reference/sg_active_learning_loop.md)
   : Run an active learning loop for iterative segmentation refinement
 - [`sg_app()`](https://cttir.github.io/segmantR/dev/reference/sg_app.md)
   : Build the segmantR Shiny application
 - [`sg_apply_corrections()`](https://cttir.github.io/segmantR/dev/reference/sg_apply_corrections.md)
   : Apply manual corrections to a segmentation mask
+- [`sg_canvas()`](https://cttir.github.io/segmantR/dev/reference/sg_canvas.md)
+  : Draw cell boundaries on a microscopy image
+- [`sg_canvas_correct()`](https://cttir.github.io/segmantR/dev/reference/sg_canvas_correct.md)
+  : Apply a cell canvas correction
 - [`sg_cleanup_labels()`](https://cttir.github.io/segmantR/dev/reference/sg_cleanup_labels.md)
   : Clean up a label mask
 - [`sg_control_capabilities()`](https://cttir.github.io/segmantR/dev/reference/sg_control_capabilities.md)
@@ -104,6 +111,126 @@
   : Read an ENVI cube window into an sg_image
 - [`sg_read_image()`](https://cttir.github.io/segmantR/dev/reference/sg_read_image.md)
   : Read an image file
+- [`sg_roi`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
+  [`sg_roi_layer`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
+  [`sg_roi_project`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
+  [`sg_roi_frame`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
+  [`sg_roi_mask`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
+  [`sg_roi_summary`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
+  : Histology ROI objects
+- [`sg_roi_add_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_add_layer.md)
+  : Add a layer to a project
+- [`sg_roi_add_roi()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_add_roi.md)
+  : Add an ROI to a project layer
+- [`sg_roi_area()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_area.md)
+  : ROI area
+- [`sg_roi_bbox()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_bbox.md)
+  : ROI bounding box
+- [`sg_roi_buffer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_buffer.md)
+  : Buffer an ROI
+- [`sg_roi_centroid()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_centroid.md)
+  : ROI centroid
+- [`sg_roi_check_containment()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_check_containment.md)
+  : Check cross-layer containment
+- [`sg_roi_check_geometry()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_check_geometry.md)
+  : Check the geometry of every ROI in a project
+- [`sg_roi_circle()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_circle.md)
+  : Create a circular ROI
+- [`sg_roi_clamp()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_clamp.md)
+  : Clip an ROI to image bounds
+- [`sg_roi_contains()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_contains.md)
+  : Test whether points fall inside an ROI
+- [`sg_roi_dims()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_dims.md)
+  : Image dimensions at a pyramid level
+- [`sg_roi_distance()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_distance.md)
+  : Distance between two ROIs
+- [`sg_roi_ellipse()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_ellipse.md)
+  : Create an elliptical ROI
+- [`sg_roi_fix_geometry()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_fix_geometry.md)
+  : Repair the geometry of a project
+- [`sg_roi_flip_y()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_flip_y.md)
+  : Flip an ROI's y-axis
+- [`sg_roi_frame()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_frame.md)
+  : Declare the coordinate frame for histology ROIs
+- [`sg_roi_freehand()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_freehand.md)
+  : Create a freehand ROI
+- [`sg_roi_from_geojson()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_from_geojson.md)
+  : Convert a GeoJSON feature to an ROI
+- [`sg_roi_from_sf()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_from_sf.md)
+  : Create an ROI from an existing sf geometry
+- [`sg_roi_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md)
+  : Create a layer
+- [`sg_roi_layer_add()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_add.md)
+  : Add an ROI to a layer
+- [`sg_roi_layer_n()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_n.md)
+  : Number of ROIs in a layer
+- [`sg_roi_layer_remove()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_remove.md)
+  : Remove an ROI from a layer
+- [`sg_roi_layer_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_rois.md)
+  : Layer ROI table
+- [`sg_roi_layers()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layers.md)
+  : Layer summary table
+- [`sg_roi_mask()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask.md)
+  : Rasterise ROIs to a mask ("Schablone")
+- [`sg_roi_mask_boundary()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_boundary.md)
+  : Object boundaries of a mask
+- [`sg_roi_mask_derive()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_derive.md)
+  : Derive a training mask from layer masks
+- [`sg_roi_mask_legend()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_legend.md)
+  : Legend of a mask
+- [`sg_roi_mask_preview()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_preview.md)
+  : Downsampled preview of a mask
+- [`sg_roi_mask_stack()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_stack.md)
+  : Stack per-layer masks into a 3D array
+- [`sg_roi_mask_stats()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_stats.md)
+  : Per-value statistics of a mask
+- [`sg_roi_overlaps()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_overlaps.md)
+  : Test whether two ROIs intersect
+- [`sg_roi_point()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_point.md)
+  : Create a point ROI
+- [`sg_roi_polygon()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_polygon.md)
+  : Create a polygon ROI
+- [`sg_roi_project()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_project.md)
+  : Create an annotation project
+- [`sg_roi_read_geojson()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_read_geojson.md)
+  : Read ROIs from a GeoJSON file
+- [`sg_roi_read_qupath()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_read_qupath.md)
+  : Read ROIs from a QuPath GeoJSON file
+- [`sg_roi_rect()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rect.md)
+  : Create a rectangular ROI
+- [`sg_roi_remove_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_remove_layer.md)
+  : Remove a layer from a project
+- [`sg_roi_remove_roi()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_remove_roi.md)
+  : Remove an ROI from a project
+- [`sg_roi_rescale()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rescale.md)
+  : Rescale an ROI between pyramid levels
+- [`sg_roi_ring()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_ring.md)
+  : Ring (annulus) along an ROI margin
+- [`sg_roi_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rois.md)
+  : Query the ROIs of a project
+- [`sg_roi_rois_overlap()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rois_overlap.md)
+  : Pairwise ROI overlaps within a layer
+- [`sg_roi_union()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_setops.md)
+  [`sg_roi_intersect()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_setops.md)
+  [`sg_roi_difference()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_setops.md)
+  [`sg_roi_symdiff()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_setops.md)
+  : Set operations on ROIs
+- [`sg_roi_simplify()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_simplify.md)
+  : Simplify an ROI
+- [`sg_roi_snap()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_snap.md)
+  : Snap ROI vertices to a grid
+- [`sg_roi_style()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_style.md)
+  : Layer style
+- [`sg_roi_summary()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_summary.md)
+  : Summarise a project
+- [`sg_roi_transform()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_transform.md)
+  : Transform an ROI between pyramid levels using real image dimensions
+- [`sg_roi_validate()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_validate.md)
+  : Validate a project's invariants
+- [`sg_roi_write_geojson()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_write_geojson.md)
+  : Write a project's ROIs to GeoJSON
+- [`sg_roi_write_qupath()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_write_qupath.md)
+  : Write a project's ROIs as QuPath GeoJSON
 - [`sg_run_app()`](https://cttir.github.io/segmantR/dev/reference/sg_run_app.md)
   : Launch the segmantR Shiny application
 - [`sg_segment_cellpose()`](https://cttir.github.io/segmantR/dev/reference/sg_segment_cellpose.md)
