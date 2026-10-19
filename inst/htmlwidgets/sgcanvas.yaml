@@ -1,0 +1,5 @@
+dependencies:
+  - name: sgcanvas-css
+    version: 0.0.1
+    src: htmlwidgets/lib/sgcanvas
+    stylesheet: sgcanvas.css

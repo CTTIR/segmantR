@@ -1,0 +1,213 @@
+# GeoJSON import/export. Geometry conversion is done by hand (rather than via a
+# GeoJSON driver) for exact round-trip fidelity and full control over the
+# property schema. These converters are shared with the QuPath dialect.
+
+# ---- sfg <-> GeoJSON geometry ----------------------------------------------
+
+.sg_roi_ring_to_coords <- function(m) {
+  lapply(seq_len(nrow(m)), function(i) as.numeric(m[i, 1:2]))
+}
+
+# Convert a single sfg to a GeoJSON geometry list (type + coordinates).
+.sg_roi_sfg_to_geojson <- function(g) {
+  type <- as.character(sf::st_geometry_type(sf::st_sfc(g)))
+  switch(
+    type,
+    "POINT"        = list(type = "Point", coordinates = as.numeric(g)),
+    "MULTIPOINT"   = list(type = "MultiPoint", coordinates = .sg_roi_ring_to_coords(unclass(g))),
+    "LINESTRING"   = list(type = "LineString", coordinates = .sg_roi_ring_to_coords(unclass(g))),
+    "POLYGON"      = list(type = "Polygon", coordinates = lapply(g, .sg_roi_ring_to_coords)),
+    "MULTIPOLYGON" = list(type = "MultiPolygon",
+                          coordinates = lapply(g, function(p) lapply(p, .sg_roi_ring_to_coords))),
+    cli::cli_abort("Cannot convert geometry type {.val {type}} to GeoJSON.")
+  )
+}
+
+.sg_roi_coords_to_matrix <- function(ring) {
+  do.call(rbind, lapply(ring, function(p) as.numeric(unlist(p))))
+}
+
+# Convert a parsed GeoJSON geometry (from jsonlite, simplifyVector = FALSE) to sfg.
+.sg_roi_geojson_to_sfg <- function(geom) {
+  type <- geom$type
+  co <- geom$coordinates
+  switch(
+    type,
+    "Point"        = sf::st_point(as.numeric(unlist(co))),
+    "MultiPoint"   = sf::st_multipoint(.sg_roi_coords_to_matrix(co)),
+    "LineString"   = sf::st_linestring(.sg_roi_coords_to_matrix(co)),
+    "Polygon"      = sf::st_polygon(lapply(co, .sg_roi_coords_to_matrix)),
+    "MultiPolygon" = sf::st_multipolygon(lapply(co, function(p) lapply(p, .sg_roi_coords_to_matrix))),
+    cli::cli_abort("Cannot convert GeoJSON geometry type {.val {type}}.")
+  )
+}
+
+# Apply a y-flip to an sfg given the image height.
+.sg_roi_flip_sfg_y <- function(g, height) {
+  .sg_roi_apply_coords(g, function(m) cbind(m[, 1], height - m[, 2]))
+}
+
+# ---- Write ------------------------------------------------------------------
+
+#' Write a project's ROIs to GeoJSON
+#'
+#' @param project An [sg_roi_project].
+#' @param path Output file path.
+#' @param layer Optional layer filter.
+#' @param level Integer pyramid level for the coordinates. Default `0`.
+#' @param flip_y Logical; invert the y-axis (for GIS-oriented consumers). Default
+#'   `FALSE` (image orientation preserved). The consequence is documented in the
+#'   interop vignette.
+#' @param overwrite Logical; overwrite an existing file. Default `FALSE`.
+#' @param call The calling environment, for error reporting.
+#'
+#' @return The output path, invisibly.
+#' @family io
+#' @seealso [sg_roi_read_geojson()], [sg_roi_write_qupath()]
+#' @export
+#' @examplesIf requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)
+#' p <- withr::local_tempfile(fileext = ".geojson")
+#' sg_roi_write_geojson(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), p)
+sg_roi_write_geojson <- function(project, path, layer = NULL, level = 0L,
+                             flip_y = FALSE, overwrite = FALSE,
+                             call = rlang::caller_env()) {
+  .sg_roi_check_project(project, call = call)
+  .sg_roi_check_string(path, call = call)
+  .sg_roi_check_flag(flip_y, call = call)
+  .sg_roi_check_flag(overwrite, call = call)
+  if (file.exists(path) && !overwrite) {
+    cli::cli_abort(c("{.path {path}} already exists.",
+                    "i" = "Pass {.code overwrite = TRUE} to replace it."), call = call)
+  }
+  height <- sg_roi_dims(project$image, level)[2]
+  fc <- .sg_roi_project_to_features(project, layer, level, flip_y, height,
+                             qupath = FALSE)
+  jsonlite::write_json(fc, path, auto_unbox = TRUE, digits = I(17), null = "null",
+                       pretty = TRUE)
+  invisible(path)
+}
+
+# Build a FeatureCollection list from a project.
+.sg_roi_project_to_features <- function(project, layer, level, flip_y, height, qupath,
+                                dialect = "qupath") {
+  Ls <- project$layers
+  if (!is.null(layer)) Ls <- Ls[intersect(layer, names(Ls))]
+  features <- list()
+  for (nm in names(Ls)) {
+    lyr <- Ls[[nm]]
+    cols <- lyr$style$colour
+    for (r in lyr$rois) {
+      g <- .sg_roi_geom_to_level(.sg_roi_to_level0(r$geometry, r$level, project$image), level, project$image)[[1]]
+      if (flip_y) g <- .sg_roi_flip_sfg_y(g, height)
+      colour <- if (!is.null(cols) && r$label %in% names(cols)) unname(cols[[r$label]]) else "#5E2C8E"
+      feat <- if (qupath) {
+        .sg_roi_roi_to_qupath_feature(r, nm, g, colour, dialect = dialect)
+      } else {
+        .sg_roi_roi_to_feature(r, nm, g)
+      }
+      features[[length(features) + 1L]] <- feat
+    }
+  }
+  list(type = "FeatureCollection", features = features)
+}
+
+.sg_roi_roi_to_feature <- function(r, layer_name, g) {
+  list(
+    type = "Feature",
+    id = r$id,
+    geometry = .sg_roi_sfg_to_geojson(g),
+    properties = list(
+      roi_id = r$id, layer = layer_name, label = r$label,
+      level = r$level, author = r$author,
+      created = format(r$created, "%Y-%m-%dT%H:%M:%S%z"),
+      modified = format(r$modified, "%Y-%m-%dT%H:%M:%S%z"),
+      source = r$source, segmantR_version = .sg_roi_pkg_version(),
+      attributes = r$attributes
+    )
+  )
+}
+
+#' Convert a GeoJSON feature to an ROI
+#'
+#' Turn a single parsed GeoJSON feature (a list with `geometry` and optional
+#' `properties`) into an [sg_roi]. Useful for consuming interactive drawing
+#' output.
+#'
+#' @param feature A parsed GeoJSON feature: a list with a `geometry` element
+#'   (`type` and `coordinates`) and optional `properties`.
+#' @param label Single string class label; taken from `properties$label` when
+#'   `NULL`.
+#' @param level Integer pyramid level. Default `0`.
+#' @param source Provenance source string. Default `"manual"`.
+#' @param call The calling environment, for error reporting.
+#'
+#' @return An [sg_roi].
+#' @family io
+#' @family rois
+#' @export
+#' @examples
+#' feat <- list(geometry = list(type = "Polygon",
+#'   coordinates = list(list(c(0, 0), c(4, 0), c(4, 4), c(0, 4), c(0, 0)))))
+#' sg_roi_from_geojson(feat, label = "region")
+sg_roi_from_geojson <- function(feature, label = NULL, level = 0L,
+                                source = "manual", call = rlang::caller_env()) {
+  if (!is.list(feature) || is.null(feature$geometry)) {
+    cli::cli_abort(
+      c("{.arg feature} must be a parsed GeoJSON feature with a {.field geometry}.",
+        "x" = "You supplied {.cls {class(feature)[1]}}."),
+      call = call
+    )
+  }
+  lab <- label %||% (feature$properties$label %||% "unlabelled")
+  g <- .sg_roi_geojson_to_sfg(feature$geometry)
+  sg_roi_from_sf(sf::st_sfc(g, crs = sf::NA_crs_), label = as.character(lab),
+                 level = as.integer(level), source = source, call = call)
+}
+
+# ---- Read -------------------------------------------------------------------
+
+#' Read ROIs from a GeoJSON file
+#'
+#' @param path Path to a GeoJSON file.
+#' @param layer_name Layer name for the imported ROIs; taken from the features'
+#'   `layer` property when `NULL`.
+#' @param level Integer level to record when a feature has no `level` property.
+#' @param flip_y Logical; invert the y-axis on read. Default `FALSE`.
+#' @param height Image height in pixels, required when `flip_y = TRUE`.
+#' @param call The calling environment, for error reporting.
+#'
+#' @return A named list of [sg_roi_layer] objects (one per distinct `layer`
+#'   property), or a single [sg_roi_layer] when `layer_name` is supplied.
+#' @family io
+#' @export
+sg_roi_read_geojson <- function(path, layer_name = NULL, level = 0L, flip_y = FALSE,
+                            height = NULL, call = rlang::caller_env()) {
+  .sg_roi_check_file(path, call = call)
+  if (flip_y && is.null(height)) {
+    cli::cli_abort("{.arg height} is required when {.code flip_y = TRUE}.", call = call)
+  }
+  fc <- jsonlite::read_json(path, simplifyVector = FALSE)
+  features <- fc$features %||% list()
+  layers <- list()
+  for (ft in features) {
+    props <- ft$properties %||% list()
+    g <- .sg_roi_geojson_to_sfg(ft$geometry)
+    if (flip_y) g <- .sg_roi_flip_sfg_y(g, height)
+    ln <- layer_name %||% (props$layer %||% "imported")
+    lb <- props$label %||% "unlabelled"
+    lvl <- props$level %||% level
+    roi <- sg_roi_from_sf(
+      sf::st_sfc(g, crs = sf::NA_crs_), label = as.character(lb), level = as.integer(lvl),
+      id = props$roi_id %||% ft$id %||% .sg_roi_new_id("roi"),
+      source = props$source %||% "imported",
+      author = props$author %||% .sg_roi_default_author()
+    )
+    if (!is.null(props$attributes)) roi$attributes <- props$attributes
+    if (is.null(layers[[ln]])) layers[[ln]] <- sg_roi_layer(ln)
+    layers[[ln]] <- sg_roi_layer_add(layers[[ln]], roi)
+  }
+  if (!is.null(layer_name)) {
+    return(layers[[layer_name]] %||% sg_roi_layer(layer_name))
+  }
+  layers
+}

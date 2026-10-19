@@ -88,6 +88,9 @@ sg_app <- function(input = NULL, state = NULL, control = "off", ...) {
       ),
       shiny::mainPanel(
         shiny::plotOutput("overlay", height = "420px"),
+        shiny::selectInput("cell_tool", "Cell annotation tool",
+          c("pan", "rect", "polygon", "freehand", "circle", "edit", "erase")),
+        shiny::uiOutput("cell_canvas_ui"),
         shiny::verbatimTextOutput("message"),
         shiny::tableOutput("measurements")
       )
@@ -279,6 +282,53 @@ sg_app <- function(input = NULL, state = NULL, control = "off", ...) {
       ch <- as.integer(input$channel %||% 1L)
       print(sg_plot_overlay(rv$image, mask, channel = ch))
     })
+
+    output$cell_canvas_ui <- shiny::renderUI({
+      if (!requireNamespace("htmlwidgets", quietly = TRUE) ||
+          !requireNamespace("magick", quietly = TRUE)) {
+        return(shiny::helpText("Install htmlwidgets and magick to draw cell boundaries."))
+      }
+      sgCanvasOutput("cell_canvas")
+    })
+    if (requireNamespace("htmlwidgets", quietly = TRUE) &&
+        requireNamespace("magick", quietly = TRUE)) {
+      canvas_state <- shiny::reactive({
+        shiny::req(rv$image)
+        mask <- rv$candidate %||% rv$reviewed
+        if (is.null(mask)) mask <- new_sg_mask(
+          matrix(0L, dim(rv$image$pixels)[1], dim(rv$image$pixels)[2]),
+          image_id = rv$image$id, origin = rv$image$origin, plane = rv$image$plane)
+        list(image = rv$image, mask = mask, revision = sg_mask_revision(mask))
+      })
+      output$cell_canvas <- renderSgCanvas({
+        x <- canvas_state()
+        sg_canvas(x$image, x$mask, channel = as.integer(input$channel %||% 1L),
+                  tool = if (read_only) "pan" else input$cell_tool %||% "pan")
+      })
+      correct_canvas <- function(action, event) {
+        if (read_only) return()
+        x <- canvas_state()
+        payload <- event$payload
+        id <- if (action == "erase") payload else payload$roi_id
+        result <- run_guarded(sg_canvas_correct(x$mask,
+          geometry = if (action != "erase") payload$geometry else NULL, action,
+          cell_id = if (!is.null(id)) as.integer(id) else NULL,
+          expected_revision = event$revision))
+        if (!is.null(result)) {
+          rv$candidate <- result
+          set_message("Cell correction staged. Review before exporting.")
+        }
+      }
+      shiny::observeEvent(input$cell_canvas_created, {
+        correct_canvas("add", input$cell_canvas_created)
+      })
+      shiny::observeEvent(input$cell_canvas_edited, {
+        correct_canvas("edit", input$cell_canvas_edited)
+      })
+      shiny::observeEvent(input$cell_canvas_erased, {
+        correct_canvas("erase", input$cell_canvas_erased)
+      })
+    }
 
     output$message <- shiny::renderText(rv$message)
 

@@ -1,5 +1,18 @@
 # segmantR (development version)
 
+* Adds independent `sg_roi_*` histology annotation objects, layers, project
+  provenance, geometry operations, GeoJSON/QuPath exchange and integer ROI masks.
+  A metadata-only frame records explicit pyramid dimensions and pixel calibration.
+  These APIs do not require annotatR or an HSI backend. Existing instance-mask APIs
+  remain unchanged. QuPath UUID derivation and legacy metadata keys are retained.
+* Direct QuPath ROI exports retain imported measurements, metadata, image planes
+  and nucleus geometry. ROI mask statistics reject invalid physical calibration.
+
+* Added an independent cell annotation canvas adapted from annotatR, with
+  rectangle, polygon, freehand, circle, edit and erase tools. Corrections
+  preserve image binding, reject overlaps and stale revisions, and enter
+  the existing staged review workflow. No annotatR dependency is required.
+
 * Physical areas use current array pixel calibration once after resampling.
   Level-0 geometry and OME spacing are unchanged; corrected downsampled
   measurement assets have new digests and require explicit revalidation.

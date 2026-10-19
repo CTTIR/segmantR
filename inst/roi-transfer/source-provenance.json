@@ -1,0 +1,28 @@
+{
+  "origin_repository": "CTTIR/annotatR",
+  "origin_commit": "288c1c53ab3d472e8e3752b63b305d217ae861a3",
+  "target_base": "7946779bd865614f5499cec7c2e8778cc76c9063",
+  "namespace_rule": "at_roi_* -> sg_roi_*; remaining at_* -> sg_roi_*; internal helpers .sg_roi_*; distinct sg_roi classes",
+  "source_sha256": {
+    "R/class-roi.R": "ca22db46d27bb77a5db8b8b90b9fe739ebd9d5fd277e53d1cc986c5d99ff3a84",
+    "R/class-layer.R": "4ea6c9636583e85eb3d6553183fa77541bd69716d2fc9f2b6ff2e8e950ef8dd0",
+    "R/class-project.R": "45107ce5d6f18c3b3776fe4a2f6bf5960fb1adfbaac1a2b24d322e49f32c75ad",
+    "R/geometry.R": "936fc2fd008abeb100317fbbf01c5f1ceaf51bbe6ff021bcdc30436e6a5c3649",
+    "R/mask.R": "6c04a21bb21dc0fd04ad5b63dd00785d1a5520206cfc46fd060ecde2b7a6c740",
+    "R/io-geojson.R": "6abdf1a806007c6a07fedd55ac4c8946662c90dde95fbf2a0f6cab627cdc0d71",
+    "R/io-qupath.R": "0d8ebb02118a31b231bdf64d58cb6bfbb04d15128dcf49e8350d32b75be84901",
+    "R/utils.R": "174b195f9810e9bc44380bb940dbb166f49174d7a22493ed822925d6ba850701",
+    "R/utils-check.R": "be2e48eee53f4ee76e81cd79ac08d60ac9ad8fbc50fd47bbd13e7afead8ab6fb",
+    "R/perf.R": "1756f3a2874b30ea21031550d13e2de42e827a9b5a3c07210541c17611931457",
+    "R/class-image.R": "c22bf00e0ee1582955045aae5dd15145eabfc80566ee52db48e889a7040d460c",
+    "tests/testthat/test-class-roi.R": "ce783ab3e080198ee5453de9ba01a4fed38a755d4000fe8970371268b295e78a",
+    "tests/testthat/test-class-layer.R": "11b83aaa2794822678ec71959d4d53245f189dbee25d369b623bc328e5695412",
+    "tests/testthat/test-geometry.R": "71f4f30ef1937fdb5f0bdec4f48159254bb4d157c29061ea690a6c0b3f14e69b",
+    "tests/testthat/test-mask.R": "53ac507a2aec27892b1d8a292a898c604d45c0166cc9df87110cd8736b655c65",
+    "tests/testthat/test-io-qupath.R": "48d82ee1a2eaec7af91bc1abbee2e1d72372429b4cfb854127d74efb64d950d2",
+    "tests/testthat/test-io-qupath-real.R": "bfbce763ae13026a6bd8a56fed124aee52ecf43edca7675615809cf7429edb0c",
+    "tests/testthat/test-roi-ring.R": "2f6497aa24a4a2afcdbc65d759ddb889e01a17510097e0b420b2007e4a566899",
+    "tests/testthat/test-class-project.R": "099783b29c2e37708ccbd7077ecc5788495dae4871560413c5d4af30cd14c023",
+    "tests/testthat/helper-annotatR.R": "a800d23a336a8a96b5a05afec293a2825921a0ad9203da213a7c045ba12d0b08"
+  }
+}

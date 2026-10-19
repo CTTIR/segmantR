@@ -1,0 +1,741 @@
+# The mask ("Schablone") engine: the core deliverable. Rasterises ROI geometry
+# to binary, labelled, or multi-class integer masks.
+#
+# PIXEL-COVERAGE CONTRACT (load-bearing; documented in sg_roi_mask() and tested
+# against hand-computed cases):
+#   * Pixel (i, j) covers the half-open square [j-1, j) x [i-1, i) in ROI
+#     coordinate space, with (0, 0) at the top-left corner of the top-left pixel.
+#     Its centre is (j - 0.5, i - 0.5).
+#   * touches = FALSE (default): a pixel is included when its CENTRE lies inside
+#     the polygon (GDAL ALL_TOUCHED=FALSE).
+#   * touches = TRUE: a pixel is included if the polygon touches it at all.
+#   * ROI coordinates use the image convention (top-left origin, y increasing
+#     downward); the rasteriser flips the y-axis to reconcile with GDAL's y-up
+#     convention.
+
+# ---- Per-ROI cover primitive -----------------------------------------------
+
+# Rasterise a single geometry to a logical [height, width] cover matrix in image
+# orientation. `engine` selects the reference (stars) or accelerated (terra)
+# implementation; the two are verified bit-identical in tests.
+#
+# For centre-based coverage (touches = FALSE) the geometry is shifted by a
+# sub-pixel epsilon so that no pixel centre ever lands exactly on a polygon edge.
+# This makes the boundary-tie rule deterministic and axis-symmetric: a centre on
+# the lower edge falls strictly inside (included) and one on the upper edge falls
+# strictly outside (excluded), i.e. the half-open `[lower, upper)` convention.
+# The shift is far below pixel scale, so no non-tie pixel is affected and the
+# stars and terra paths remain bit-identical.
+.sg_roi_cover <- function(geom, dims, touches = FALSE, engine = "stars") {
+  if (!touches) {
+    # Fast, exact path for axis-aligned rectangles and points (bit-identical to
+    # the general rasteriser); avoids stars/terra entirely.
+    sc <- .sg_roi_cover_shortcircuit(geom, dims)
+    if (!is.null(sc)) {
+      return(sc)
+    }
+    eps <- 1e-7
+    geom <- .sg_roi_apply_coords(geom, function(m) cbind(m[, 1] - eps, m[, 2] - eps))
+  }
+  if (engine == "terra" && requireNamespace("terra", quietly = TRUE)) {
+    return(.sg_roi_cover_terra(geom, dims, touches))
+  }
+  .sg_roi_cover_stars(geom, dims, touches)
+}
+
+.sg_roi_cover_stars <- function(geom, dims, touches) {
+  width <- dims[1]
+  height <- dims[2]
+  sfobj <- sf::st_sf(v = 1L, geometry = sf::st_sfc(geom, crs = sf::NA_crs_))
+  bb <- sf::st_bbox(c(xmin = 0, ymin = 0, xmax = width, ymax = height))
+  templ <- stars::st_as_stars(bb, nx = as.integer(width), ny = as.integer(height),
+                              values = 0L)
+  opt <- if (touches) "ALL_TOUCHED=TRUE" else "ALL_TOUCHED=FALSE"
+  r <- suppressWarnings(stars::st_rasterize(sfobj, template = templ, options = opt))
+  m <- r[[1]]
+  m[is.na(m)] <- 0L
+  cover <- t(m)[height:1, , drop = FALSE] != 0L
+  matrix(cover, nrow = height, ncol = width)
+}
+
+.sg_roi_cover_terra <- function(geom, dims, touches) {
+  width <- dims[1]
+  height <- dims[2]
+  v <- terra::vect(sf::st_sfc(geom, crs = sf::NA_crs_))
+  r <- terra::rast(xmin = 0, xmax = width, ymin = 0, ymax = height,
+                   resolution = 1, vals = 0)
+  rr <- terra::rasterize(v, r, field = 1, background = 0, touches = touches)
+  m <- terra::as.matrix(rr, wide = TRUE) # [row, col], row 1 = ymax (top)
+  m[is.na(m)] <- 0
+  # terra row 1 = ymax; image row 1 = y small -> flip rows.
+  cover <- m[height:1, , drop = FALSE] != 0
+  matrix(cover, nrow = height, ncol = width)
+}
+
+# ---- Collect ROIs for masking ----------------------------------------------
+
+# Return a list describing the ROIs to rasterise, ordered by draw order
+# (ascending z, then insertion), with geometry transformed to `level`.
+.sg_roi_collect_mask_rois <- function(x, layer = NULL, label = NULL, level = 0L,
+                               call = rlang::caller_env()) {
+  image <- if (inherits(x, "sg_roi_project")) x$image else NULL
+  entries <- list()
+  add_layer <- function(lyr) {
+    z <- lyr$style$z %||% 1L
+    cols <- lyr$style$colour
+    for (r in lyr$rois) {
+      if (!is.null(label) && !(r$label %in% label)) next
+      g0 <- .sg_roi_to_level0(r$geometry, r$level, image)
+      g <- .sg_roi_geom_to_level(g0, level, image)
+      colour <- if (!is.null(cols) && r$label %in% names(cols)) unname(cols[[r$label]]) else "#5E2C8E"
+      entries[[length(entries) + 1L]] <<- list(
+        roi_id = r$id, label = r$label, layer = lyr$name,
+        z = as.integer(z), colour = colour, geom = g[[1]]
+      )
+    }
+  }
+  if (inherits(x, "sg_roi")) {
+    g0 <- .sg_roi_to_level0(x$geometry, x$level, NULL)
+    g <- .sg_roi_geom_to_level(g0, level, NULL)
+    entries[[1]] <- list(roi_id = x$id, label = x$label, layer = NA_character_,
+                         z = 1L, colour = "#5E2C8E", geom = g[[1]])
+  } else if (inherits(x, "sg_roi_layer")) {
+    add_layer(x)
+  } else if (inherits(x, "sg_roi_project")) {
+    lyrs <- x$layers
+    if (!is.null(layer)) lyrs <- lyrs[intersect(layer, names(lyrs))]
+    for (lyr in lyrs) add_layer(lyr)
+  } else {
+    cli::cli_abort(
+      "{.arg x} must be an {.cls sg_roi}, {.cls sg_roi_layer}, or {.cls sg_roi_project}.",
+      call = call
+    )
+  }
+  # Stable order by ascending z (higher z drawn later, on top).
+  if (length(entries) > 1L) {
+    ord <- order(vapply(entries, `[[`, integer(1), "z"), seq_along(entries))
+    entries <- entries[ord]
+  }
+  entries
+}
+
+# Determine mask dimensions c(width, height) at a level.
+.sg_roi_resolve_mask_dims <- function(x, level, dims, entries, call = rlang::caller_env()) {
+  if (!is.null(dims)) {
+    if (!is.numeric(dims) || length(dims) != 2L) {
+      cli::cli_abort("{.arg dims} must be a length-2 numeric vector.", call = call)
+    }
+    return(as.integer(ceiling(dims)))
+  }
+  if (inherits(x, "sg_roi_project")) {
+    return(sg_roi_dims(x$image, level))
+  }
+  # Fall back to the geometry bounding box.
+  if (length(entries) == 0L) {
+    return(c(1L, 1L))
+  }
+  xmax <- 0
+  ymax <- 0
+  for (e in entries) {
+    co <- sf::st_coordinates(sf::st_sfc(e$geom))
+    xmax <- max(xmax, co[, "X"], na.rm = TRUE)
+    ymax <- max(ymax, co[, "Y"], na.rm = TRUE)
+  }
+  as.integer(c(ceiling(xmax), ceiling(ymax)))
+}
+
+# ---- The mask constructor --------------------------------------------------
+
+#' Rasterise ROIs to a mask ("Schablone")
+#'
+#' Produce a binary, labelled, or multi-class integer mask from annotations.
+#' This is the package's core output artifact.
+#'
+#' @details
+#' **Pixel-coverage contract.** Pixel `(i, j)` covers the half-open square
+#' `[j-1, j) x [i-1, i)` with `(0, 0)` at the top-left corner of the top-left
+#' pixel; its centre is `(j - 0.5, i - 0.5)`. With `touches = FALSE` (default) a
+#' pixel is included when its centre lies inside the polygon; with
+#' `touches = TRUE` a pixel is included if the polygon touches it at all. ROI
+#' coordinates use the image convention (top-left origin, y down).
+#'
+#' @param x An [sg_roi], [sg_roi_layer], or [sg_roi_project].
+#' @param type `"binary"` (a logical matrix), `"labelled"` (one integer id per
+#'   ROI), or `"multiclass"` (one id per label class).
+#' @param layer Optional layer name(s) to restrict to (projects only).
+#' @param label Optional label(s) to restrict to.
+#' @param level Integer pyramid level at which to rasterise. Default `0`.
+#' @param background Integer background value. Default `0`.
+#' @param touches Logical; see the coverage contract. Default `FALSE`.
+#' @param dims Optional `c(width, height)`; taken from the image (projects) or
+#'   the geometry bounding box otherwise.
+#' @param values Optional named integer vector mapping labels to explicit class
+#'   codes (e.g. `c(specular = 1L, blood = 2L, shadow = 4L)`), used only for
+#'   `type = "multiclass"`. When `NULL` (default) codes follow first-seen label
+#'   order. Supply power-of-two codes together with `overlap = "bitor"` to build
+#'   a bitfield mask.
+#' @param overlap How overlapping ROIs resolve: `"last"` (later z-order wins,
+#'   the default), `"first"`, `"max"`, `"min"`, `"error"` (abort on any overlap),
+#'   or `"bitor"` (bitwise-OR the overlapping values, for bitfield masks; use
+#'   with power-of-two `values` and `background = 0`).
+#' @param engine `"stars"` (reference) or `"terra"` (accelerated, if installed);
+#'   the two produce identical masks.
+#' @param call The calling environment, for error reporting.
+#'
+#' @return An `sg_roi_mask`: a matrix (logical for `"binary"`, otherwise integer)
+#'   with attributes `legend` (a tibble with columns `value`, `label`, `layer`,
+#'   `roi_id`, `n_px`, `colour`), `level`, `dims`, `type`, and `created`. An
+#'   all-background mask of the correct dimensions is returned when there are no
+#'   ROIs.
+#' @family masks
+#' @seealso [sg_roi_mask_legend()], [sg_roi_mask_stats()]
+#' @export
+#' @examplesIf requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
+#' m <- sg_roi_mask(proj, type = "multiclass")
+#' table(as.integer(m))
+sg_roi_mask <- function(x,
+                    type = c("binary", "labelled", "multiclass"),
+                    layer = NULL, label = NULL, level = 0L, background = 0L,
+                    touches = FALSE, dims = NULL, values = NULL,
+                    overlap = c("last", "first", "max", "min", "error", "bitor"),
+                    engine = c("stars", "terra"),
+                    call = rlang::caller_env()) {
+  type <- .sg_roi_check_choice(type, c("binary", "labelled", "multiclass"), call = call)
+  overlap <- .sg_roi_check_choice(overlap, c("last", "first", "max", "min", "error", "bitor"), call = call)
+  engine <- .sg_roi_check_choice(engine, c("stars", "terra"), call = call)
+  level <- .sg_roi_check_count(level, call = call)
+  background <- .sg_roi_check_count(background, min = 0L, call = call)
+  .sg_roi_check_flag(touches, call = call)
+  values <- .sg_roi_check_values_map(values, type, call = call)
+
+  entries <- .sg_roi_collect_mask_rois(x, layer = layer, label = label, level = level, call = call)
+  d <- .sg_roi_resolve_mask_dims(x, level, dims, entries, call = call)
+  width <- d[1]
+  height <- d[2]
+
+  # Assign each ROI a value according to the mask type.
+  if (type == "multiclass") {
+    if (!is.null(values)) {
+      present <- unique(vapply(entries, `[[`, character(1), "label"))
+      unmapped <- setdiff(present, names(values))
+      if (length(unmapped) > 0L) {
+        cli::cli_abort(
+          c("{.arg values} does not map every label present.",
+            "x" = "Unmapped label{?s}: {.val {unmapped}}."),
+          call = call
+        )
+      }
+      val_of <- function(e) values[[e$label]]
+    } else {
+      labels_all <- unique(vapply(entries, `[[`, character(1), "label"))
+      val_of <- function(e) match(e$label, labels_all)
+    }
+  } else {
+    val_of <- function(e) NA
+  }
+  values <- vapply(seq_along(entries), function(k) {
+    switch(type, binary = 1L, labelled = k, multiclass = val_of(entries[[k]]))
+  }, integer(1))
+
+  if (length(entries) == 0L) {
+    out <- matrix(as.integer(background), nrow = height, ncol = width)
+  } else if (overlap %in% c("last", "first") && length(entries) >= 2L) {
+    # Fast path: burn every ROI in one rasterisation (painter's order gives the
+    # "last" policy; reversing the order gives "first"). Bit-identical to the
+    # per-ROI combine but far cheaper for many ROIs.
+    out <- .sg_roi_rasterize_batch(entries, values, c(width, height), background,
+                            touches, reverse = (overlap == "first"), engine = engine)
+  } else {
+    out <- .sg_roi_rasterize_per_roi(entries, values, c(width, height), background,
+                              touches, overlap, engine, call)
+  }
+
+  legend <- .sg_roi_build_legend(type, entries, values, out, background, overlap)
+
+  if (type == "binary") {
+    out <- out != background
+  }
+  .sg_roi_new_annot_mask(out, legend, level, c(width, height), type,
+                  source = if (inherits(x, "sg_roi_project")) x$meta$name %||% NA_character_ else NA_character_)
+}
+
+# Per-ROI rasterise-and-combine (short-circuits + all five overlap policies).
+.sg_roi_rasterize_per_roi <- function(entries, values, dims, background, touches,
+                               overlap, engine, call = rlang::caller_env()) {
+  width <- dims[1]
+  height <- dims[2]
+  out <- matrix(as.integer(background), nrow = height, ncol = width)
+  for (k in seq_along(entries)) {
+    cover <- .sg_roi_cover(entries[[k]]$geom, c(width, height), touches = touches, engine = engine)
+    value <- values[k]
+    if (overlap == "error") {
+      if (any(cover & out != background)) {
+        cli::cli_abort(
+          c("Overlapping ROIs detected with {.code overlap = \"error\"}.",
+            "i" = "Use a different overlap policy or fix the annotations."),
+          call = call
+        )
+      }
+      out[cover] <- value
+    } else if (overlap == "last") {
+      out[cover] <- value
+    } else if (overlap == "first") {
+      out[cover & (out == background)] <- value
+    } else if (overlap == "max") {
+      out[cover & (out == background)] <- value
+      m2 <- cover & (out != background)
+      out[m2] <- pmax(out[m2], value)
+    } else if (overlap == "min") {
+      out[cover & (out == background)] <- value
+      m2 <- cover & (out != background)
+      out[m2] <- pmin(out[m2], value)
+    } else if (overlap == "bitor") {
+      out[cover] <- bitwOr(out[cover], value)
+    }
+  }
+  out
+}
+
+# Validate an optional label -> integer-code map (multiclass only).
+.sg_roi_check_values_map <- function(values, type, call = rlang::caller_env()) {
+  if (is.null(values)) {
+    return(NULL)
+  }
+  if (type != "multiclass") {
+    cli::cli_abort(
+      c("{.arg values} is only supported for {.code type = \"multiclass\"}.",
+        "x" = "You supplied {.arg values} with {.code type = \"{type}\"}."),
+      call = call
+    )
+  }
+  nm <- names(values)
+  if (is.null(nm) || any(!nzchar(nm)) || anyDuplicated(nm)) {
+    cli::cli_abort(
+      c("{.arg values} must be a named integer vector with unique, non-empty names.",
+        "i" = "Names are labels; values are the integer codes to assign."),
+      call = call
+    )
+  }
+  if (any(is.na(values)) || any(values != as.integer(values))) {
+    cli::cli_abort("{.arg values} must contain whole numbers.", call = call)
+  }
+  stats::setNames(as.integer(values), nm)
+}
+
+# Batched rasterisation: burn all ROIs in one st_rasterize/terra call.
+.sg_roi_rasterize_batch <- function(entries, values, dims, background, touches, reverse,
+                             engine = "stars") {
+  width <- dims[1]
+  height <- dims[2]
+  geoms <- lapply(entries, `[[`, "geom")
+  if (!touches) {
+    eps <- 1e-7
+    geoms <- lapply(geoms, function(g) .sg_roi_apply_coords(g, function(m) cbind(m[, 1] - eps, m[, 2] - eps)))
+  }
+  ord <- if (reverse) rev(seq_along(geoms)) else seq_along(geoms)
+  sfc <- sf::st_sfc(geoms[ord], crs = sf::NA_crs_)
+  sfobj <- sf::st_sf(value = as.integer(values[ord]), geometry = sfc)
+  opt <- if (touches) "ALL_TOUCHED=TRUE" else "ALL_TOUCHED=FALSE"
+  if (engine == "terra" && requireNamespace("terra", quietly = TRUE)) {
+    v <- terra::vect(sfobj)
+    r <- terra::rast(xmin = 0, xmax = width, ymin = 0, ymax = height, resolution = 1)
+    rr <- terra::rasterize(v, r, field = "value", background = background, touches = touches)
+    m <- terra::as.matrix(rr, wide = TRUE)
+    m[is.na(m)] <- as.integer(background)
+    return(matrix(as.integer(m[height:1, , drop = FALSE]), nrow = height, ncol = width))
+  }
+  bb <- sf::st_bbox(c(xmin = 0, ymin = 0, xmax = width, ymax = height))
+  templ <- stars::st_as_stars(bb, nx = as.integer(width), ny = as.integer(height),
+                              values = as.integer(background))
+  r <- suppressWarnings(stars::st_rasterize(sfobj, template = templ, options = opt))
+  m <- r[[1]]
+  m[is.na(m)] <- as.integer(background)
+  matrix(as.integer(t(m)[height:1, , drop = FALSE]), nrow = height, ncol = width)
+}
+
+# Build the legend tibble from the entries, their values, and the final mask.
+# For the bitor policy, legend rows are the base (power-of-two) codes and pixel
+# counts include every pixel with that bit set (composite pixels count for each
+# of their bits).
+.sg_roi_build_legend <- function(type, entries, values, out, background, overlap = "last") {
+  empty <- tibble::tibble(
+    value = integer(0), label = character(0), layer = character(0),
+    roi_id = character(0), n_px = integer(0), colour = character(0)
+  )
+  if (length(entries) == 0L) {
+    return(empty)
+  }
+  if (type == "binary") {
+    return(tibble::tibble(
+      value = 1L, label = "foreground", layer = NA_character_,
+      roi_id = NA_character_, n_px = as.integer(sum(out != background)),
+      colour = "#5E2C8E"
+    ))
+  }
+  if (type == "labelled") {
+    rows <- lapply(seq_along(entries), function(k) {
+      e <- entries[[k]]
+      tibble::tibble(
+        value = as.integer(values[k]), label = e$label, layer = e$layer,
+        roi_id = e$roi_id, n_px = as.integer(sum(out == values[k])),
+        colour = e$colour
+      )
+    })
+    return(do.call(rbind, rows))
+  }
+  # multiclass: one row per distinct base value. Under "bitor", a pixel counts
+  # for every bit it carries, so counts use bitwAnd rather than equality.
+  vals <- sort(unique(values))
+  rows <- lapply(vals, function(v) {
+    e <- entries[[which(values == v)[1]]]
+    n <- if (overlap == "bitor") sum(bitwAnd(out, v) != 0L) else sum(out == v)
+    tibble::tibble(
+      value = as.integer(v), label = e$label, layer = e$layer,
+      roi_id = NA_character_, n_px = as.integer(n), colour = e$colour
+    )
+  })
+  do.call(rbind, rows)
+}
+
+# ---- sg_roi_mask class ------------------------------------------------------
+
+.sg_roi_new_annot_mask <- function(matrix, legend, level, dims, type, source = NA_character_) {
+  structure(
+    matrix,
+    legend = legend,
+    level = as.integer(level),
+    dims = as.integer(dims),
+    mask_type = type,
+    source_project = source,
+    created = .sg_roi_now(),
+    class = "sg_roi_mask"
+  )
+}
+
+#' @export
+print.sg_roi_mask <- function(x, ...) {
+  d <- attr(x, "dims")
+  lg <- attr(x, "legend")
+  cat(cli::format_inline(
+    "{.cls sg_roi_mask} {attr(x, 'mask_type')}  |  {d[1]} x {d[2]} px  |  level {attr(x, 'level')}"
+  ), "\n", sep = "")
+  cat(cli::format_inline("values: {nrow(lg)}"), "\n", sep = "")
+  if (nrow(lg) > 0L) {
+    print(utils::head(lg, 10L))
+  }
+  invisible(x)
+}
+
+#' @export
+dim.sg_roi_mask <- function(x) {
+  attr(x, "dims")[c(2, 1)] # [height, width] to match the matrix
+}
+
+#' @export
+as.matrix.sg_roi_mask <- function(x, ...) {
+  attributes(x) <- list(dim = dim(unclass(x)))
+  unclass(x)
+}
+
+#' @export
+summary.sg_roi_mask <- function(object, ...) {
+  attr(object, "legend")
+}
+
+#' Legend of a mask
+#'
+#' @param mask An `sg_roi_mask`.
+#' @param call The calling environment, for error reporting.
+#' @return The mask's legend [tibble::tibble] (`value`, `label`, `layer`,
+#'   `roi_id`, `n_px`, `colour`).
+#' @family masks
+#' @export
+#' @examplesIf requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)
+#' sg_roi_mask_legend(sg_roi_mask(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), "labelled"))
+sg_roi_mask_legend <- function(mask, call = rlang::caller_env()) {
+  .sg_roi_check_class(mask, "sg_roi_mask", call = call)
+  attr(mask, "legend")
+}
+
+# ---- Additional mask operations --------------------------------------------
+
+#' Stack per-layer masks into a 3D array
+#'
+#' @param project An [sg_roi_project].
+#' @param layers Optional layer name(s) to include; all by default.
+#' @param level Integer pyramid level. Default `0`.
+#' @param call The calling environment, for error reporting.
+#' @return A 3D integer array `[y, x, layer]`, one multi-class plane per layer;
+#'   the third dimension is named by layer.
+#' @family masks
+#' @export
+sg_roi_mask_stack <- function(project, layers = NULL, level = 0L,
+                          call = rlang::caller_env()) {
+  .sg_roi_check_project(project, call = call)
+  nms <- names(project$layers)
+  if (!is.null(layers)) {
+    nms <- intersect(layers, nms)
+  }
+  d <- sg_roi_dims(project$image, level)
+  if (length(nms) == 0L) {
+    return(array(0L, dim = c(d[2], d[1], 0L)))
+  }
+  planes <- lapply(nms, function(nm) {
+    as.matrix(sg_roi_mask(project, type = "multiclass", layer = nm, level = level))
+  })
+  arr <- array(0L, dim = c(d[2], d[1], length(nms)),
+               dimnames = list(NULL, NULL, nms))
+  for (k in seq_along(planes)) arr[, , k] <- planes[[k]]
+  arr
+}
+
+#' Derive a training mask from layer masks
+#'
+#' Combine rasterised layer masks into the derived training mask
+#' `state WHERE anatomy == keep_label AND artefact == 0 AND state != background`.
+#' This is the cross-layer operation the four-layer HSI scheme relies on: it
+#' keeps a state (class) label only where the anatomy layer marks the region of
+#' interest, no artefact bit is set, and the state is actually labelled.
+#'
+#' @param state An `sg_roi_mask` of state (class) codes.
+#' @param anatomy An `sg_roi_mask` of anatomy codes, sharing `state`'s dimensions
+#'   and level.
+#' @param artefact Optional `sg_roi_mask` (bitfield); pixels with any artefact bit
+#'   set are dropped. `NULL` (default) applies no artefact exclusion.
+#' @param keep_label The anatomy label whose region is kept (e.g. `"wound"`).
+#' @param background Integer background/unlabeled value. Default `0`.
+#' @param call The calling environment, for error reporting.
+#'
+#' @return An `sg_roi_mask` (multiclass) of the surviving state codes, with the
+#'   state legend restricted to those classes and pixel counts recomputed.
+#' @family masks
+#' @seealso [sg_roi_mask()], [sg_roi_mask_stack()]
+#' @export
+#' @examplesIf requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
+#' # A single-layer project derives trivially; the four-layer HSI workflow passes
+#' # separate anatomy/state/artefact masks. See the masks vignette.
+#' m <- sg_roi_mask(proj, "multiclass")
+#' sg_roi_mask_derive(m, m, keep_label = sg_roi_mask_legend(m)$label[1])
+sg_roi_mask_derive <- function(state, anatomy, artefact = NULL, keep_label = "wound",
+                           background = 0L, call = rlang::caller_env()) {
+  .sg_roi_check_class(state, "sg_roi_mask", call = call)
+  .sg_roi_check_class(anatomy, "sg_roi_mask", call = call)
+  if (!is.null(artefact)) .sg_roi_check_class(artefact, "sg_roi_mask", call = call)
+  background <- .sg_roi_check_count(background, min = 0L, call = call)
+  sm <- as.matrix(state)
+  am <- as.matrix(anatomy)
+  if (!identical(dim(sm), dim(am))) {
+    cli::cli_abort(
+      c("{.arg state} and {.arg anatomy} must have the same dimensions.",
+        "x" = "state is {nrow(sm)}x{ncol(sm)}; anatomy is {nrow(am)}x{ncol(am)}."),
+      call = call
+    )
+  }
+  lg_a <- attr(anatomy, "legend")
+  wound_val <- lg_a$value[match(keep_label, lg_a$label)]
+  if (length(wound_val) != 1L || is.na(wound_val)) {
+    cli::cli_abort(
+      c("{.arg keep_label} {.val {keep_label}} is not a label of the anatomy mask.",
+        "i" = "Anatomy labels: {.val {lg_a$label}}."),
+      call = call
+    )
+  }
+  keep <- (am == wound_val) & (sm != background)
+  if (!is.null(artefact)) {
+    fm <- as.matrix(artefact)
+    if (!identical(dim(fm), dim(sm))) {
+      cli::cli_abort(
+        c("{.arg artefact} must share the {.arg state} dimensions.",
+          "x" = "state is {nrow(sm)}x{ncol(sm)}; artefact is {nrow(fm)}x{ncol(fm)}."),
+        call = call
+      )
+    }
+    keep <- keep & (fm == 0L)
+  }
+  out <- sm
+  out[!keep] <- as.integer(background)
+  lg_s <- attr(state, "legend")
+  surv <- sort(unique(as.integer(out[out != background])))
+  lg <- lg_s[lg_s$value %in% surv, , drop = FALSE]
+  if (nrow(lg) > 0L) {
+    lg$n_px <- vapply(lg$value, function(v) as.integer(sum(out == v)), integer(1))
+  }
+  .sg_roi_new_annot_mask(out, lg, attr(state, "level"), attr(state, "dims"),
+                  "multiclass", source = attr(state, "source_project"))
+}
+
+#' Object boundaries of a mask
+#'
+#' @param mask An `sg_roi_mask`.
+#' @param width Integer boundary thickness in pixels. Default `1`.
+#' @param call The calling environment, for error reporting.
+#' @return A logical matrix marking boundary pixels (where a 4-neighbour has a
+#'   different value).
+#' @family masks
+#' @export
+sg_roi_mask_boundary <- function(mask, width = 1L, call = rlang::caller_env()) {
+  .sg_roi_check_class(mask, "sg_roi_mask", call = call)
+  width <- .sg_roi_check_count(width, min = 1L, call = call)
+  m <- as.matrix(mask)
+  storage.mode(m) <- "double"
+  nr <- nrow(m)
+  nc <- ncol(m)
+  b <- matrix(FALSE, nr, nc)
+  b[-nr, ] <- b[-nr, ] | (m[-nr, ] != m[-1, ])
+  b[-1, ]  <- b[-1, ]  | (m[-1, ] != m[-nr, ])
+  b[, -nc] <- b[, -nc] | (m[, -nc] != m[, -1])
+  b[, -1]  <- b[, -1]  | (m[, -1] != m[, -nc])
+  if (width > 1L) {
+    for (w in seq_len(width - 1L)) {
+      bb <- b
+      bb[-nr, ] <- bb[-nr, ] | b[-1, ]
+      bb[-1, ]  <- bb[-1, ]  | b[-nr, ]
+      bb[, -nc] <- bb[, -nc] | b[, -1]
+      bb[, -1]  <- bb[, -1]  | b[, -nc]
+      b <- bb
+    }
+  }
+  # Keep only foreground (object) boundary pixels, not adjacent background.
+  b & (m != 0)
+}
+
+#' Downsampled preview of a mask
+#'
+#' Nearest-neighbour downsample only (interpolating a label mask would invent
+#' labels that do not exist).
+#'
+#' @param mask An `sg_roi_mask`.
+#' @param max_dim Integer maximum dimension of the preview. Default `1024`.
+#' @param call The calling environment, for error reporting.
+#' @return A downsampled `sg_roi_mask` with the legend pixel counts recomputed.
+#' @family masks
+#' @export
+sg_roi_mask_preview <- function(mask, max_dim = 1024L, call = rlang::caller_env()) {
+  .sg_roi_check_class(mask, "sg_roi_mask", call = call)
+  max_dim <- .sg_roi_check_count(max_dim, min = 1L, call = call)
+  m <- as.matrix(mask)
+  nr <- nrow(m)
+  nc <- ncol(m)
+  fac <- max(1L, ceiling(max(nr, nc) / max_dim))
+  if (fac == 1L) {
+    return(mask)
+  }
+  ys <- seq(1L, nr, by = fac)
+  xs <- seq(1L, nc, by = fac)
+  small <- m[ys, xs, drop = FALSE]
+  lg <- attr(mask, "legend")
+  if (nrow(lg) > 0L) {
+    lg$n_px <- vapply(lg$value, function(v) as.integer(sum(small == v)), integer(1))
+  }
+  .sg_roi_new_annot_mask(
+    small, lg, attr(mask, "level"),
+    c(ncol(small), nrow(small)), attr(mask, "mask_type"),
+    source = attr(mask, "source_project")
+  )
+}
+
+#' Per-value statistics of a mask
+#'
+#' @param mask An `sg_roi_mask`.
+#' @param pixel_size Optional numeric `c(x, y)` physical pixel size for physical
+#'   area at the mask's level (scale level-zero calibration before use on a
+#'   coarser mask). When `NULL`, `area_physical` is `NA`.
+#' @param call The calling environment, for error reporting.
+#' @return A [tibble::tibble] with one row per mask value: `value`, `label`,
+#'   `n_px`, `area_px`, `area_physical`, `frac_total`, bounding box
+#'   (`bbox_xmin`, `bbox_ymin`, `bbox_xmax`, `bbox_ymax`), and centroid
+#'   (`centroid_x`, `centroid_y`). A 0-row tibble when the mask is empty.
+#' @family masks
+#' @export
+#' @examplesIf requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)
+#' sg_roi_mask_stats(sg_roi_mask(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), "labelled"))
+sg_roi_mask_stats <- function(mask, pixel_size = NULL, call = rlang::caller_env()) {
+  .sg_roi_check_class(mask, "sg_roi_mask", call = call)
+  if (!is.null(pixel_size) && (!typeof(pixel_size) %in% c("integer", "double") ||
+      is.object(pixel_size) || !is.null(dim(pixel_size)) || length(pixel_size) != 2L ||
+      anyNA(pixel_size) || any(!is.finite(pixel_size) | pixel_size <= 0))) {
+    cli::cli_abort("pixel_size must contain two positive finite numbers.", call = call)
+  }
+  m <- as.matrix(mask)
+  lg <- attr(mask, "legend")
+  total <- length(m)
+  cols <- c("value", "label", "n_px", "area_px", "area_physical", "frac_total",
+            "bbox_xmin", "bbox_ymin", "bbox_xmax", "bbox_ymax",
+            "centroid_x", "centroid_y")
+  empty <- tibble::tibble(
+    value = integer(0), label = character(0), n_px = integer(0),
+    area_px = double(0), area_physical = double(0), frac_total = double(0),
+    bbox_xmin = double(0), bbox_ymin = double(0), bbox_xmax = double(0),
+    bbox_ymax = double(0), centroid_x = double(0), centroid_y = double(0)
+  )
+  if (nrow(lg) == 0L) {
+    return(empty)
+  }
+  psf <- if (is.null(pixel_size)) NA_real_ else prod(pixel_size)
+  rows <- lapply(seq_len(nrow(lg)), function(k) {
+    v <- lg$value[k]
+    idx <- which(m == v, arr.ind = TRUE)
+    n <- nrow(idx)
+    if (n == 0L) {
+      return(tibble::tibble(
+        value = as.integer(v), label = lg$label[k], n_px = 0L, area_px = 0,
+        area_physical = if (is.na(psf)) NA_real_ else 0,
+        frac_total = 0, bbox_xmin = NA_real_, bbox_ymin = NA_real_,
+        bbox_xmax = NA_real_, bbox_ymax = NA_real_,
+        centroid_x = NA_real_, centroid_y = NA_real_
+      ))
+    }
+    xs <- idx[, 2] - 0.5
+    ys <- idx[, 1] - 0.5
+    tibble::tibble(
+      value = as.integer(v), label = lg$label[k], n_px = as.integer(n),
+      area_px = as.double(n),
+      area_physical = if (is.na(psf)) NA_real_ else n * psf,
+      frac_total = n / total,
+      bbox_xmin = min(xs) - 0.5, bbox_ymin = min(ys) - 0.5,
+      bbox_xmax = max(xs) + 0.5, bbox_ymax = max(ys) + 0.5,
+      centroid_x = mean(xs), centroid_y = mean(ys)
+    )
+  })
+  do.call(rbind, rows)
+}
+
+#' Plot a mask
+#'
+#' @param x An `sg_roi_mask`.
+#' @param legend Logical; show the fill legend. Default `TRUE`.
+#' @param ... Ignored.
+#' @return A [ggplot2::ggplot] object (discrete fill from the legend colours,
+#'   image orientation). Not drawn; print it to render.
+#' @keywords internal
+#' @export
+plot.sg_roi_mask <- function(x, legend = TRUE, ...) {
+  m <- as.matrix(x)
+  lg <- attr(x, "legend")
+  # Only foreground pixels are drawn (background is left blank). geom_tile (not
+  # geom_raster) is used so sparse foreground data raises no warnings.
+  df <- expand.grid(y = seq_len(nrow(m)), x = seq_len(ncol(m)))
+  df$value <- as.vector(m)
+  df <- df[df$value != 0, , drop = FALSE]
+  df$label <- if (nrow(df) > 0L && nrow(lg) > 0L) lg$label[match(df$value, lg$value)] else character(0)
+  pal <- NULL
+  if (nrow(lg) > 0L) {
+    pal <- lg$colour
+    names(pal) <- lg$label
+  }
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = .data$x, y = .data$y, fill = .data$label)) +
+    ggplot2::geom_tile() +
+    ggplot2::scale_y_reverse() +
+    ggplot2::coord_fixed() +
+    ggplot2::labs(title = "Mask", x = "x (px)", y = "y (px)", fill = "label") +
+    ggplot2::theme_minimal()
+  if (!is.null(pal)) {
+    p <- p + ggplot2::scale_fill_manual(values = pal)
+  }
+  if (!legend) {
+    p <- p + ggplot2::theme(legend.position = "none")
+  }
+  p
+}

@@ -102,3 +102,40 @@ must be reviewed and revised before inclusion, and references must be verified
 against their DOI, arXiv ID or ISBN.
 
 Local software setup: vLLM with Python/PyTorch, plus R and RStudio.
+
+## Package responsibility
+
+segmantR owns microscopy cell/nucleus segmentation, manual annotation and
+correction, model training, review and QuPath exchange. `hyperannotatR`
+(formerly annotatR) owns HSI annotation and evolves independently.
+
+The offline cell drawing engine was adapted from annotatR under its MIT license
+(copyright 2026 Raban Heller). Its JavaScript and CSS are maintained here as
+`sgcanvas`; no annotatR or hyperannotatR runtime dependency is needed.
+`sg_canvas(image, mask)` displays cell boundaries and `sg_canvas_correct()`
+converts local pixel polygons into staged mask corrections. The app exposes
+rectangle, polygon, freehand, circle, edit and erase tools when htmlwidgets and
+magick are installed. Existing image origin/plane metadata is retained.
+
+## Histology ROI annotations
+
+The `sg_roi_*` APIs represent vector annotations independently of integer
+instance masks and without an HSI annotation package dependency:
+
+```r
+frame <- sg_roi_frame(c(100, 80), pixel_size = c(0.5, 0.8), pixel_unit = "um")
+roi <- sg_roi_rect(10, 10, 30, 25, label = "tissue")
+layer <- sg_roi_layer_add(sg_roi_layer("review"), roi)
+project <- sg_roi_project(frame, layer)
+mask <- sg_roi_mask(project, type = "labelled")
+sg_roi_mask_stats(mask, pixel_size = frame$pixel_size)
+# sg_roi_write_qupath(project, "review.geojson")
+# imported <- sg_roi_read_qupath("review.geojson")
+```
+
+Frames declare image dimensions, calibration and optional pyramid levels; they
+load no pixel data. Geometry, layer editing and masks preserve image coordinates
+(top-left origin, x right, y down). Existing `sg_mask`/`sg_export_qupath` APIs
+remain available for instance-mask workflows. The ROI transfer does not include
+the HSI application or control service. See `system.file("roi-transfer",
+"README.md", package = "segmantR")` for provenance and limitations.

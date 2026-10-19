@@ -1,0 +1,13 @@
+.sgcanvas-canvas {
+  display: block;
+  background: #1a1a1a;
+  touch-action: none;
+}
+.html-widget.sgcanvas {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
+}
