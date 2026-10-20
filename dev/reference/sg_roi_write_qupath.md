@@ -5,7 +5,7 @@ natively (verified with QuPath 0.7.0): `objectType`, `classification`
 with an `[r, g, b]` colour, `isLocked` for locked ROIs, a deterministic
 UUID per ROI as the feature id (QuPath replaces non-UUID ids), and
 segmantR's own ROI id, layer, source and level in `properties.metadata`.
-`dialect = "legacy"` writes the segmantR 0.1 form (`object_type`, signed
+`dialect = "legacy"` writes the annotatR 0.1 form (`object_type`, signed
 `colorRGB`), which QuPath still reads with a deprecation warning.
 
 ## Usage

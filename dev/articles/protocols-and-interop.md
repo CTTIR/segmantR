@@ -161,7 +161,7 @@ list.files(dest)
 #> [1] "integrity.json"   "manifest.json"    "mask.legend.json" "mask.tif"        
 #> [5] "measurements.csv" "objects.geojson"
 bundle$bundle_digest
-#> [1] "sha256:f80a0c3edfa5c0a45325f63950d20cf14d228ea9c24e993dc2d08c5b5d43d92e"
+#> [1] "sha256:6eb20f3c81c825ea1ccdb7ac16b6b4607227e928fbb7ec25ece92303e479aa18"
 ```
 
 Imports verify integrity, schema, dtype, orientation, plane, legend and
@@ -342,12 +342,14 @@ back$qupath$agreement
 
 caps <- sg_interchange_capabilities()
 vapply(caps$profiles, function(p) p$status, character(1))
-#>               I0               I1              app          control 
-#>      "supported"      "supported"        "planned"        "planned" 
-#>         datasets           models partner_annotatR partner_qupflowR 
-#>      "supported"      "supported"        "planned"        "planned" 
-#>  qupath_programs  stardist_python  stardist_qupath 
-#>        "planned"    "unavailable"        "planned"
+#>                    I0                    I1                   app 
+#>           "supported"           "supported"             "planned" 
+#>               control              datasets                models 
+#>             "planned"           "supported"           "supported" 
+#> partner_hyperannotatR      partner_qupflowR       qupath_programs 
+#>             "planned"             "planned"             "planned" 
+#>       stardist_python       stardist_qupath 
+#>         "unavailable"             "planned"
 ```
 
 See `system.file("interop", "INTEROP.md", package = "segmantR")` for the

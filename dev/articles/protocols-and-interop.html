@@ -210,7 +210,7 @@ and a SHA-256 inventory.</p>
 <span><span class="co">#&gt; [1] "integrity.json"   "manifest.json"    "mask.legend.json" "mask.tif"        </span></span>
 <span><span class="co">#&gt; [5] "measurements.csv" "objects.geojson"</span></span>
 <span><span class="va">bundle</span><span class="op">$</span><span class="va">bundle_digest</span></span>
-<span><span class="co">#&gt; [1] "sha256:f80a0c3edfa5c0a45325f63950d20cf14d228ea9c24e993dc2d08c5b5d43d92e"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "sha256:6eb20f3c81c825ea1ccdb7ac16b6b4607227e928fbb7ec25ece92303e479aa18"</span></span></code></pre></div>
 <p>Imports verify integrity, schema, dtype, orientation, plane, legend
 and the agreement between GeoJSON and TIFF, and return a
 <strong>staged</strong> mask:</p>
@@ -366,12 +366,14 @@ results:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">caps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sg_interchange_capabilities.html">sg_interchange_capabilities</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">caps</span><span class="op">$</span><span class="va">profiles</span>, <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="va">p</span><span class="op">$</span><span class="va">status</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;               I0               I1              app          control </span></span>
-<span><span class="co">#&gt;      "supported"      "supported"        "planned"        "planned" </span></span>
-<span><span class="co">#&gt;         datasets           models partner_annotatR partner_qupflowR </span></span>
-<span><span class="co">#&gt;      "supported"      "supported"        "planned"        "planned" </span></span>
-<span><span class="co">#&gt;  qupath_programs  stardist_python  stardist_qupath </span></span>
-<span><span class="co">#&gt;        "planned"    "unavailable"        "planned"</span></span></code></pre></div>
+<span><span class="co">#&gt;                    I0                    I1                   app </span></span>
+<span><span class="co">#&gt;           "supported"           "supported"             "planned" </span></span>
+<span><span class="co">#&gt;               control              datasets                models </span></span>
+<span><span class="co">#&gt;             "planned"           "supported"           "supported" </span></span>
+<span><span class="co">#&gt; partner_hyperannotatR      partner_qupflowR       qupath_programs </span></span>
+<span><span class="co">#&gt;             "planned"             "planned"             "planned" </span></span>
+<span><span class="co">#&gt;       stardist_python       stardist_qupath </span></span>
+<span><span class="co">#&gt;         "unavailable"             "planned"</span></span></code></pre></div>
 <p>See
 <code>system.file("interop", "INTEROP.md", package = "segmantR")</code>
 for the full contract, migration notes and security boundaries.</p>

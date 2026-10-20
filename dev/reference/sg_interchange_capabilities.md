@@ -32,9 +32,9 @@ measurements, integrity inventory); `I1` versioned protocols and run
 envelopes; `models` model bundles with runtime and checksums;
 `qupath_programs` Groovy templates and `run.json`; `stardist_qupath` the
 StarDist extension adapter; `control` the local control service
-(`segmantR-control-v1`); `partner_qupflowR` and `partner_annotatR` the
-partner contracts, which stay `planned` until a real consumer and QuPath
-evidence exist.
+(`segmantR-control-v1`); `partner_qupflowR` and `partner_hyperannotatR`
+the partner contracts, which stay `planned` until a real consumer and
+QuPath evidence exist.
 
 ## Examples
 

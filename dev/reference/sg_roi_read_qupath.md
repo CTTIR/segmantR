@@ -1,7 +1,7 @@
 # Read ROIs from a QuPath GeoJSON file
 
 Reads QuPath 0.4+ exports (a FeatureCollection or a bare feature array)
-and the legacy segmantR 0.1 dialect. `classification.name` (or the
+and the legacy annotatR 0.1 dialect. `classification.name` (or the
 joined `names` of a derived class, e.g. `"Tumor: Positive"`) becomes the
 ROI label, the classification colour the layer style colour, and
 features without a classification are labelled `"unclassified"`.
