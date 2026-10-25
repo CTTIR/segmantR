@@ -21,3 +21,4 @@
 ^\.gitattributes$
 ^\.zenodo\.json$
 ^CITATION\.cff$
+^tools/branding$

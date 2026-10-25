@@ -1,4 +1,4 @@
-# segmantR <img src="man/figures/logo.png" align="right" height="139" alt="segmantR logo" />
+# segmantR <img src="man/figures/logo.png" align="right" width="120" height="139" alt="segmantR logo" />
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21889962.svg)](https://doi.org/10.5281/zenodo.21889962)
 
@@ -139,3 +139,8 @@ load no pixel data. Geometry, layer editing and masks preserve image coordinates
 remain available for instance-mask workflows. The ROI transfer does not include
 the HSI application or control service. See `system.file("roi-transfer",
 "README.md", package = "segmantR")` for provenance and limitations.
+
+## Branding
+
+Editable R sources and regeneration instructions are in
+[tools/branding](https://github.com/CTTIR/segmantR/tree/main/tools/branding).
