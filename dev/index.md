@@ -155,3 +155,8 @@ workflows. The ROI transfer does not include the HSI application or
 control service. See
 `system.file("roi-transfer", "README.md", package = "segmantR")` for
 provenance and limitations.
+
+## Branding
+
+Editable R sources and regeneration instructions are in
+[tools/branding](https://github.com/CTTIR/segmantR/tree/main/tools/branding).
