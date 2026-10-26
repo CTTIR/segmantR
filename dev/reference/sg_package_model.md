@@ -87,6 +87,6 @@ mdl <- new_sg_trained_model(
   training_metrics = list(n_epochs = 50L)
 )
 out <- sg_package_model(mdl, tempfile(fileext = ".segmantR"))
-#> ✔ Model packaged to /tmp/RtmpP2q8kj/file206f28d40a6a.segmantR.
+#> ✔ Model packaged to /tmp/RtmpG1kX7o/file213e4750df38.segmantR.
 # }
 ```
