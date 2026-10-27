@@ -13,12 +13,12 @@ sg_roi_layer_rois(layer, image = NULL, call = rlang::caller_env())
 - layer:
 
   An
-  [sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md).
 
 - image:
 
   Optional
-  [sg_roi_frame](https://cttir.github.io/segmantR/reference/sg_roi.html)
+  [sg_roi_frame](https://cttir.github.io/segmantR/dev/reference/sg_roi_frame.md)
   for accurate level-0 coordinate transforms.
 
 - call:
@@ -35,7 +35,7 @@ layer has no ROIs.
 ## See also
 
 Other layers:
-[`sg_roi_layer()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md),
 [`sg_roi_layer_add()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_add.md),
 [`sg_roi_layer_n()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_n.md),
 [`sg_roi_layer_remove()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_remove.md),

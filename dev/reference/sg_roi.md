@@ -8,7 +8,7 @@ classes.
 ## See also
 
 [`sg_roi_rect()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rect.md),
-[`sg_roi_frame()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
-[`sg_roi_layer()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
-[`sg_roi_project()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
-[`sg_roi_mask()`](https://cttir.github.io/segmantR/reference/sg_roi.html)
+[`sg_roi_frame()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_frame.md),
+[`sg_roi_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md),
+[`sg_roi_project()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_project.md),
+[`sg_roi_mask()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask.md)

@@ -13,13 +13,13 @@ sg_roi_project(image, layers = list(), ..., call = rlang::caller_env())
 - image:
 
   An
-  [sg_roi_frame](https://cttir.github.io/segmantR/reference/sg_roi.html)
+  [sg_roi_frame](https://cttir.github.io/segmantR/dev/reference/sg_roi_frame.md)
   the annotations refer to.
 
 - layers:
 
   An
-  [sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html),
+  [sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md),
   a list of them, or an empty list (default).
 
 - ...:
@@ -32,17 +32,15 @@ sg_roi_project(image, layers = list(), ..., call = rlang::caller_env())
 
 ## Value
 
-An
-[sg_roi_project](https://cttir.github.io/segmantR/reference/sg_roi.html)
-bundling the image, layers, metadata, and provenance (creation time,
-`segmantR` version, R version, author, and an edit log).
+An sg_roi_project bundling the image, layers, metadata, and provenance
+(creation time, `segmantR` version, R version, author, and an edit log).
 
 ## See also
 
 [`sg_roi_add_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_add_layer.md),
 [`sg_roi_add_roi()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_add_roi.md),
 [`sg_roi_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rois.md),
-[`sg_roi_mask()`](https://cttir.github.io/segmantR/reference/sg_roi.html)
+[`sg_roi_mask()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask.md)
 
 Other projects:
 [`sg_roi_add_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_add_layer.md),
@@ -51,7 +49,7 @@ Other projects:
 [`sg_roi_remove_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_remove_layer.md),
 [`sg_roi_remove_roi()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_remove_roi.md),
 [`sg_roi_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rois.md),
-[`sg_roi_summary()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_summary()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_summary.md),
 [`sg_roi_validate()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_validate.md)
 
 ## Examples

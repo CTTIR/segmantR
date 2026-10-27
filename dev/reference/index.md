@@ -111,13 +111,8 @@
   : Read an ENVI cube window into an sg_image
 - [`sg_read_image()`](https://cttir.github.io/segmantR/dev/reference/sg_read_image.md)
   : Read an image file
-- [`sg_roi`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
-  [`sg_roi_layer`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
-  [`sg_roi_project`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
-  [`sg_roi_frame`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
-  [`sg_roi_mask`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
-  [`sg_roi_summary`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)
-  : Histology ROI objects
+- [`sg_roi`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md) :
+  Histology ROI objects
 - [`sg_roi_add_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_add_layer.md)
   : Add a layer to a project
 - [`sg_roi_add_roi()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_add_roi.md)

@@ -21,7 +21,7 @@ sg_roi_write_geojson(
 - project:
 
   An
-  [sg_roi_project](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_project](https://cttir.github.io/segmantR/dev/reference/sg_roi_project.md).
 
 - path:
 

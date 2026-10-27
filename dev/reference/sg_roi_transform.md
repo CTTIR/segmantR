@@ -4,7 +4,7 @@ Unlike
 [`sg_roi_rescale()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rescale.md)
 (which assumes a power-of-two pyramid), this uses the actual level
 dimensions of an
-[sg_roi_frame](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[sg_roi_frame](https://cttir.github.io/segmantR/dev/reference/sg_roi_frame.md),
 so it is exact for pyramids with any downsampling ratio.
 
 ## Usage
@@ -26,7 +26,7 @@ sg_roi_transform(roi, from_level, to_level, img, call = rlang::caller_env())
 - img:
 
   The
-  [sg_roi_frame](https://cttir.github.io/segmantR/reference/sg_roi.html)
+  [sg_roi_frame](https://cttir.github.io/segmantR/dev/reference/sg_roi_frame.md)
   whose pyramid defines the level dimensions.
 
 - call:

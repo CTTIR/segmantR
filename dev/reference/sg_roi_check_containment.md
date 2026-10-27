@@ -20,7 +20,7 @@ sg_roi_check_containment(project, tol = 0, call = rlang::caller_env())
 - project:
 
   An
-  [sg_roi_project](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_project](https://cttir.github.io/segmantR/dev/reference/sg_roi_project.md).
 
 - tol:
 

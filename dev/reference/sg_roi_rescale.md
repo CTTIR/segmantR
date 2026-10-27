@@ -5,7 +5,7 @@ assuming a power-of-two pyramid. For an exact transform against a real
 image pyramid (which need not be power-of-two), use
 [`sg_roi_transform()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_transform.md)
 with the
-[sg_roi_frame](https://cttir.github.io/segmantR/reference/sg_roi.html).
+[sg_roi_frame](https://cttir.github.io/segmantR/dev/reference/sg_roi_frame.md).
 
 ## Usage
 

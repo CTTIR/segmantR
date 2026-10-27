@@ -35,7 +35,7 @@ with one row per mask value: `value`, `label`, `n_px`, `area_px`,
 ## See also
 
 Other masks:
-[`sg_roi_mask()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_mask()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask.md),
 [`sg_roi_mask_boundary()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_boundary.md),
 [`sg_roi_mask_derive()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_derive.md),
 [`sg_roi_mask_legend()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_legend.md),

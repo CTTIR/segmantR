@@ -13,7 +13,7 @@ sg_roi_layer_add(layer, roi, call = rlang::caller_env())
 - layer:
 
   An
-  [sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md).
 
 - roi:
 
@@ -26,7 +26,7 @@ sg_roi_layer_add(layer, roi, call = rlang::caller_env())
 ## Value
 
 A new
-[sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html)
+[sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md)
 with the ROI appended. The label vocabulary and colour mapping are
 extended if the ROI introduces a new label. A colliding ROI identifier
 is re-minted to preserve uniqueness. The input is unchanged.
@@ -34,7 +34,7 @@ is re-minted to preserve uniqueness. The input is unchanged.
 ## See also
 
 Other layers:
-[`sg_roi_layer()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md),
 [`sg_roi_layer_n()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_n.md),
 [`sg_roi_layer_remove()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_remove.md),
 [`sg_roi_layer_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_rois.md),

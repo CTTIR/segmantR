@@ -13,7 +13,7 @@ sg_roi_add_roi(project, layer, roi, call = rlang::caller_env())
 - project:
 
   An
-  [sg_roi_project](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_project](https://cttir.github.io/segmantR/dev/reference/sg_roi_project.md).
 
 - layer:
 
@@ -30,7 +30,7 @@ sg_roi_add_roi(project, layer, roi, call = rlang::caller_env())
 ## Value
 
 A new
-[sg_roi_project](https://cttir.github.io/segmantR/reference/sg_roi.html)
+[sg_roi_project](https://cttir.github.io/segmantR/dev/reference/sg_roi_project.md)
 with the ROI added to the layer. A colliding ROI identifier is re-minted
 to keep identifiers unique across the project. The input is unchanged.
 
@@ -39,9 +39,9 @@ to keep identifiers unique across the project. The input is unchanged.
 Other projects:
 [`sg_roi_add_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_add_layer.md),
 [`sg_roi_layers()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layers.md),
-[`sg_roi_project()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_project()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_project.md),
 [`sg_roi_remove_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_remove_layer.md),
 [`sg_roi_remove_roi()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_remove_roi.md),
 [`sg_roi_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rois.md),
-[`sg_roi_summary()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_summary()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_summary.md),
 [`sg_roi_validate()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_validate.md)

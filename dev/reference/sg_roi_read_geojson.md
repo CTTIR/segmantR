@@ -45,9 +45,9 @@ sg_roi_read_geojson(
 ## Value
 
 A named list of
-[sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html)
+[sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md)
 objects (one per distinct `layer` property), or a single
-[sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html)
+[sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md)
 when `layer_name` is supplied.
 
 ## See also

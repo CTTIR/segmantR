@@ -45,7 +45,7 @@ sg_roi_read_qupath(
 ## Value
 
 An
-[sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html).
+[sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md).
 
 ## See also
 

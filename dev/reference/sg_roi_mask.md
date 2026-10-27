@@ -27,9 +27,9 @@ sg_roi_mask(
 - x:
 
   An [sg_roi](https://cttir.github.io/segmantR/dev/reference/sg_roi.md),
-  [sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html),
+  [sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md),
   or
-  [sg_roi_project](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_project](https://cttir.github.io/segmantR/dev/reference/sg_roi_project.md).
 
 - type:
 

@@ -13,7 +13,7 @@ sg_roi_rois_overlap(layer, call = rlang::caller_env())
 - layer:
 
   An
-  [sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md).
 
 - call:
 

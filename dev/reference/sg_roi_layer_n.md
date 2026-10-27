@@ -13,7 +13,7 @@ sg_roi_layer_n(layer, call = rlang::caller_env())
 - layer:
 
   An
-  [sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md).
 
 - call:
 
@@ -26,7 +26,7 @@ An integer scalar.
 ## See also
 
 Other layers:
-[`sg_roi_layer()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md),
 [`sg_roi_layer_add()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_add.md),
 [`sg_roi_layer_remove()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_remove.md),
 [`sg_roi_layer_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_rois.md),

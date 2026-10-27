@@ -1,7 +1,7 @@
 # Layer style
 
 Construct a style specification for an
-[sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html).
+[sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md).
 
 ## Usage
 
@@ -59,7 +59,7 @@ A named list of class `annot_style`.
 ## See also
 
 Other layers:
-[`sg_roi_layer()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md),
 [`sg_roi_layer_add()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_add.md),
 [`sg_roi_layer_n()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_n.md),
 [`sg_roi_layer_remove()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_remove.md),

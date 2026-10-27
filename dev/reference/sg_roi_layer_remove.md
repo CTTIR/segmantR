@@ -13,7 +13,7 @@ sg_roi_layer_remove(layer, id, call = rlang::caller_env())
 - layer:
 
   An
-  [sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md).
 
 - id:
 
@@ -26,14 +26,14 @@ sg_roi_layer_remove(layer, id, call = rlang::caller_env())
 ## Value
 
 A new
-[sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html)
+[sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md)
 without the identified ROI. Warns if the ROI is not present and returns
 the layer unchanged.
 
 ## See also
 
 Other layers:
-[`sg_roi_layer()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md),
 [`sg_roi_layer_add()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_add.md),
 [`sg_roi_layer_n()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_n.md),
 [`sg_roi_layer_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_rois.md),

@@ -17,7 +17,7 @@ sg_roi_fix_geometry(project, verbose = TRUE, call = rlang::caller_env())
 - project:
 
   An
-  [sg_roi_project](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_project](https://cttir.github.io/segmantR/dev/reference/sg_roi_project.md).
 
 - verbose:
 
@@ -30,7 +30,7 @@ sg_roi_fix_geometry(project, verbose = TRUE, call = rlang::caller_env())
 ## Value
 
 The
-[sg_roi_project](https://cttir.github.io/segmantR/reference/sg_roi.html)
+[sg_roi_project](https://cttir.github.io/segmantR/dev/reference/sg_roi_project.md)
 with repaired geometry. Repairs are reported via
 [`cli::cli_inform()`](https://cli.r-lib.org/reference/cli_abort.html)
 when `verbose` is `TRUE`. Issues that cannot be repaired (zero area,

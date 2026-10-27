@@ -39,9 +39,7 @@ sg_roi_layer(
 
 ## Value
 
-An
-[sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html)
-with no ROIs and a resolved colour mapping.
+An sg_roi_layer with no ROIs and a resolved colour mapping.
 
 ## See also
 

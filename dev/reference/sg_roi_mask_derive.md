@@ -55,11 +55,11 @@ state legend restricted to those classes and pixel counts recomputed.
 
 ## See also
 
-[`sg_roi_mask()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_mask()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask.md),
 [`sg_roi_mask_stack()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_stack.md)
 
 Other masks:
-[`sg_roi_mask()`](https://cttir.github.io/segmantR/reference/sg_roi.html),
+[`sg_roi_mask()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask.md),
 [`sg_roi_mask_boundary()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_boundary.md),
 [`sg_roi_mask_legend()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_legend.md),
 [`sg_roi_mask_preview()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_preview.md),

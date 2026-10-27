@@ -3,7 +3,7 @@
 Combine ROIs geometrically. Each accepts several
 [sg_roi](https://cttir.github.io/segmantR/dev/reference/sg_roi.md) via
 `...`, or a single
-[sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html).
+[sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md).
 Multi-part results are returned as one ROI with `MULTIPOLYGON` geometry
 (the return type is always a single
 [sg_roi](https://cttir.github.io/segmantR/dev/reference/sg_roi.md)).
@@ -27,7 +27,7 @@ sg_roi_symdiff(..., call = rlang::caller_env())
   Two or more
   [sg_roi](https://cttir.github.io/segmantR/dev/reference/sg_roi.md), or
   a single
-  [sg_roi_layer](https://cttir.github.io/segmantR/reference/sg_roi.html).
+  [sg_roi_layer](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer.md).
 
 - call:
 
