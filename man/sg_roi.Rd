@@ -2,11 +2,6 @@
 % Please edit documentation in R/roi-classes.R
 \name{sg_roi}
 \alias{sg_roi}
-\alias{sg_roi_layer}
-\alias{sg_roi_project}
-\alias{sg_roi_frame}
-\alias{sg_roi_mask}
-\alias{sg_roi_summary}
 \title{Histology ROI objects}
 \description{
 ROI geometries use null-CRS image coordinates: top-left origin, x right,
