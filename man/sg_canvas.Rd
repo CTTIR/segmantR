@@ -35,3 +35,12 @@ The canvas uses local array pixel coordinates (top-left origin, x right,
 y down). Drawing emits Shiny inputs suffixed \verb{_created}, \verb{_edited}, and
 \verb{_erased}. Use \code{\link[=sg_canvas_correct]{sg_canvas_correct()}} to stage changes to a mask.
 }
+\examples{
+\dontshow{if (rlang::is_installed(c("htmlwidgets", "magick"))) withAutoprint(\{ # examplesIf}
+img <- new_sg_image(matrix(seq_len(72), 8, 9), id = "slide")
+msk <- new_sg_mask(matrix(0L, 8, 9), image_id = "slide")
+widget <- sg_canvas(img, msk, tool = "polygon")
+class(widget)
+if (interactive()) widget
+\dontshow{\}) # examplesIf}
+}

@@ -30,3 +30,11 @@ A staged \code{sg_mask}.
 Geometry is in local array pixels. Changes retain image binding and are
 staged for explicit review. Overlapping cells are rejected.
 }
+\examples{
+msk <- new_sg_mask(matrix(0L, 8, 9))
+box <- list(type = "Polygon",
+            coordinates = list(list(c(1, 1), c(4, 1), c(4, 4), c(1, 4), c(1, 1))))
+added <- sg_canvas_correct(msk, box, expected_revision = sg_mask_revision(msk))
+sum(added$labels > 0)
+added$review$status
+}

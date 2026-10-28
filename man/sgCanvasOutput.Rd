@@ -26,3 +26,14 @@ A Shiny output element or render function.
 \description{
 Shiny bindings for the cell canvas
 }
+\examples{
+if (interactive() && requireNamespace("htmlwidgets", quietly = TRUE) &&
+    requireNamespace("magick", quietly = TRUE)) {
+  img <- new_sg_image(matrix(seq_len(72), 8, 9))
+  ui <- shiny::fluidPage(sgCanvasOutput("canvas"))
+  server <- function(input, output, session) {
+    output$canvas <- renderSgCanvas(sg_canvas(img))
+  }
+  shiny::shinyApp(ui, server)
+}
+}

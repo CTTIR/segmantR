@@ -14,6 +14,12 @@
 #' @param elementId Optional widget id.
 #' @return An HTML widget.
 #' @export
+#' @examplesIf rlang::is_installed(c("htmlwidgets", "magick"))
+#' img <- new_sg_image(matrix(seq_len(72), 8, 9), id = "slide")
+#' msk <- new_sg_mask(matrix(0L, 8, 9), image_id = "slide")
+#' widget <- sg_canvas(img, msk, tool = "polygon")
+#' class(widget)
+#' if (interactive()) widget
 sg_canvas <- function(image, mask = NULL, channel = 1L, tool = "pan",
                       width = NULL, height = 600, elementId = NULL) {
   .sg_assert_image(image)
@@ -81,6 +87,13 @@ sg_canvas <- function(image, mask = NULL, channel = 1L, tool = "pan",
 #' @param expected_revision Revision shown when the edit began.
 #' @return A staged `sg_mask`.
 #' @export
+#' @examples
+#' msk <- new_sg_mask(matrix(0L, 8, 9))
+#' box <- list(type = "Polygon",
+#'             coordinates = list(list(c(1, 1), c(4, 1), c(4, 4), c(1, 4), c(1, 1))))
+#' added <- sg_canvas_correct(msk, box, expected_revision = sg_mask_revision(msk))
+#' sum(added$labels > 0)
+#' added$review$status
 sg_canvas_correct <- function(mask, geometry = NULL, action = "add",
                               cell_id = NULL, expected_revision) {
   .sg_assert_mask(mask)
@@ -120,6 +133,16 @@ sg_canvas_correct <- function(mask, geometry = NULL, action = "add",
 #' @param width,height Output dimensions.
 #' @return A Shiny output element or render function.
 #' @export
+#' @examples
+#' if (interactive() && requireNamespace("htmlwidgets", quietly = TRUE) &&
+#'     requireNamespace("magick", quietly = TRUE)) {
+#'   img <- new_sg_image(matrix(seq_len(72), 8, 9))
+#'   ui <- shiny::fluidPage(sgCanvasOutput("canvas"))
+#'   server <- function(input, output, session) {
+#'     output$canvas <- renderSgCanvas(sg_canvas(img))
+#'   }
+#'   shiny::shinyApp(ui, server)
+#' }
 sgCanvasOutput <- function(outputId, width = "100%", height = "600px") {
   .sg_require_htmlwidgets()
   htmlwidgets::shinyWidgetOutput(outputId, "sgcanvas", width, height, package = "segmantR")
