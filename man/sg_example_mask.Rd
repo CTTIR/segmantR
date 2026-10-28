@@ -8,10 +8,11 @@ sg_example_mask(type = c("he_breast", "fluorescence_nuclei", "multiplex_4ch"))
 }
 \arguments{
 \item{type}{Character, one of \code{"he_breast"}, \code{"fluorescence_nuclei"},
-or \code{"multiplex_4ch"}.}
+or \code{"multiplex_4ch"} (see \code{\link[=sg_example_image]{sg_example_image()}}).}
 }
 \value{
-An \code{sg_mask} object.
+An \code{sg_mask} object whose labels are 0 for background and
+positive integers for the cells of the example image of the same type.
 }
 \description{
 Returns an \code{sg_mask} matching the corresponding example image. Like

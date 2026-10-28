@@ -51,10 +51,16 @@ sg_run_app <- function(image = NULL, mask = NULL, port = NULL,
 #' the same in every session, and the caller's random number stream is
 #' left unchanged.
 #'
-#' @param type Character, one of `"he_breast"`, `"fluorescence_nuclei"`,
-#'   or `"multiplex_4ch"`.
+#' @param type Character, the example to generate:
+#'   * `"he_breast"`: 64 x 64 single-channel image simulating an H&E
+#'     stained breast section with about 20 cell-like blobs;
+#'   * `"fluorescence_nuclei"`: 64 x 64 single-channel image simulating
+#'     DAPI-stained nuclei, about 15 bright spots on a dark background;
+#'   * `"multiplex_4ch"`: 64 x 64 x 4 array simulating a four-channel
+#'     panel (DAPI, CD3, CD8, PanCK) with about 18 cells.
 #'
 #' @return An `sg_image` object.
+#' @seealso [sg_example_mask()] for the matching label masks.
 #' @export
 #' @examples
 #' img <- sg_example_image("he_breast")
@@ -77,9 +83,10 @@ sg_example_image <- function(type = c("he_breast", "fluorescence_nuclei",
 #' unchanged.
 #'
 #' @param type Character, one of `"he_breast"`, `"fluorescence_nuclei"`,
-#'   or `"multiplex_4ch"`.
+#'   or `"multiplex_4ch"` (see [sg_example_image()]).
 #'
-#' @return An `sg_mask` object.
+#' @return An `sg_mask` object whose labels are 0 for background and
+#'   positive integers for the cells of the example image of the same type.
 #' @export
 #' @examples
 #' mask <- sg_example_mask("he_breast")

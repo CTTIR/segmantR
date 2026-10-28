@@ -7,8 +7,15 @@
 sg_example_image(type = c("he_breast", "fluorescence_nuclei", "multiplex_4ch"))
 }
 \arguments{
-\item{type}{Character, one of \code{"he_breast"}, \code{"fluorescence_nuclei"},
-or \code{"multiplex_4ch"}.}
+\item{type}{Character, the example to generate:
+\itemize{
+\item \code{"he_breast"}: 64 x 64 single-channel image simulating an H&E
+stained breast section with about 20 cell-like blobs;
+\item \code{"fluorescence_nuclei"}: 64 x 64 single-channel image simulating
+DAPI-stained nuclei, about 15 bright spots on a dark background;
+\item \code{"multiplex_4ch"}: 64 x 64 x 4 array simulating a four-channel
+panel (DAPI, CD3, CD8, PanCK) with about 18 cells.
+}}
 }
 \value{
 An \code{sg_image} object.
@@ -22,4 +29,7 @@ left unchanged.
 \examples{
 img <- sg_example_image("he_breast")
 print(img)
+}
+\seealso{
+\code{\link[=sg_example_mask]{sg_example_mask()}} for the matching label masks.
 }
