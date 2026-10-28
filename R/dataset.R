@@ -451,8 +451,9 @@ sg_prepare_training_data <- function(pairs, destination = NULL, ...,
     if (isTRUE(t$excluded)) next
     pr <- pairs[[t$source_index]]
     origin <- .sg_image_origin(pr$image)
-    r0 <- as.integer((t$y - origin$y) / origin$downsample) + 1L
-    c0 <- as.integer((t$x - origin$x) / origin$downsample) + 1L
+    # round, not truncate: (k * downsample) / downsample can fall just below k
+    r0 <- as.integer(round((t$y - origin$y) / origin$downsample)) + 1L
+    c0 <- as.integer(round((t$x - origin$x) / origin$downsample)) + 1L
     rr <- r0:(r0 + t$height - 1L)
     cc <- c0:(c0 + t$width - 1L)
     px <- pr$image$pixels

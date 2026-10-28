@@ -162,3 +162,23 @@ test_that("grouped splits fill every requested split when groups allow", {
                            split = props)
   expect_true(all(lengths(m$split$groups[names(props)]) == 1L))
 })
+
+test_that("tiles are cut at their recorded position for fractional downsample", {
+  px <- matrix(as.numeric(seq_len(64 * 64)), 64, 64)
+  lab <- matrix(0L, 64, 64)
+  lab[30:40, 30:40] <- 1L
+  img <- new_sg_image(px, origin = list(x = 0, y = 0, downsample = 1.3))
+  msk <- new_sg_mask(lab, origin = list(x = 0, y = 0, downsample = 1.3))
+  ts <- sg_prepare_training_data(
+    list(list(image = img, mask = msk, subject_id = "A")),
+    tile_size = 28L, min_objects = 0L, partial_tiles = "keep",
+    split = c(train = 1, validation = 0, test = 0)
+  )
+  for (t in ts$manifest$tiles) {
+    r0 <- round(t$y / 1.3) + 1
+    c0 <- round(t$x / 1.3) + 1
+    expect_equal(ts$tiles[[t$tile_id]]$image[1, 1], px[r0, c0],
+                 info = t$tile_id)
+  }
+  expect_true(sg_validate_training_manifest(ts$manifest)$ok)
+})

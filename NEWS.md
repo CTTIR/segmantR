@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* `sg_prepare_training_data()` rounds tile offsets back to pixel indices
+  instead of truncating them, so tiles of images with a fractional
+  `downsample` are no longer cut one pixel too high or too far left.
+
 * Grouped dataset splits (`sg_dataset_manifest()`,
   `sg_prepare_training_data()`) no longer leave a requested split empty
   when there are enough groups to fill every split, for example three
