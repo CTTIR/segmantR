@@ -65,10 +65,7 @@ test_that("the app stages drawing events and rejects stale revisions", {
 })
 
 test_that("canvas outputs explain a missing htmlwidgets", {
-  local_mocked_bindings(
-    requireNamespace = function(pkg, ...) !identical(pkg, "htmlwidgets"),
-    .package = "base"
-  )
+  local_mocked_bindings(.sg_has_htmlwidgets = function() FALSE)
   expect_error(sgCanvasOutput("cv"), "htmlwidgets")
   expect_error(renderSgCanvas(NULL), "htmlwidgets")
 })

@@ -331,12 +331,8 @@ sg_export_mask <- function(mask, path, format = c("tiff", "png", "geojson",
       grDevices::png(path, width = ncol(labels), height = nrow(labels))
       png_dev <- grDevices::dev.cur()
       # close the device even when drawing fails
-      tryCatch({
-        graphics::par(mar = c(0, 0, 0, 0))
-        graphics::image(t(display_labels[rev(seq_len(nrow(labels))), ]),
-                        col = c("black", grDevices::rainbow(n_colours)),
-                        axes = FALSE)
-      }, finally = grDevices::dev.off(png_dev))
+      tryCatch(.sg_draw_label_image(display_labels, n_colours),
+               finally = grDevices::dev.off(png_dev))
     },
     geojson = {
       polys <- sg_mask_to_polygons(mask, simplify = TRUE)
@@ -389,4 +385,13 @@ sg_export_mask <- function(mask, path, format = c("tiff", "png", "geojson",
   cli::cli_inform(c("v" = "Mask exported to {.path {path}} ({.val {format}})."))
 
   invisible(path)
+}
+
+#' Draw consecutive label ids on the current device, top row at the top
+#' @noRd
+.sg_draw_label_image <- function(labels, n_colours) {
+  graphics::par(mar = c(0, 0, 0, 0))
+  graphics::image(t(labels[rev(seq_len(nrow(labels))), ]),
+                  col = c("black", grDevices::rainbow(n_colours)),
+                  axes = FALSE)
 }

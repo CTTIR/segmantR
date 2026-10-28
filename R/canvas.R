@@ -58,8 +58,12 @@ sg_canvas <- function(image, mask = NULL, channel = 1L, tool = "pan",
     package = "segmantR", elementId = elementId)
 }
 
+.sg_has_htmlwidgets <- function() {
+  requireNamespace("htmlwidgets", quietly = TRUE)
+}
+
 .sg_require_htmlwidgets <- function() {
-  if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
+  if (!.sg_has_htmlwidgets()) {
     .sg_abort("Install {.pkg htmlwidgets} to use the cell annotation canvas.")
   }
   invisible(TRUE)
