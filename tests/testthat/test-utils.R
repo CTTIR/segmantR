@@ -279,3 +279,22 @@ test_that("threshold opening keeps the full extent of border objects", {
   ))
   expect_equal(sort(as.vector(table(m$labels[m$labels > 0L]))), c(121L, 240L))
 })
+
+test_that("opening works on images smaller than the structuring element", {
+  px <- matrix(0, 3, 10)
+  px[, 4:8] <- 1
+  m <- suppressMessages(sg_segment_threshold(
+    new_sg_image(px), method = "otsu", min_area = 1L,
+    morphology = list(open = 5L, fill_holes = FALSE)
+  ))
+  expect_equal(m$n_cells, 1L)
+  expect_equal(which(m$labels > 0L), which(px > 0))
+  # erosion clips its window at the image edge, like dilation
+  expect_equal(segmantR:::.morpho_erode(matrix(1L, 3, 3), size = 5L),
+               matrix(1L, 3, 3))
+  b <- matrix(1L, 3, 10)
+  b[2, 1] <- 0L
+  e <- segmantR:::.morpho_erode(b, size = 3L)
+  expect_equal(e[, 1:2], matrix(0L, 3, 2))
+  expect_equal(e[, 3:10], matrix(1L, 3, 8))
+})

@@ -212,9 +212,13 @@
   nr <- nrow(binary)
   nc <- ncol(binary)
   result <- matrix(0L, nrow = nr, ncol = nc)
-  for (i in (half + 1L):(nr - half)) {
-    for (j in (half + 1L):(nc - half)) {
-      patch <- binary[(i - half):(i + half), (j - half):(j + half)]
+  # The window is clipped at the image edge, as in .morpho_dilate(), so
+  # images smaller than the window work and border objects are not eroded
+  # from outside the image
+  for (i in seq_len(nr)) {
+    for (j in seq_len(nc)) {
+      patch <- binary[max(1L, i - half):min(nr, i + half),
+                      max(1L, j - half):min(nc, j + half)]
       if (all(patch == 1L)) result[i, j] <- 1L
     }
   }

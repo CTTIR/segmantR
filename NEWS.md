@@ -98,9 +98,11 @@
   the rectangle fast path now requires four corners and axis-aligned edges.
 
 * The morphological opening in `sg_segment_threshold()` (default
-  `open = 5`) dilates up to the image edge, so objects touching the
-  border keep their full extent instead of losing a band of
-  `open %/% 2` pixels.
+  `open = 5`) clips its erosion and dilation windows at the image edge.
+  Objects touching the border keep their full extent instead of losing a
+  band of `open %/% 2` pixels, border objects at least `open %/% 2 + 1`
+  pixels thick survive the opening, and images smaller than `open` in a
+  dimension (for example 3 x 10 pixels) no longer fail.
 
 * Bilinear upsampling in `sg_preprocess()` no longer extrapolates at the
   top and left edges, where it could produce values outside the input
