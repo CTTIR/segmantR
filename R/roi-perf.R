@@ -2,9 +2,16 @@
   if (length(unclass(geom)) != 1L) {
     return(FALSE)
   }
-  ring <- geom[[1]]
-  length(unique(round(ring[, 1], 9))) == 2L &&
-    length(unique(round(ring[, 2], 9))) == 2L
+  ring <- round(geom[[1]], 9)
+  # Four distinct corners joined by horizontal or vertical edges only; a
+  # right triangle also has two distinct x and two distinct y values.
+  if (nrow(unique(ring)) != 4L ||
+      length(unique(ring[, 1])) != 2L ||
+      length(unique(ring[, 2])) != 2L) {
+    return(FALSE)
+  }
+  edges <- diff(ring)
+  all((edges[, 1] == 0) != (edges[, 2] == 0))
 }
 
 # Fast, exact cover for rectangles and points (touches = FALSE only). Returns a

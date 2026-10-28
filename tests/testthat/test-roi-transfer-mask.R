@@ -184,3 +184,15 @@ test_that("sg_roi_mask_stats reports zero pixels for a fully occluded label", {
   st <- sg_roi_mask_stats(m)
   expect_true(0L %in% st$n_px)
 })
+
+test_that("a right triangle is not rasterised as its bounding rectangle", {
+  tri <- sg_roi_polygon(rbind(c(0, 0), c(10, 0), c(10, 10)), label = "t")
+  expect_false(segmantR:::.sg_roi_is_axis_aligned_rect(tri$geometry[[1]]))
+  expect_equal(sum(sg_roi_mask(tri, dims = c(10, 10))), 45L)
+  far <- sg_roi_rect(100, 100, 101, 101, label = "t")
+  lyr <- sg_roi_layer_add(sg_roi_layer_add(sg_roi_layer("L"), tri), far)
+  expect_equal(sum(sg_roi_mask(lyr, dims = c(10, 10), overlap = "last")), 45L)
+  rect <- sg_roi_rect(2, 2, 8, 8, label = "r")
+  expect_true(segmantR:::.sg_roi_is_axis_aligned_rect(rect$geometry[[1]]))
+  expect_equal(sum(sg_roi_mask(rect, dims = c(10, 10))), 36L)
+})

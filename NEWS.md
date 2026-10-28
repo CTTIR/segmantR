@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* `sg_roi_mask()` no longer rasterises right triangles (and other
+  polygons with two distinct x and y values) as their bounding rectangle;
+  the rectangle fast path now requires four corners and axis-aligned edges.
+
 * The morphological opening in `sg_segment_threshold()` (default
   `open = 5`) dilates up to the image edge, so objects touching the
   border keep their full extent instead of losing a band of
