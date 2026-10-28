@@ -1,5 +1,8 @@
 # segmantR (development version)
 
+* The README and `CITATION.cff` no longer cite the Zenodo DOI, which is not
+  registered yet; it will be added once the Zenodo record is published.
+
 * `sg_run_app()` restores the previous value of the option
   `segmantR.app_env` when the app stops.
 
