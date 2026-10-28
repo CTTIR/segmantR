@@ -154,8 +154,9 @@ sg_preprocess <- function(image,
 #' @param method Character string specifying the deconvolution method.
 #'   One of `"macenko"` (default) or `"ruifrok"`.
 #' @param stains Optional 3x3 numeric matrix whose columns are the
-#'   stain vectors. If `NULL`, stain vectors are estimated from the
-#'   image using the specified `method`.
+#'   stain vectors (optical density in R, G and B) for haematoxylin, eosin
+#'   and the residual channel, in that order. If `NULL`, stain vectors are
+#'   estimated from the image using the specified `method`.
 #'
 #' @return A named list of `sg_image` objects, one per stain channel.
 #'   Typically `hematoxylin` and `eosin`, plus `residual`.
@@ -197,8 +198,8 @@ sg_stain_deconvolve <- function(image,
   # Convert RGB to optical density
   od <- .rgb_to_od(pixels)
 
-  # Deconvolve
-  stain_inv <- tryCatch(solve(stains), error = function(e) {
+  # Deconvolve: OD = concentrations %*% t(stains), stains in columns
+  stain_inv <- tryCatch(solve(t(stains)), error = function(e) {
     cli::cli_abort(c(
       "Stain matrix is singular and cannot be inverted.",
       "i" = "Provide a valid stain matrix."
@@ -371,7 +372,7 @@ sg_stain_deconvolve <- function(image,
   -log(pmin(pixels, 1))
 }
 
-#' Ruifrok H&E stain matrix
+#' Ruifrok stain matrix (one stain vector per column)
 #' @noRd
 .ruifrok_stain_matrix <- function() {
   # Standard Ruifrok & Johnston stain vectors (normalised)
@@ -379,7 +380,7 @@ sg_stain_deconvolve <- function(image,
     0.6500286,  0.7040055,  0.2859569,
     0.2681468,  0.5688969,  0.7782507,
     0.7110272,  0.4232710,  0.5615109
-  ), nrow = 3L, ncol = 3L, byrow = TRUE)
+  ), nrow = 3L, ncol = 3L)
 }
 
 #' Estimate Macenko stain vectors (simplified)
@@ -409,6 +410,12 @@ sg_stain_deconvolve <- function(image,
   v2 <- pca$rotation[, 1:2] %*% c(cos(max_angle), sin(max_angle))
   v1 <- v1 / sqrt(sum(v1^2))
   v2 <- v2 / sqrt(sum(v2^2))
+  # Haematoxylin absorbs more red than eosin: put it in the first column
+  if (v1[1] < v2[1]) {
+    tmp <- v1
+    v1 <- v2
+    v2 <- tmp
+  }
   # Third vector is the cross product (residual)
   v3 <- c(
     v1[2] * v2[3] - v1[3] * v2[2],

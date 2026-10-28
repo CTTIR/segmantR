@@ -14,8 +14,9 @@ sg_stain_deconvolve(image, method = c("macenko", "ruifrok"), stains = NULL)
 One of \code{"macenko"} (default) or \code{"ruifrok"}.}
 
 \item{stains}{Optional 3x3 numeric matrix whose columns are the
-stain vectors. If \code{NULL}, stain vectors are estimated from the
-image using the specified \code{method}.}
+stain vectors (optical density in R, G and B) for haematoxylin, eosin
+and the residual channel, in that order. If \code{NULL}, stain vectors are
+estimated from the image using the specified \code{method}.}
 }
 \value{
 A named list of \code{sg_image} objects, one per stain channel.

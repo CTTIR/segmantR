@@ -1,5 +1,10 @@
 # segmantR (development version)
 
+* `sg_stain_deconvolve()` reads stain matrices column-wise, as documented,
+  for the built-in Ruifrok vectors, Macenko estimates and user matrices
+  alike; it used to mix rows and columns and returned wrong
+  concentrations. Macenko estimates put haematoxylin first.
+
 * Morphology features no longer fail on single-pixel cells (shape
   descriptors are `NA` there), which also fixes `sg_filter_cells()` and
   CSV export of such masks. Line-shaped cells get eccentricity 1 instead

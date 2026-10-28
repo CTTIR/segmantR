@@ -159,3 +159,28 @@ test_that("sg_stain_deconvolve records deconvolution metadata", {
   expect_equal(stains$hematoxylin$metadata$deconvolution_method, "ruifrok")
   expect_equal(stains$eosin$metadata$stain_channel, "eosin")
 })
+
+test_that("sg_stain_deconvolve recovers known stain concentrations", {
+  stains <- segmantR:::.ruifrok_stain_matrix()
+  set.seed(3)
+  c_h <- stats::runif(400, 0, 1.5)
+  c_e <- stats::runif(400, 0, 1.5)
+  # optical density = concentrations %*% t(stain vectors in columns)
+  od <- cbind(c_h, c_e) %*% t(stains[, 1:2])
+  img <- new_sg_image(array(exp(-od), dim = c(20, 20, 3)),
+                      channels = c("R", "G", "B"))
+
+  rf <- sg_stain_deconvolve(img, method = "ruifrok")
+  expect_equal(as.vector(rf$hematoxylin$pixels), c_h, tolerance = 1e-8)
+  expect_equal(as.vector(rf$eosin$pixels), c_e, tolerance = 1e-8)
+  expect_lt(max(rf$residual$pixels), 1e-8)
+
+  # a user matrix is read column-wise, too
+  swapped <- sg_stain_deconvolve(img, stains = stains[, c(2, 1, 3)])
+  expect_equal(as.vector(swapped$hematoxylin$pixels), c_e, tolerance = 1e-8)
+  expect_equal(as.vector(swapped$eosin$pixels), c_h, tolerance = 1e-8)
+
+  mk <- suppressMessages(sg_stain_deconvolve(img, method = "macenko"))
+  expect_gt(stats::cor(as.vector(mk$hematoxylin$pixels), c_h), 0.99)
+  expect_gt(stats::cor(as.vector(mk$eosin$pixels), c_e), 0.99)
+})
