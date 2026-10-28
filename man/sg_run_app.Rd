@@ -28,7 +28,8 @@ package code; \code{inst/shiny/segmantR/app.R} is a thin wrapper for
 \details{
 For compatibility with code that starts the bundled app directory
 directly, the pre-loaded objects are also stored in the option
-\code{segmantR.app_env}; \code{\link[=sg_app]{sg_app()}} itself does not use options.
+\code{segmantR.app_env} while the app runs; the previous value is restored
+when it stops. \code{\link[=sg_app]{sg_app()}} itself does not use options.
 }
 \examples{
 \dontrun{

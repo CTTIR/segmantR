@@ -32,23 +32,29 @@ test_that("sg_example_image pixel content is reproducible", {
                         style = "serialize")
 })
 
-test_that("sg_run_app stores image/mask in options and dispatches to runApp", {
+test_that("sg_run_app stores image/mask in options while runApp runs", {
   captured <- NULL
+  env <- NULL
   local_mocked_bindings(
     runApp = function(...) {
       captured <<- list(...)
+      env <<- getOption("segmantR.app_env")
       invisible(NULL)
     },
     .package = "shiny"
   )
+  withr::local_options(segmantR.app_env = "previous")
   img <- sg_example_image("he_breast")
   msk <- sg_example_mask("he_breast")
   expect_null(sg_run_app(image = img, mask = msk, port = 1234L,
                          launch.browser = FALSE))
-  env <- getOption("segmantR.app_env")
   expect_s3_class(env$image, "sg_image")
   expect_s3_class(env$mask, "sg_mask")
+  expect_equal(captured$port, 1234L)
+  # the option is restored when the app stops
+  expect_equal(getOption("segmantR.app_env"), "previous")
 })
+
 
 test_that(".draw_ellipse and .draw_ellipse_int fill a region", {
   m <- matrix(0, 10, 10)

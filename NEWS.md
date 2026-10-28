@@ -1,5 +1,8 @@
 # segmantR (development version)
 
+* `sg_run_app()` restores the previous value of the option
+  `segmantR.app_env` when the app stops.
+
 * `sg_example_image()` and `sg_example_mask()` no longer reset the
   caller's random number stream; the example data are unchanged.
 
