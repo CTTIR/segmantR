@@ -100,3 +100,51 @@ test_that(".dilate_labels grows labelled regions", {
   out <- segmantR:::.dilate_labels(labels, 1L)
   expect_gt(sum(out > 0L), 1L)
 })
+
+test_that("sg_segment_watershed keeps separate objects inside the foreground", {
+  px <- matrix(0, 30, 30)
+  px[5:10, 5:10] <- 1
+  px[20:26, 18:25] <- 1
+  msk <- suppressMessages(sg_segment_watershed(
+    new_sg_image(px), seed_method = "distance", h = 0.3, expand_pixels = 0L
+  ))
+  expect_equal(msk$n_cells, 2L)
+  expect_true(all(msk$labels[px == 0] == 0L))
+  expect_true(all(msk$labels[px == 1] > 0L))
+  expect_length(unique(as.vector(msk$labels[5:10, 5:10])), 1L)
+  expect_length(unique(as.vector(msk$labels[20:26, 18:25])), 1L)
+})
+
+test_that("the membrane channel moves the watershed boundary", {
+  yy <- row(matrix(0, 20, 30))
+  xx <- col(matrix(0, 20, 30))
+  nuc <- matrix(as.numeric(((yy - 10)^2 + (xx - 9)^2 <= 36) |
+                             ((yy - 10)^2 + (xx - 21)^2 <= 36)), 20, 30)
+  mem <- matrix(0, 20, 30)
+  mem[, 12] <- 1
+  img <- new_sg_image(array(c(nuc, mem), c(20, 30, 2)))
+  plain <- suppressMessages(sg_segment_watershed(
+    img, seed_method = "distance", h = 0.7, expand_pixels = 0L
+  ))
+  walled <- suppressMessages(sg_segment_watershed(
+    img, seed_method = "distance", h = 0.7, expand_pixels = 0L,
+    membrane_channel = 2L
+  ))
+  expect_equal(plain$n_cells, 2L)
+  expect_equal(walled$n_cells, 2L)
+  # Without a membrane the split falls midway between the two discs; with
+  # the membrane it follows the ridge in column 12.
+  expect_false(identical(plain$labels, walled$labels))
+  expect_true(all(walled$labels[10, 3:11] == walled$labels[10, 3]))
+  expect_true(all(walled$labels[10, 13:27] != walled$labels[10, 3]))
+  expect_equal(plain$labels[10, 13], plain$labels[10, 3])
+})
+
+test_that(".simple_watershed never floods outside the foreground", {
+  seeds <- matrix(0L, 5, 5)
+  seeds[1, 1] <- 1L
+  fg <- matrix(0L, 5, 5)
+  fg[1:2, 1:2] <- 1L
+  out <- segmantR:::.simple_watershed(matrix(0, 5, 5), seeds, foreground = fg)
+  expect_equal(out, fg)
+})

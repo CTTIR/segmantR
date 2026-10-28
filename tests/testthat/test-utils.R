@@ -63,7 +63,9 @@ test_that(".distance_transform peaks inside an object", {
   binary[2:6, 2:6] <- 1L
   dt <- segmantR:::.distance_transform(binary)
   expect_equal(dim(dt), c(7L, 7L))
-  expect_gte(max(dt), 0)
+  expect_true(all(dt[binary == 0L] == 0))
+  expect_equal(dt[4, 4], max(dt))
+  expect_equal(dt[2, 2], 1)
 })
 
 test_that(".morpho_erode and .morpho_dilate change foreground extent", {

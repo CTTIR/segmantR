@@ -1,5 +1,10 @@
 # segmantR (development version)
 
+* `sg_segment_watershed()` computes the distance transform inside the
+  foreground and floods only foreground pixels, level by level along the
+  surface. Previously every image came back as one object covering the
+  whole plane, and `membrane_channel` had no effect; results change.
+
 * Standardize the named v5 package logo across README, documentation pages
   and available application headers, with matching light and dark artwork.
 

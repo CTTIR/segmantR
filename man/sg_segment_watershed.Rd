@@ -47,7 +47,11 @@ An \code{sg_mask} object with labelled cell regions.
 \description{
 Segments cells using a marker-controlled watershed algorithm.
 Seeds (markers) are detected automatically via distance-transform
-peaks or h-minima, and the watershed flood fills from these seeds.
+peaks or h-minima inside the Otsu foreground of \code{channel}. The
+watershed then floods from these seeds, level by level along the
+surface, so that object boundaries follow its ridges; pixels outside
+the foreground are never flooded (only \code{expand_pixels} grows objects
+beyond it).
 }
 \examples{
 set.seed(42)

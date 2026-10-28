@@ -316,12 +316,18 @@
   labels
 }
 
+#' Otsu foreground of a single channel (1 = foreground)
+#' @noRd
+.watershed_foreground <- function(channel) {
+  ifelse(channel > .otsu_threshold(channel), 1L, 0L)
+}
+
 #' Watershed seeds from distance transform
 #' @noRd
 .watershed_seeds <- function(channel, method = "distance", h = 0.05,
-                             min_distance = 10L) {
+                             min_distance = 10L, foreground = NULL) {
   method <- match.arg(method, c("h_minima", "distance", "markers"))
-  binary <- ifelse(channel > .otsu_threshold(channel), 1L, 0L)
+  binary <- foreground %||% .watershed_foreground(channel)
   dt <- .distance_transform(binary)
   if (method == "distance") {
     threshold <- max(dt) * h
@@ -333,13 +339,17 @@
   seeds
 }
 
-#' Simple distance transform (Chamfer 3-4)
+#' City-block distance transform
+#'
+#' Distance of each foreground pixel to the nearest background pixel;
+#' background pixels are 0. A plane without background gets one constant
+#' value.
 #' @noRd
 .distance_transform <- function(binary) {
   nr <- nrow(binary)
   nc <- ncol(binary)
   dt <- matrix(Inf, nrow = nr, ncol = nc)
-  dt[binary == 1L] <- 0
+  dt[binary != 1L] <- 0
   for (i in seq_len(nr)) {
     for (j in seq_len(nc)) {
       if (i > 1L) dt[i, j] <- min(dt[i, j], dt[i - 1L, j] + 1)
@@ -352,9 +362,8 @@
       if (j < nc) dt[i, j] <- min(dt[i, j], dt[i, j + 1L] + 1)
     }
   }
-  max_val <- max(dt[is.finite(dt)])
-  dt[!is.finite(dt)] <- max_val + 1
-  max_val + 1 - dt
+  if (all(is.infinite(dt))) dt[] <- max(nr, nc)
+  dt
 }
 
 #' Pure-R Voronoi propagation

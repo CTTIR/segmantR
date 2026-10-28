@@ -2,7 +2,11 @@
 #'
 #' Segments cells using a marker-controlled watershed algorithm.
 #' Seeds (markers) are detected automatically via distance-transform
-#' peaks or h-minima, and the watershed flood fills from these seeds.
+#' peaks or h-minima inside the Otsu foreground of `channel`. The
+#' watershed then floods from these seeds, level by level along the
+#' surface, so that object boundaries follow its ridges; pixels outside
+#' the foreground are never flooded (only `expand_pixels` grows objects
+#' beyond it).
 #'
 #' @param image An `sg_image` object.
 #' @param channel Integer index of the image channel used for
@@ -63,15 +67,17 @@ sg_segment_watershed <- function(image,
   }
 
   # --- Generate seeds -----------------------------------------------------
+  foreground <- .watershed_foreground(ch)
   seeds <- .watershed_seeds(ch, method = seed_method, h = h,
-                            min_distance = min_distance)
+                            min_distance = min_distance,
+                            foreground = foreground)
 
   cli::cli_inform(c(
     "i" = "Generated {max(seeds, na.rm = TRUE)} seed{?s} via {.val {seed_method}}."
   ))
 
-  # --- Watershed flooding -------------------------------------------------
-  labels <- .simple_watershed(surface, seeds)
+  # --- Watershed flooding (restricted to the foreground) -------------------
+  labels <- .simple_watershed(surface, seeds, foreground = foreground)
 
   # --- Expansion ----------------------------------------------------------
   if (expand_pixels > 0L) {
@@ -242,51 +248,62 @@ sg_segment_propagate <- function(image,
   EBImage::propagate(x, seeds = seeds, lambda = lambda)
 }
 
-#' Simple priority-free watershed (greedy flood fill from seeds)
+#' Level-ordered watershed flood from seeds
+#'
+#' Floods the surface by immersion: the surface is binned into `n_levels`
+#' levels and, level by level, unlabelled pixels at or below the current
+#' level take the label of a labelled 4-neighbour (first of up, down, left,
+#' right) until nothing changes. Ridges of the surface therefore become the
+#' boundaries between basins. Pixels outside `foreground` are never
+#' flooded.
 #' @noRd
-.simple_watershed <- function(surface, seeds) {
+.simple_watershed <- function(surface, seeds, foreground = NULL,
+                              n_levels = 256L) {
   nr <- nrow(surface)
   nc <- ncol(surface)
   labels <- seeds
-  changed <- TRUE
-  max_iter <- max(nr, nc)
-  iter <- 0L
-  while (changed && iter < max_iter) {
-    changed <- FALSE
-    iter <- iter + 1L
-    new_labels <- labels
-    for (i in seq_len(nr)) {
-      for (j in seq_len(nc)) {
-        if (labels[i, j] != 0L) next
-        neighbors <- integer(0)
-        costs <- numeric(0)
-        if (i > 1L && labels[i - 1L, j] > 0L) {
-          neighbors <- c(neighbors, labels[i - 1L, j])
-          costs <- c(costs, surface[i, j])
-        }
-        if (i < nr && labels[i + 1L, j] > 0L) {
-          neighbors <- c(neighbors, labels[i + 1L, j])
-          costs <- c(costs, surface[i, j])
-        }
-        if (j > 1L && labels[i, j - 1L] > 0L) {
-          neighbors <- c(neighbors, labels[i, j - 1L])
-          costs <- c(costs, surface[i, j])
-        }
-        if (j < nc && labels[i, j + 1L] > 0L) {
-          neighbors <- c(neighbors, labels[i, j + 1L])
-          costs <- c(costs, surface[i, j])
-        }
-        if (length(neighbors) > 0L) {
-          # Assign the label of the lowest-cost neighbor
-          tbl <- table(neighbors)
-          new_labels[i, j] <- as.integer(names(tbl)[which.max(tbl)])
-          changed <- TRUE
-        }
-      }
+  allowed <- if (is.null(foreground)) {
+    matrix(TRUE, nr, nc)
+  } else {
+    !is.na(foreground) & foreground == 1L
+  }
+  vals <- surface[allowed & is.finite(surface)]
+  rng <- if (length(vals) > 0L) range(vals) else c(0, 0)
+  level <- if (rng[2] > rng[1]) {
+    1L + floor((surface - rng[1]) / (rng[2] - rng[1]) * (n_levels - 1L))
+  } else {
+    matrix(1L, nr, nc)
+  }
+  level[!is.finite(level)] <- n_levels
+  level <- pmin(pmax(level, 1L), n_levels)
+  for (lev in sort(unique(level[allowed & labels == 0L]))) {
+    repeat {
+      free <- allowed & labels == 0L & level <= lev
+      if (!any(free)) break
+      nb <- .neighbour_label(labels)
+      grow <- free & nb > 0L
+      if (!any(grow)) break
+      labels[grow] <- nb[grow]
     }
-    labels <- new_labels
   }
   labels
+}
+
+#' Label of the first labelled 4-neighbour (up, down, left, right), or 0
+#' @noRd
+.neighbour_label <- function(labels) {
+  nr <- nrow(labels)
+  nc <- ncol(labels)
+  up <- rbind(0L, labels[-nr, , drop = FALSE])
+  down <- rbind(labels[-1L, , drop = FALSE], 0L)
+  left <- cbind(0L, labels[, -nc, drop = FALSE])
+  right <- cbind(labels[, -1L, drop = FALSE], 0L)
+  nb <- up
+  for (cand in list(down, left, right)) {
+    take <- nb == 0L
+    nb[take] <- cand[take]
+  }
+  nb
 }
 
 #' Dilate labelled regions
