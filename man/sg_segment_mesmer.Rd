@@ -38,10 +38,10 @@ whole-cell compartments.
 Requires a working Python installation with \code{deepcell} installed.
 }
 \examples{
-\donttest{
 pixels <- array(runif(200), dim = c(10, 10, 2))
 img <- new_sg_image(pixels, channels = c("nuclear", "membrane"))
-# Requires Python + deepcell:
-# mask <- sg_segment_mesmer(img, compartment = "whole-cell")
+\dontrun{
+# Requires Python with DeepCell
+mask <- sg_segment_mesmer(img, compartment = "whole-cell")
 }
 }

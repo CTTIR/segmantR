@@ -402,9 +402,14 @@ print.sg_qupath_program <- function(x, ...) {
 #'   extension versions, template version, run id, GeoJSON/TIFF agreement).
 #' @export
 #' @examples
-#' \donttest{
-#' # rep <- sg_import_qupath("path/to/out")
-#' }
+#' # a plain QuPath GeoJSON export, rasterised onto the image grid
+#' cells <- sg_roi_layer_add(sg_roi_layer("cells"),
+#'                           sg_roi_rect(2, 2, 8, 8, label = "cell"))
+#' cells <- sg_roi_layer_add(cells, sg_roi_rect(10, 10, 15, 16, label = "cell"))
+#' p <- tempfile(fileext = ".geojson")
+#' sg_roi_write_qupath(sg_roi_project(sg_roi_frame(c(20, 20)), cells), p)
+#' rep <- sg_import_qupath(p, image = new_sg_image(matrix(0, 20, 20)))
+#' rep$mask$n_cells
 sg_import_qupath <- function(path, ..., image = NULL, expected_run_id = NULL,
                              error = TRUE) {
   if (length(list(...))) {

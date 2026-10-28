@@ -37,8 +37,10 @@ Orchestrates a human-in-the-loop (HITL) active learning workflow:
 segment, review, correct, retrain, repeat.
 }
 \examples{
-\donttest{
-# Requires Python + Cellpose and interactive session:
-# result <- sg_active_learning_loop(image, n_rounds = 3L)
+\dontrun{
+# Requires Python with Cellpose and an interactive review session
+img <- sg_example_image("fluorescence_nuclei")
+result <- sg_active_learning_loop(img, n_rounds = 3L,
+                                  patches_per_round = 2L, patch_size = 32L)
 }
 }

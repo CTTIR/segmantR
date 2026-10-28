@@ -38,8 +38,11 @@ image-mask pairs provided by the user. Requires a working Python
 environment with Cellpose installed (see \code{\link[=sg_setup_python]{sg_setup_python()}}).
 }
 \examples{
-\donttest{
-# Requires Python + Cellpose:
-# trained <- sg_train_cellpose(training_data, base_model = "cyto3")
+\dontrun{
+# Requires Python with Cellpose (see sg_setup_python())
+pair <- list(image = sg_example_image("fluorescence_nuclei"),
+             mask = sg_example_mask("fluorescence_nuclei"))
+trained <- sg_train_cellpose(list(pair), base_model = "cyto3",
+                             n_epochs = 10L)
 }
 }

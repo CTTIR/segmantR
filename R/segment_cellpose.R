@@ -124,11 +124,11 @@ sg_setup_python <- function(envname = "segmantr",
 #' @return An `sg_mask` object with labelled cell regions.
 #' @export
 #' @examples
-#' \donttest{
 #' pixels <- array(runif(300), dim = c(10, 10, 3))
 #' img <- new_sg_image(pixels, channels = c("R", "G", "B"))
-#' # Requires Python + cellpose:
-#' # mask <- sg_segment_cellpose(img, model = "cyto3")
+#' \dontrun{
+#' # Requires Python with Cellpose (see sg_setup_python())
+#' mask <- sg_segment_cellpose(img, model = "cyto3")
 #' }
 sg_segment_cellpose <- function(image,
                                 model = c("cyto3", "cyto2", "nuclei",

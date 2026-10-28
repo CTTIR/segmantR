@@ -19,9 +19,12 @@
 #' @return An `sg_trained_model` object.
 #' @export
 #' @examples
-#' \donttest{
-#' # Requires Python + Cellpose:
-#' # trained <- sg_train_cellpose(training_data, base_model = "cyto3")
+#' \dontrun{
+#' # Requires Python with Cellpose (see sg_setup_python())
+#' pair <- list(image = sg_example_image("fluorescence_nuclei"),
+#'              mask = sg_example_mask("fluorescence_nuclei"))
+#' trained <- sg_train_cellpose(list(pair), base_model = "cyto3",
+#'                              n_epochs = 10L)
 #' }
 sg_train_cellpose <- function(training_data, base_model = "cyto3",
                               n_epochs = 100L, learning_rate = 0.1,
@@ -128,9 +131,11 @@ sg_train_cellpose <- function(training_data, base_model = "cyto3",
 #'   and `$metrics` (training metrics across rounds).
 #' @export
 #' @examples
-#' \donttest{
-#' # Requires Python + Cellpose and interactive session:
-#' # result <- sg_active_learning_loop(image, n_rounds = 3L)
+#' \dontrun{
+#' # Requires Python with Cellpose and an interactive review session
+#' img <- sg_example_image("fluorescence_nuclei")
+#' result <- sg_active_learning_loop(img, n_rounds = 3L,
+#'                                   patches_per_round = 2L, patch_size = 32L)
 #' }
 sg_active_learning_loop <- function(image, model = "cellpose",
                                     n_rounds = 5L, patches_per_round = 10L,

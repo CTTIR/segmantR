@@ -55,10 +55,10 @@ with \code{stardist} and \code{tensorflow} installed. Use
 \code{\link[=sg_setup_python]{sg_setup_python()}} to configure the environment.
 }
 \examples{
-\donttest{
 pixels <- matrix(runif(400), nrow = 20, ncol = 20)
 img <- new_sg_image(pixels)
-# Requires Python + stardist:
-# mask <- sg_segment_stardist(img, model = "2D_versatile_fluo")
+\dontrun{
+# Requires Python with StarDist (see sg_setup_python())
+mask <- sg_segment_stardist(img, model = "2D_versatile_fluo")
 }
 }

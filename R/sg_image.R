@@ -251,10 +251,12 @@ dim.sg_image <- function(x) {
 #'
 #' @return An `sg_image` object.
 #' @export
-#' @examples
-#' \donttest{
-#' # img <- sg_read_image("path/to/image.tiff")
-#' }
+#' @examplesIf requireNamespace("EBImage", quietly = TRUE)
+#' f <- tempfile(fileext = ".tif")
+#' EBImage::writeImage(EBImage::Image(matrix(seq(0, 1, length.out = 200), 20, 10)),
+#'                     f)
+#' img <- sg_read_image(f)
+#' dim(img$pixels)
 sg_read_image <- function(path, ...) {
   if (!file.exists(path)) {
     cli::cli_abort("Image file not found: {.path {path}}")

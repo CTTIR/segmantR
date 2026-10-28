@@ -23,7 +23,11 @@ in \code{source_digest} plus its base name (never the full path) in
 \code{metadata$source_name}.
 }
 \examples{
-\donttest{
-# img <- sg_read_image("path/to/image.tiff")
-}
+\dontshow{if (requireNamespace("EBImage", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+f <- tempfile(fileext = ".tif")
+EBImage::writeImage(EBImage::Image(matrix(seq(0, 1, length.out = 200), 20, 10)),
+                    f)
+img <- sg_read_image(f)
+dim(img$pixels)
+\dontshow{\}) # examplesIf}
 }

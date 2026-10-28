@@ -22,11 +22,11 @@
 #'   or a named list of two `sg_mask` objects (for `"both"`).
 #' @export
 #' @examples
-#' \donttest{
 #' pixels <- array(runif(200), dim = c(10, 10, 2))
 #' img <- new_sg_image(pixels, channels = c("nuclear", "membrane"))
-#' # Requires Python + deepcell:
-#' # mask <- sg_segment_mesmer(img, compartment = "whole-cell")
+#' \dontrun{
+#' # Requires Python with DeepCell
+#' mask <- sg_segment_mesmer(img, compartment = "whole-cell")
 #' }
 sg_segment_mesmer <- function(image,
                               compartment = c("whole-cell", "nuclear",
