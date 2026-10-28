@@ -1,25 +1,32 @@
 Package: segmantR
-Title: Cell Segmentation of Histology Slides with Human-in-the-Loop Training
+Title: Cell Segmentation for Histology with Human-in-the-Loop Training
 Version: 0.1.0.9000
 Authors@R:
-    person("R.", "Heller", , "raban.heller@charite.de", role = c("aut", "cre"),
+    person("R.", "Heller", , "raban.heller@charite.de",
+           role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-8006-9742"))
-Description: Comprehensive cell segmentation for histology and multiplexed
-    tissue imaging. Provides classical segmentation methods (adaptive
-    thresholding, watershed, Voronoi propagation), deep learning wrappers
-    (Cellpose, StarDist, Mesmer via reticulate), and a human-in-the-loop
-    iterative refinement workflow. A polished Shiny application lets
-    researchers annotate, correct, train, evaluate, and download custom
-    segmentation models without leaving R. Versioned declarative
-    segmentation protocols, a neutral interchange format (JSON manifests,
-    integer label TIFF, GeoJSON, measurement tables with SHA-256
-    inventories), training dataset manifests with grouped splits, and
-    readable 'QuPath' script templates with a 'StarDist' parameter adapter
-    support reproducible exchange with 'QuPath' and partner packages.
+Description: Cell segmentation for histology and multiplexed tissue imaging.
+    Provides classical segmentation methods (adaptive thresholding,
+    watershed, Voronoi propagation), wrappers through 'reticulate' for the
+    deep learning models 'Cellpose' (Stringer et al. (2021)
+    <doi:10.1038/s41592-020-01018-x>), 'StarDist' (Schmidt et al. (2018)
+    <doi:10.1007/978-3-030-00934-2_30>) and 'Mesmer' (Greenwald et al.
+    (2022) <doi:10.1038/s41587-021-01094-0>), and a human-in-the-loop
+    iterative refinement workflow. A 'shiny' application lets researchers
+    annotate, correct, train, evaluate and download custom segmentation
+    models without leaving R. Versioned declarative segmentation protocols,
+    a neutral interchange format (JSON manifests, integer label TIFF,
+    GeoJSON, measurement tables with SHA-256 inventories), training dataset
+    manifests with grouped splits, and readable 'QuPath' script templates
+    with a 'StarDist' parameter adapter support reproducible exchange with
+    'QuPath' and partner packages.
 License: MIT + file LICENSE
 URL: https://github.com/cttir/segmantR, https://cttir.github.io/segmantR/
 BugReports: https://github.com/cttir/segmantR/issues
 Encoding: UTF-8
+SystemRequirements: Optional: Python with the 'cellpose', 'stardist' or
+    'deepcell' modules for the deep learning backends; QuPath (>= 0.4) to
+    run the exported QuPath scripts.
 Roxygen: list(markdown = TRUE)
 Imports:
     digest,
