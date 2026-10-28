@@ -1,5 +1,8 @@
 # segmantR (development version)
 
+* `sg_example_image()` and `sg_example_mask()` no longer reset the
+  caller's random number stream; the example data are unchanged.
+
 * PNG export in `sg_export_mask()` closes its graphics device when
   drawing fails.
 

@@ -89,3 +89,14 @@ test_that("the bundled app directory is a thin wrapper around sg_app()", {
                                package = "segmantR"))
   expect_true(any(grepl("segmantR::sg_app", src, fixed = TRUE)))
 })
+
+test_that("example data generators leave the caller's RNG state alone", {
+  withr::local_seed(99)
+  expected <- withr::with_seed(99, stats::runif(3))
+  img <- sg_example_image("multiplex_4ch")
+  msk <- sg_example_mask("he_breast")
+  expect_equal(stats::runif(3), expected)
+  # the examples themselves stay fixed
+  expect_identical(sg_example_mask("he_breast")$labels, msk$labels)
+  expect_identical(sg_example_image("multiplex_4ch")$pixels, img$pixels)
+})

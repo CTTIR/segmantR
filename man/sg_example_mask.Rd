@@ -14,7 +14,9 @@ or \code{"multiplex_4ch"}.}
 An \code{sg_mask} object.
 }
 \description{
-Returns an \code{sg_mask} matching the corresponding example image.
+Returns an \code{sg_mask} matching the corresponding example image. Like
+\code{\link[=sg_example_image]{sg_example_image()}}, it leaves the caller's random number stream
+unchanged.
 }
 \examples{
 mask <- sg_example_mask("he_breast")

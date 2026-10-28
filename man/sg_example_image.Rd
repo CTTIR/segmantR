@@ -15,7 +15,9 @@ An \code{sg_image} object.
 }
 \description{
 Returns an \code{sg_image} containing synthetic image data for testing
-and demonstrations.
+and demonstrations. The data are drawn with a fixed seed, so they are
+the same in every session, and the caller's random number stream is
+left unchanged.
 }
 \examples{
 img <- sg_example_image("he_breast")
