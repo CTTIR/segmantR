@@ -23,6 +23,20 @@ test_that("sg_create_annotation_task crops to a region", {
   expect_s3_class(task, "sg_annotation_task")
 })
 
+test_that("sg_create_annotation_task scores the mask inside the region", {
+  img <- new_sg_image(matrix(0, 100, 100))
+  labels <- matrix(0L, 100, 100)
+  labels[5:15, 5:15] <- 1L   # outside the region
+  labels[80:90, 80:90] <- 2L # region rows/cols 30:40
+  task <- suppressMessages(sg_create_annotation_task(
+    img, initial_mask = new_sg_mask(labels), region = c(51, 100, 51, 100),
+    n_patches = 4L, patch_size = 25L
+  ))
+  top <- task$patches[[1]]
+  expect_equal(unlist(top[c("row_start", "row_end", "col_start", "col_end")]),
+               c(row_start = 26, row_end = 50, col_start = 26, col_end = 50))
+})
+
 test_that("sg_create_annotation_task validates its arguments", {
   expect_error(sg_create_annotation_task("x"), "sg_image")
   img <- new_sg_image(matrix(0, 32, 32))

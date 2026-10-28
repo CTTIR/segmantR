@@ -10,7 +10,8 @@
 #' @param initial_mask Optional `sg_mask` object. When provided, patches are
 #'   scored by segmentation uncertainty and sampled accordingly.
 #' @param region Optional numeric vector `c(row_min, row_max, col_min, col_max)`
-#'   to restrict patch sampling to a sub-region.
+#'   to restrict patch sampling to a sub-region. Patch coordinates are then
+#'   relative to the region, and `initial_mask` is cropped to it.
 #' @param n_patches Integer. Number of patches to sample. Default `20L`.
 #' @param patch_size Integer. Size of each square patch in pixels.
 #'   Default `256L`.
@@ -38,11 +39,17 @@ sg_create_annotation_task <- function(image, initial_mask = NULL,
 
   # Optionally crop image to region
   work_image <- image
+  work_labels <- if (!is.null(initial_mask)) initial_mask$labels
   if (!is.null(region)) {
     if (length(region) != 4L) {
       cli::cli_abort("{.arg region} must be a length-4 numeric vector: c(row_min, row_max, col_min, col_max).")
     }
     work_image <- image[region[1]:region[2], region[3]:region[4]]
+    # Patch positions are relative to the region, so crop the mask with it
+    if (!is.null(work_labels)) {
+      work_labels <- work_labels[region[1]:region[2], region[3]:region[4],
+                                 drop = FALSE]
+    }
   }
 
   strategy <- if (is.null(initial_mask)) "grid" else "uncertainty"
@@ -55,7 +62,7 @@ sg_create_annotation_task <- function(image, initial_mask = NULL,
   if (!is.null(initial_mask) && length(patches) > 0L) {
     scores <- vapply(patches, function(p) {
       sub_mask <- new_sg_mask(
-        initial_mask$labels[
+        work_labels[
           p$row_start:p$row_end,
           p$col_start:p$col_end
         ]

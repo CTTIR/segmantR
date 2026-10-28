@@ -19,7 +19,8 @@ sg_create_annotation_task(
 scored by segmentation uncertainty and sampled accordingly.}
 
 \item{region}{Optional numeric vector \code{c(row_min, row_max, col_min, col_max)}
-to restrict patch sampling to a sub-region.}
+to restrict patch sampling to a sub-region. Patch coordinates are then
+relative to the region, and \code{initial_mask} is cropped to it.}
 
 \item{n_patches}{Integer. Number of patches to sample. Default \code{20L}.}
 

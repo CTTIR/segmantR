@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* `sg_create_annotation_task()` with both `region` and `initial_mask`
+  crops the mask to the region before scoring patches; the
+  region-relative patches used to be scored on the wrong part of the mask.
+
 * Compressed (for example LZW) multi-sample TIFFs such as RGB images are
   read with the integer values of their declared dtype, as uncompressed
   ones are; they came back scaled to [0, 1]. This affects
