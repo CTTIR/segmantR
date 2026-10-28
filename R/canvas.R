@@ -52,6 +52,13 @@ sg_canvas <- function(image, mask = NULL, channel = 1L, tool = "pan",
     package = "segmantR", elementId = elementId)
 }
 
+.sg_require_htmlwidgets <- function() {
+  if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
+    .sg_abort("Install {.pkg htmlwidgets} to use the cell annotation canvas.")
+  }
+  invisible(TRUE)
+}
+
 .sg_canvas_binding <- function(image, mask) {
   .sg_assert_image(image)
   .sg_assert_mask(mask)
@@ -114,6 +121,7 @@ sg_canvas_correct <- function(mask, geometry = NULL, action = "add",
 #' @return A Shiny output element or render function.
 #' @export
 sgCanvasOutput <- function(outputId, width = "100%", height = "600px") {
+  .sg_require_htmlwidgets()
   htmlwidgets::shinyWidgetOutput(outputId, "sgcanvas", width, height, package = "segmantR")
 }
 
@@ -124,5 +132,6 @@ sgCanvasOutput <- function(outputId, width = "100%", height = "600px") {
 #' @export
 renderSgCanvas <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) expr <- substitute(expr)
+  .sg_require_htmlwidgets()
   htmlwidgets::shinyRenderWidget(expr, sgCanvasOutput, env, quoted = TRUE)
 }
