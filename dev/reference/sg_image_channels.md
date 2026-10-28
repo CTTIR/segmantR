@@ -45,7 +45,7 @@ sg_image_channels(f)
 #> 1       1  ch1         1     4      3           4            3     Byte
 #> 2       2  ch2         2     4      3           4            3     Byte
 #>                                                dsn
-#> 1 GTIFF_DIR:1:/tmp/RtmpLu4lzd/file202b4b360aab.tif
-#> 2 GTIFF_DIR:2:/tmp/RtmpLu4lzd/file202b4b360aab.tif
+#> 1 GTIFF_DIR:1:/tmp/RtmpJ7CMlI/file1fe03c609ce6.tif
+#> 2 GTIFF_DIR:2:/tmp/RtmpJ7CMlI/file1fe03c609ce6.tif
 # }
 ```
