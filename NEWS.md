@@ -1,5 +1,8 @@
 # segmantR (development version)
 
+* PNG export in `sg_export_mask()` closes its graphics device when
+  drawing fails.
+
 * `sg_setup_python()` installs `cellpose` rather than the `cellpose[gui]`
   desktop extra when `gpu = TRUE`, installs into the environment type it
   created, and names `use_condaenv()` after creating a conda environment.

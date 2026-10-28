@@ -331,11 +331,14 @@ sg_export_mask <- function(mask, path, format = c("tiff", "png", "geojson",
       display_labels[labels > 0L] <- match(labels[labels > 0L], ids)
       n_colours <- max(1L, length(ids))
       grDevices::png(path, width = ncol(labels), height = nrow(labels))
-      graphics::par(mar = c(0, 0, 0, 0))
-      graphics::image(t(display_labels[rev(seq_len(nrow(labels))), ]),
-                      col = c("black", grDevices::rainbow(n_colours)),
-                      axes = FALSE)
-      grDevices::dev.off()
+      png_dev <- grDevices::dev.cur()
+      # close the device even when drawing fails
+      tryCatch({
+        graphics::par(mar = c(0, 0, 0, 0))
+        graphics::image(t(display_labels[rev(seq_len(nrow(labels))), ]),
+                        col = c("black", grDevices::rainbow(n_colours)),
+                        axes = FALSE)
+      }, finally = grDevices::dev.off(png_dev))
     },
     geojson = {
       polys <- sg_mask_to_polygons(mask, simplify = TRUE)

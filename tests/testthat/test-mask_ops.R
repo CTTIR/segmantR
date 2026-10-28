@@ -177,3 +177,15 @@ test_that("sg_export_mask CSV content is reproducible", {
   sg_export_mask(mask, tmp, format = "csv")
   expect_snapshot_value(utils::read.csv(tmp)$area, style = "serialize")
 })
+
+test_that("PNG export closes its device when drawing fails", {
+  labels <- matrix(0L, 6, 6)
+  labels[2:4, 2:4] <- 1L
+  before <- grDevices::dev.list()
+  local_mocked_bindings(image = function(...) stop("draw failed"),
+                        .package = "graphics")
+  f <- withr::local_tempfile(fileext = ".png")
+  expect_error(sg_export_mask(new_sg_mask(labels), f, format = "png"),
+               "draw failed")
+  expect_identical(grDevices::dev.list(), before)
+})
