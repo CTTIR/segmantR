@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* `sg_roi_write_qupath()` records the level of the written coordinates as
+  `annotatr_level` in the feature metadata, as `sg_roi_write_geojson()`
+  does in its `level` property; it used to record the ROI's own level.
+
 * A layer style with named colours keeps the colours of labels that are
   not in the layer yet; adding another label first used to drop them, so
   those labels later received palette colours.

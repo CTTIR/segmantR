@@ -50,7 +50,9 @@
         substr(h, 21, 32), sep = "-")
 }
 
-.sg_roi_roi_to_qupath_feature <- function(r, layer_name, g, colour, dialect = "qupath") {
+# `level` is the level of the written coordinates, not the ROI's own level.
+.sg_roi_roi_to_qupath_feature <- function(r, layer_name, g, colour, dialect = "qupath",
+                                          level = r$level) {
   object_type <- r$attributes$qupath$object_type %||%
     (if (r$source %in% c("mask", "derived")) "detection" else "annotation")
   if (identical(dialect, "legacy")) {
@@ -93,7 +95,7 @@
     annotatr_roi_id = r$id,
     annotatr_layer = layer_name,
     annotatr_source = r$source,
-    annotatr_level = as.character(r$level)
+    annotatr_level = as.character(as.integer(level))
   ))
   if (identical(r$attributes$qupath$roi_native, "ellipse")) geometry$isEllipse <- TRUE
   measurements <- r$attributes$qupath$measurements
@@ -126,7 +128,9 @@
 #' @param project An [sg_roi_project].
 #' @param path Output file path.
 #' @param layer Optional layer filter.
-#' @param level Integer pyramid level. Default `0`.
+#' @param level Integer pyramid level for the coordinates. Default `0`. It is
+#'   recorded as `annotatr_level` in the feature metadata of the `"qupath"`
+#'   dialect.
 #' @param overwrite Logical; overwrite an existing file. Default `FALSE`.
 #' @param dialect `"qupath"` (default) or `"legacy"`.
 #' @param call The calling environment, for error reporting.

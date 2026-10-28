@@ -21,7 +21,9 @@ sg_roi_write_qupath(
 
 \item{layer}{Optional layer filter.}
 
-\item{level}{Integer pyramid level. Default \code{0}.}
+\item{level}{Integer pyramid level for the coordinates. Default \code{0}. It is
+recorded as \code{annotatr_level} in the feature metadata of the \code{"qupath"}
+dialect.}
 
 \item{overwrite}{Logical; overwrite an existing file. Default \code{FALSE}.}
 

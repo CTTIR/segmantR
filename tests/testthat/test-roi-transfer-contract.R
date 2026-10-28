@@ -54,3 +54,18 @@ test_that("GeoJSON keeps the geometry of ROIs drawn at a non-zero level", {
                  as.numeric(sf::st_bbox(before$geometry)))
   }
 })
+
+test_that("QuPath metadata records the level of the written coordinates", {
+  fr <- sg_roi_frame(c(100, 100), list(c(100, 100), c(50, 50)))
+  roi <- sg_roi_rect(10, 10, 20, 20, label = "a", level = 1L)
+  p <- sg_roi_project(fr, sg_roi_layer_add(sg_roi_layer("L"), roi))
+  for (lvl in c(0L, 1L)) {
+    f <- withr::local_tempfile(fileext = ".geojson")
+    sg_roi_write_qupath(p, f, level = lvl)
+    ft <- jsonlite::read_json(f)$features[[1]]
+    expect_identical(ft$properties$metadata$annotatr_level, as.character(lvl))
+    # level-1 coordinates (10..20) are written at twice the size at level 0
+    expect_equal(range(unlist(ft$geometry$coordinates)),
+                 if (lvl == 0L) c(20, 40) else c(10, 20))
+  }
+})

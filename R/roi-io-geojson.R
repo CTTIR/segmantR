@@ -106,7 +106,8 @@ sg_roi_write_geojson <- function(project, path, layer = NULL, level = 0L,
       if (flip_y) g <- .sg_roi_flip_sfg_y(g, height)
       colour <- if (!is.null(cols) && r$label %in% names(cols)) unname(cols[[r$label]]) else "#5E2C8E"
       feat <- if (qupath) {
-        .sg_roi_roi_to_qupath_feature(r, nm, g, colour, dialect = dialect)
+        .sg_roi_roi_to_qupath_feature(r, nm, g, colour, dialect = dialect,
+                                      level = level)
       } else {
         .sg_roi_roi_to_feature(r, nm, g, level)
       }
