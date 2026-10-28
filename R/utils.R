@@ -471,18 +471,27 @@
   bbox_col_max <- max(cell_pixels[, 2])
 
   perim <- .estimate_perimeter(mask_labels, cell_id)
-  circ <- if (perim > 0) 4 * pi * area / (perim^2) else NA_real_
 
-  cov_mat <- stats::cov(cell_pixels)
-  eigenvals <- eigen(cov_mat, symmetric = TRUE)$values
-  ecc <- if (all(eigenvals > 0)) {
-    sqrt(1 - min(eigenvals) / max(eigenvals))
-  } else {
-    NA_real_
+  # Shape descriptors are undefined for a single pixel.
+  circ <- NA_real_
+  ecc <- NA_real_
+  solid <- NA_real_
+  if (area >= 2L) {
+    # The boundary-pixel count underestimates the perimeter of round
+    # objects, so 4 * pi * area / perimeter^2 is capped at 1.
+    circ <- if (perim > 0) min(1, 4 * pi * area / (perim^2)) else NA_real_
+
+    eigenvals <- eigen(stats::cov(cell_pixels), symmetric = TRUE)$values
+    # A line of pixels has one zero eigenvalue: eccentricity 1.
+    ecc <- if (max(eigenvals) > 0) {
+      sqrt(1 - max(min(eigenvals), 0) / max(eigenvals))
+    } else {
+      NA_real_
+    }
+
+    hull_area <- .convex_hull_area(cell_pixels)
+    solid <- if (hull_area > 0) area / hull_area else NA_real_
   }
-
-  hull_area <- .convex_hull_area(cell_pixels)
-  solid <- if (hull_area > 0) area / hull_area else NA_real_
 
   tibble::tibble(
     area = area,
@@ -523,12 +532,22 @@
   as.numeric(perim)
 }
 
-#' Convex hull area approximation
+#' Area of the convex hull of a set of pixels
+#'
+#' The hull is taken over the pixel corners, so it contains every pixel
+#' square and is never smaller than the pixel count.
 #' @noRd
 .convex_hull_area <- function(pts) {
-  if (nrow(pts) < 3L) return(nrow(pts))
-  hull_idx <- grDevices::chull(pts[, 1], pts[, 2])
-  hull_pts <- pts[hull_idx, , drop = FALSE]
+  if (nrow(pts) == 0L) return(0)
+  centre_hull <- unname(pts[grDevices::chull(pts[, 1], pts[, 2]), , drop = FALSE])
+  corners <- rbind(
+    centre_hull + rep(c(-0.5, -0.5), each = nrow(centre_hull)),
+    centre_hull + rep(c(-0.5, 0.5), each = nrow(centre_hull)),
+    centre_hull + rep(c(0.5, -0.5), each = nrow(centre_hull)),
+    centre_hull + rep(c(0.5, 0.5), each = nrow(centre_hull))
+  )
+  hull_pts <- corners[grDevices::chull(corners[, 1], corners[, 2]), ,
+                      drop = FALSE]
   n <- nrow(hull_pts)
   area <- 0
   for (i in seq_len(n)) {

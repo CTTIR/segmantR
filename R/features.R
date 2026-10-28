@@ -14,6 +14,14 @@
 #'   to use for intensity and texture features. `NULL` (default) uses all
 #'   channels.
 #'
+#' @details Morphology features: `perimeter` is the number of boundary
+#'   pixels; `circularity` is \eqn{4 \pi A / P^2}, capped at 1 because the
+#'   boundary-pixel count underestimates the perimeter of round objects;
+#'   `eccentricity` comes from the eigenvalues of the pixel-coordinate
+#'   covariance (0 for a disc, 1 for a line of pixels); `solidity` is the
+#'   area divided by the area of the convex hull of the pixel squares.
+#'   Circularity, eccentricity and solidity are `NA` for single-pixel cells.
+#'
 #' @return A tibble with one row per cell and a `cell_id` column, plus columns
 #'   for each requested feature.
 #' @export

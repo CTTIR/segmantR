@@ -145,7 +145,7 @@ test_that(".estimate_perimeter counts border pixels", {
 test_that(".convex_hull_area handles small and large point sets", {
   expect_equal(segmantR:::.convex_hull_area(matrix(1:2, 1, 2)), 1)
   square <- as.matrix(expand.grid(1:4, 1:4))
-  expect_gt(segmantR:::.convex_hull_area(square), 0)
+  expect_equal(segmantR:::.convex_hull_area(square), 16)
 })
 
 test_that(".uncertainty_score is 0 for empty masks and in [0,1] otherwise", {

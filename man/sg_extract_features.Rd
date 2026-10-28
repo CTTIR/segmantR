@@ -32,6 +32,15 @@ for each requested feature.
 Computes intensity, morphology, texture, and location features for each
 segmented cell. Returns a tibble with one row per cell.
 }
+\details{
+Morphology features: \code{perimeter} is the number of boundary
+pixels; \code{circularity} is \eqn{4 \pi A / P^2}, capped at 1 because the
+boundary-pixel count underestimates the perimeter of round objects;
+\code{eccentricity} comes from the eigenvalues of the pixel-coordinate
+covariance (0 for a disc, 1 for a line of pixels); \code{solidity} is the
+area divided by the area of the convex hull of the pixel squares.
+Circularity, eccentricity and solidity are \code{NA} for single-pixel cells.
+}
 \examples{
 pixels <- array(runif(20 * 20 * 2), dim = c(20, 20, 2))
 img <- new_sg_image(pixels, channels = c("DAPI", "CD3"))

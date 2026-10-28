@@ -1,5 +1,12 @@
 # segmantR (development version)
 
+* Morphology features no longer fail on single-pixel cells (shape
+  descriptors are `NA` there), which also fixes `sg_filter_cells()` and
+  CSV export of such masks. Line-shaped cells get eccentricity 1 instead
+  of `NA`, so `max_eccentricity` removes them. Solidity uses the convex
+  hull of the pixel squares and circularity is capped at 1; both could
+  exceed 1 before.
+
 * `sg_evaluate_segmentation()` reports `ap50` and `ap75` as the
   instance-segmentation average precision TP / (TP + FP + FN) used by
   Cellpose and StarDist; they previously repeated the F1 score.

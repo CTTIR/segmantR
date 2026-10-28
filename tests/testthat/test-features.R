@@ -99,3 +99,38 @@ test_that("sg_extract_features morphology output is reproducible", {
                                features = "morphology")
   expect_snapshot_value(feats$area, style = "serialize")
 })
+
+test_that("morphology handles single-pixel and line-shaped cells", {
+  lab <- matrix(0L, 30, 30)
+  lab[10, 3:27] <- 1L
+  lab[15:22, 15:22] <- 2L
+  lab[26, 26] <- 3L
+  msk <- new_sg_mask(lab)
+  f <- suppressMessages(sg_extract_features(
+    new_sg_image(matrix(1, 30, 30)), msk, features = "morphology"
+  ))
+  expect_equal(f$area, c(25L, 64L, 1L))
+  expect_equal(f$eccentricity[1], 1)
+  expect_true(is.na(f$circularity[3]))
+  expect_true(is.na(f$eccentricity[3]))
+  expect_true(is.na(f$solidity[3]))
+  kept <- suppressMessages(sg_filter_cells(msk, min_area = 1L))
+  # the line exceeds max_eccentricity = 0.95; the single pixel has no shape
+  expect_equal(kept$n_cells, 2L)
+  expect_equal(sort(unique(as.vector(lab[kept$labels > 0L]))), c(2L, 3L))
+})
+
+test_that("circularity and solidity stay within [0, 1]", {
+  yy <- row(matrix(0, 41, 41))
+  xx <- col(matrix(0, 41, 41))
+  lab <- matrix(0L, 41, 41)
+  lab[(yy - 12)^2 + (xx - 12)^2 <= 25] <- 1L
+  lab[30:35, 30:35] <- 2L
+  lab[3:4, 30:31] <- 3L
+  f <- suppressMessages(sg_extract_features(
+    new_sg_image(matrix(1, 41, 41)), new_sg_mask(lab), features = "morphology"
+  ))
+  expect_true(all(f$circularity <= 1 & f$circularity > 0))
+  expect_true(all(f$solidity <= 1 & f$solidity > 0))
+  expect_equal(f$solidity[2:3], c(1, 1))
+})
