@@ -19,6 +19,11 @@ A new \link{sg_roi_project} without the named layer. The input is unchanged.
 \description{
 Remove a layer from a project
 }
+\examples{
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)),
+                       list(sg_roi_layer("tumour"), sg_roi_layer("stroma")))
+names(sg_roi_remove_layer(proj, "stroma")$layers)
+}
 \seealso{
 Other projects:
 \code{\link[=sg_roi_add_layer]{sg_roi_add_layer()}},

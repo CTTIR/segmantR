@@ -17,6 +17,11 @@ A logical scalar.
 \description{
 Test whether two ROIs intersect
 }
+\examples{
+a <- sg_roi_rect(0, 0, 4, 4, label = "a")
+sg_roi_overlaps(a, sg_roi_rect(2, 2, 6, 6, label = "b"))
+sg_roi_overlaps(a, sg_roi_rect(10, 0, 14, 4, label = "c"))
+}
 \seealso{
 Other geometry:
 \code{\link[=sg_roi_buffer]{sg_roi_buffer()}},

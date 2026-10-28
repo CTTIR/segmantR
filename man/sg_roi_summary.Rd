@@ -19,7 +19,10 @@ per-label ROI counts, and total area per label.
 Summarise a project
 }
 \examples{
-sg_roi_summary(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))))
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+sg_roi_summary(proj)
 }
 \seealso{
 Other projects:

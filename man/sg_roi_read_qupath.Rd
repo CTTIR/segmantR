@@ -36,6 +36,13 @@ nucleus geometry, and \code{roi_native = "ellipse"} with
 \code{geometry_fidelity = "approximated"} for polygonised ellipses. An segmantR id
 stored in \code{metadata.annotatr_roi_id} is restored as the ROI id.
 }
+\examples{
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+p <- tempfile(fileext = ".geojson")
+sg_roi_write_qupath(sg_roi_project(sg_roi_frame(c(20, 20)), lyr), p)
+sg_roi_layer_n(sg_roi_read_qupath(p))
+}
 \seealso{
 Other io:
 \code{\link[=sg_roi_from_geojson]{sg_roi_from_geojson()}},

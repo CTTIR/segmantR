@@ -43,8 +43,10 @@ centroid, are expressed at pyramid level 0; the \code{level} column records the
 level at which each ROI was originally defined.
 }
 \examples{
-# proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
-# sg_roi_rois(proj)
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+sg_roi_rois(proj)
 }
 \seealso{
 \code{\link[=sg_roi_layers]{sg_roi_layers()}}, \code{sg_roi_mask()}

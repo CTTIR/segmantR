@@ -20,6 +20,11 @@ columns when the project has no layers.
 \description{
 Layer summary table
 }
+\examples{
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)),
+                       list(sg_roi_layer("tumour"), sg_roi_layer("stroma")))
+sg_roi_layers(proj)
+}
 \seealso{
 Other projects:
 \code{\link[=sg_roi_add_layer]{sg_roi_add_layer()}},

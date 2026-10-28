@@ -190,8 +190,10 @@
 #' @family masks
 #' @seealso [sg_roi_mask_legend()], [sg_roi_mask_stats()]
 #' @export
-#' @examplesIf requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)
-#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
 #' m <- sg_roi_mask(proj, type = "multiclass")
 #' table(as.integer(m))
 sg_roi_mask <- function(x,
@@ -451,8 +453,11 @@ summary.sg_roi_mask <- function(object, ...) {
 #'   `roi_id`, `n_px`, `colour`).
 #' @family masks
 #' @export
-#' @examplesIf requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)
-#' sg_roi_mask_legend(sg_roi_mask(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), "labelled"))
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+#' sg_roi_mask_legend(sg_roi_mask(proj, "labelled"))
 sg_roi_mask_legend <- function(mask, call = rlang::caller_env()) {
   .sg_roi_check_class(mask, "sg_roi_mask", call = call)
   attr(mask, "legend")
@@ -470,6 +475,13 @@ sg_roi_mask_legend <- function(mask, call = rlang::caller_env()) {
 #'   the third dimension is named by layer.
 #' @family masks
 #' @export
+#' @examples
+#' tumour <- sg_roi_layer_add(sg_roi_layer("tumour"),
+#'                            sg_roi_rect(2, 2, 8, 8, label = "tumour"))
+#' stroma <- sg_roi_layer_add(sg_roi_layer("stroma"),
+#'                            sg_roi_rect(10, 10, 18, 18, label = "stroma"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), list(tumour, stroma))
+#' dim(sg_roi_mask_stack(proj))
 sg_roi_mask_stack <- function(project, layers = NULL, level = 0L,
                           call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
@@ -512,8 +524,10 @@ sg_roi_mask_stack <- function(project, layers = NULL, level = 0L,
 #' @family masks
 #' @seealso [sg_roi_mask()], [sg_roi_mask_stack()]
 #' @export
-#' @examplesIf requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)
-#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
 #' # A single-layer project derives trivially; the four-layer HSI workflow passes
 #' # separate anatomy/state/artefact masks. See the masks vignette.
 #' m <- sg_roi_mask(proj, "multiclass")
@@ -575,6 +589,11 @@ sg_roi_mask_derive <- function(state, anatomy, artefact = NULL, keep_label = "wo
 #'   different value).
 #' @family masks
 #' @export
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' m <- sg_roi_mask(sg_roi_project(sg_roi_frame(c(10, 10)), lyr), "labelled")
+#' sg_roi_mask_boundary(m) * 1L
 sg_roi_mask_boundary <- function(mask, width = 1L, call = rlang::caller_env()) {
   .sg_roi_check_class(mask, "sg_roi_mask", call = call)
   width <- .sg_roi_check_count(width, min = 1L, call = call)
@@ -612,6 +631,11 @@ sg_roi_mask_boundary <- function(mask, width = 1L, call = rlang::caller_env()) {
 #' @return A downsampled `sg_roi_mask` with the legend pixel counts recomputed.
 #' @family masks
 #' @export
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(20, 20, 80, 80, label = "tissue"))
+#' m <- sg_roi_mask(sg_roi_project(sg_roi_frame(c(100, 100)), lyr), "labelled")
+#' dim(sg_roi_mask_preview(m, max_dim = 25))
 sg_roi_mask_preview <- function(mask, max_dim = 1024L, call = rlang::caller_env()) {
   .sg_roi_check_class(mask, "sg_roi_mask", call = call)
   max_dim <- .sg_roi_check_count(max_dim, min = 1L, call = call)
@@ -649,8 +673,11 @@ sg_roi_mask_preview <- function(mask, max_dim = 1024L, call = rlang::caller_env(
 #'   (`centroid_x`, `centroid_y`). A 0-row tibble when the mask is empty.
 #' @family masks
 #' @export
-#' @examplesIf requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)
-#' sg_roi_mask_stats(sg_roi_mask(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), "labelled"))
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+#' sg_roi_mask_stats(sg_roi_mask(proj, "labelled"))
 sg_roi_mask_stats <- function(mask, pixel_size = NULL, call = rlang::caller_env()) {
   .sg_roi_check_class(mask, "sg_roi_mask", call = call)
   if (!is.null(pixel_size) && (!typeof(pixel_size) %in% c("integer", "double") ||

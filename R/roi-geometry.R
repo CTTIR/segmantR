@@ -19,7 +19,7 @@
 #' @family geometry
 #' @seealso [sg_roi_rescale()]
 #' @export
-#' @examplesIf requireNamespace("tiff", quietly = TRUE)
+#' @examples
 #' img <- sg_roi_frame(c(100, 100), list(c(100, 100), c(50, 50), c(25, 25)))
 #' r <- sg_roi_rect(0, 0, 100, 100, label = "a")
 #' sg_roi_transform(r, from_level = 0, to_level = 2, img = img)
@@ -290,6 +290,10 @@ sg_roi_contains <- function(roi, x, y, call = rlang::caller_env()) {
 #' @return A logical scalar.
 #' @family geometry
 #' @export
+#' @examples
+#' a <- sg_roi_rect(0, 0, 4, 4, label = "a")
+#' sg_roi_overlaps(a, sg_roi_rect(2, 2, 6, 6, label = "b"))
+#' sg_roi_overlaps(a, sg_roi_rect(10, 0, 14, 4, label = "c"))
 sg_roi_overlaps <- function(roi1, roi2, call = rlang::caller_env()) {
   .sg_roi_check_roi(roi1, arg = "roi1", call = call)
   .sg_roi_check_roi(roi2, arg = "roi2", call = call)
@@ -305,6 +309,10 @@ sg_roi_overlaps <- function(roi1, roi2, call = rlang::caller_env()) {
 #' @return A numeric scalar distance in level-0 pixels.
 #' @family geometry
 #' @export
+#' @examples
+#' a <- sg_roi_rect(0, 0, 4, 4, label = "a")
+#' b <- sg_roi_rect(10, 0, 14, 4, label = "b")
+#' sg_roi_distance(a, b)
 sg_roi_distance <- function(roi1, roi2, call = rlang::caller_env()) {
   .sg_roi_check_roi(roi1, arg = "roi1", call = call)
   .sg_roi_check_roi(roi2, arg = "roi2", call = call)
@@ -322,6 +330,11 @@ sg_roi_distance <- function(roi1, roi2, call = rlang::caller_env()) {
 #'   tibble with these columns when no ROIs overlap.
 #' @family geometry
 #' @export
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("cells"),
+#'                         sg_roi_rect(0, 0, 4, 4, label = "cell"))
+#' lyr <- sg_roi_layer_add(lyr, sg_roi_rect(2, 2, 6, 6, label = "cell"))
+#' sg_roi_rois_overlap(lyr)
 sg_roi_rois_overlap <- function(layer, call = rlang::caller_env()) {
   .sg_roi_check_layer(layer, call = call)
   empty <- tibble::tibble(
@@ -441,7 +454,10 @@ sg_roi_rois_overlap <- function(layer, call = rlang::caller_env()) {
 #' @seealso [sg_roi_fix_geometry()], [sg_roi_validate()]
 #' @export
 #' @examples
-#' sg_roi_check_geometry(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))))
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+#' sg_roi_check_geometry(proj)
 sg_roi_check_geometry <- function(project, call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
   empty <- tibble::tibble(
@@ -575,6 +591,13 @@ sg_roi_check_containment <- function(project, tol = 0, call = rlang::caller_env(
 #' @family geometry
 #' @seealso [sg_roi_check_geometry()]
 #' @export
+#' @examples
+#' # a rectangle reaching past the image edge is clamped into the image
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(-2, -2, 8, 8, label = "tissue"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+#' fixed <- sg_roi_fix_geometry(proj)
+#' sg_roi_rois(fixed)$area_px
 sg_roi_fix_geometry <- function(project, verbose = TRUE, call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
   .sg_roi_check_flag(verbose, call = call)

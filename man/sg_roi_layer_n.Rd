@@ -17,6 +17,11 @@ An integer scalar.
 \description{
 Number of ROIs in a layer
 }
+\examples{
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(0, 0, 4, 4, label = "tissue"))
+sg_roi_layer_n(lyr)
+}
 \seealso{
 Other layers:
 \code{\link[=sg_roi_layer]{sg_roi_layer()}},

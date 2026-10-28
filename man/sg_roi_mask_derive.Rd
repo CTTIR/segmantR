@@ -40,13 +40,13 @@ keeps a state (class) label only where the anatomy layer marks the region of
 interest, no artefact bit is set, and the state is actually labelled.
 }
 \examples{
-\dontshow{if (requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)) withAutoprint(\{ # examplesIf}
-proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
 # A single-layer project derives trivially; the four-layer HSI workflow passes
 # separate anatomy/state/artefact masks. See the masks vignette.
 m <- sg_roi_mask(proj, "multiclass")
 sg_roi_mask_derive(m, m, keep_label = sg_roi_mask_legend(m)$label[1])
-\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=sg_roi_mask]{sg_roi_mask()}}, \code{\link[=sg_roi_mask_stack]{sg_roi_mask_stack()}}

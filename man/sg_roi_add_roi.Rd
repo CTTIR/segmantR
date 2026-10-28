@@ -23,6 +23,11 @@ The input is unchanged.
 \description{
 Add an ROI to a project layer
 }
+\examples{
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer("tissue"))
+proj <- sg_roi_add_roi(proj, "tissue", sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+sg_roi_rois(proj)$area_px
+}
 \seealso{
 Other projects:
 \code{\link[=sg_roi_add_layer]{sg_roi_add_layer()}},

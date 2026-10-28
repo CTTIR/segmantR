@@ -128,6 +128,10 @@ sg_roi_project <- function(image, layers = list(), ..., call = rlang::caller_env
 #' @return A new [sg_roi_project] with the layer added. The input is unchanged.
 #' @family projects
 #' @export
+#' @examples
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)))
+#' proj <- sg_roi_add_layer(proj, sg_roi_layer("tissue"))
+#' names(proj$layers)
 sg_roi_add_layer <- function(project, layer, call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
   .sg_roi_check_layer(layer, call = call)
@@ -152,6 +156,10 @@ sg_roi_add_layer <- function(project, layer, call = rlang::caller_env()) {
 #' @return A new [sg_roi_project] without the named layer. The input is unchanged.
 #' @family projects
 #' @export
+#' @examples
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)),
+#'                        list(sg_roi_layer("tumour"), sg_roi_layer("stroma")))
+#' names(sg_roi_remove_layer(proj, "stroma")$layers)
 sg_roi_remove_layer <- function(project, name, call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
   .sg_roi_check_string(name, call = call)
@@ -179,6 +187,10 @@ sg_roi_remove_layer <- function(project, name, call = rlang::caller_env()) {
 #'   The input is unchanged.
 #' @family projects
 #' @export
+#' @examples
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer("tissue"))
+#' proj <- sg_roi_add_roi(proj, "tissue", sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' sg_roi_rois(proj)$area_px
 sg_roi_add_roi <- function(project, layer, roi, call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
   .sg_roi_check_string(layer, call = call)
@@ -208,6 +220,11 @@ sg_roi_add_roi <- function(project, layer, roi, call = rlang::caller_env()) {
 #'   the project unchanged if the identifier is not found.
 #' @family projects
 #' @export
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue", id = "r1"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+#' nrow(sg_roi_rois(sg_roi_remove_roi(proj, "r1")))
 sg_roi_remove_roi <- function(project, id, call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
   .sg_roi_check_string(id, call = call)
@@ -238,6 +255,10 @@ sg_roi_remove_roi <- function(project, id, call = rlang::caller_env()) {
 #'   columns when the project has no layers.
 #' @family projects
 #' @export
+#' @examples
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)),
+#'                        list(sg_roi_layer("tumour"), sg_roi_layer("stroma")))
+#' sg_roi_layers(proj)
 sg_roi_layers <- function(project, call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
   Ls <- project$layers
@@ -288,8 +309,10 @@ sg_roi_layers <- function(project, call = rlang::caller_env()) {
 #' @seealso [sg_roi_layers()], `sg_roi_mask()`
 #' @export
 #' @examples
-#' # proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
-#' # sg_roi_rois(proj)
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+#' sg_roi_rois(proj)
 sg_roi_rois <- function(project, layer = NULL, label = NULL,
                     call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
@@ -339,7 +362,10 @@ sg_roi_rois <- function(project, layer = NULL, label = NULL,
 #' @seealso `sg_roi_check_geometry()`
 #' @export
 #' @examples
-#' proj <- sg_roi_validate(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))))
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+#' sg_roi_validate(proj)
 sg_roi_validate <- function(project, call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
   nms <- names(project$layers)
@@ -381,7 +407,10 @@ sg_roi_validate <- function(project, call = rlang::caller_env()) {
 #' @family projects
 #' @export
 #' @examples
-#' sg_roi_summary(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))))
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+#' sg_roi_summary(proj)
 sg_roi_summary <- function(project, call = rlang::caller_env()) {
   .sg_roi_check_project(project, call = call)
   roi_tbl <- sg_roi_rois(project)

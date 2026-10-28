@@ -17,6 +17,11 @@ A numeric scalar distance in level-0 pixels.
 \description{
 Distance between two ROIs
 }
+\examples{
+a <- sg_roi_rect(0, 0, 4, 4, label = "a")
+b <- sg_roi_rect(10, 0, 14, 4, label = "b")
+sg_roi_distance(a, b)
+}
 \seealso{
 Other geometry:
 \code{\link[=sg_roi_buffer]{sg_roi_buffer()}},

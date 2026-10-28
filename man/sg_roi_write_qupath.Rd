@@ -46,10 +46,11 @@ QuPath keeps one colour per classification name, so identical labels with
 different layer colours collapse to the first colour QuPath sees.
 }
 \examples{
-\dontshow{if (requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)) withAutoprint(\{ # examplesIf}
-p <- withr::local_tempfile(fileext = ".geojson")
-sg_roi_write_qupath(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), p)
-\dontshow{\}) # examplesIf}
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+p <- tempfile(fileext = ".geojson")
+sg_roi_write_qupath(proj, p)
 }
 \seealso{
 \code{\link[=sg_roi_read_qupath]{sg_roi_read_qupath()}}, \code{\link[=sg_roi_write_geojson]{sg_roi_write_geojson()}}

@@ -132,6 +132,10 @@ sg_roi_layer_add <- function(layer, roi, call = rlang::caller_env()) {
 #'   not present and returns the layer unchanged.
 #' @family layers
 #' @export
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(0, 0, 4, 4, label = "tissue", id = "r1"))
+#' sg_roi_layer_n(sg_roi_layer_remove(lyr, "r1"))
 sg_roi_layer_remove <- function(layer, id, call = rlang::caller_env()) {
   .sg_roi_check_layer(layer, call = call)
   .sg_roi_check_string(id, call = call)
@@ -154,6 +158,11 @@ sg_roi_layer_remove <- function(layer, id, call = rlang::caller_env()) {
 #'   with the same columns when the layer has no ROIs.
 #' @family layers
 #' @export
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(0, 0, 4, 4, label = "tumour"))
+#' lyr <- sg_roi_layer_add(lyr, sg_roi_rect(5, 5, 8, 8, label = "stroma"))
+#' sg_roi_layer_rois(lyr)[, c("label", "area_px")]
 sg_roi_layer_rois <- function(layer, image = NULL, call = rlang::caller_env()) {
   .sg_roi_check_layer(layer, call = call)
   .sg_roi_rois_to_tbl(layer$rois, rep(layer$name, length(layer$rois)), image = image)
@@ -166,6 +175,10 @@ sg_roi_layer_rois <- function(layer, image = NULL, call = rlang::caller_env()) {
 #' @return An integer scalar.
 #' @family layers
 #' @export
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(0, 0, 4, 4, label = "tissue"))
+#' sg_roi_layer_n(lyr)
 sg_roi_layer_n <- function(layer, call = rlang::caller_env()) {
   .sg_roi_check_layer(layer, call = call)
   length(layer$rois)

@@ -27,6 +27,14 @@ the third dimension is named by layer.
 \description{
 Stack per-layer masks into a 3D array
 }
+\examples{
+tumour <- sg_roi_layer_add(sg_roi_layer("tumour"),
+                           sg_roi_rect(2, 2, 8, 8, label = "tumour"))
+stroma <- sg_roi_layer_add(sg_roi_layer("stroma"),
+                           sg_roi_rect(10, 10, 18, 18, label = "stroma"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), list(tumour, stroma))
+dim(sg_roi_mask_stack(proj))
+}
 \seealso{
 Other masks:
 \code{\link[=sg_roi_mask]{sg_roi_mask()}},

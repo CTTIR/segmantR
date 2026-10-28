@@ -74,11 +74,11 @@ pixel is included when its centre lies inside the polygon; with
 coordinates use the image convention (top-left origin, y down).
 }
 \examples{
-\dontshow{if (requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)) withAutoprint(\{ # examplesIf}
-proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
 m <- sg_roi_mask(proj, type = "multiclass")
 table(as.integer(m))
-\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=sg_roi_mask_legend]{sg_roi_mask_legend()}}, \code{\link[=sg_roi_mask_stats]{sg_roi_mask_stats()}}

@@ -25,9 +25,10 @@ A \link[tibble:tibble]{tibble::tibble} with one row per mask value: \code{value}
 Per-value statistics of a mask
 }
 \examples{
-\dontshow{if (requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)) withAutoprint(\{ # examplesIf}
-sg_roi_mask_stats(sg_roi_mask(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), "labelled"))
-\dontshow{\}) # examplesIf}
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+sg_roi_mask_stats(sg_roi_mask(proj, "labelled"))
 }
 \seealso{
 Other masks:

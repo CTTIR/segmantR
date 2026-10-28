@@ -23,6 +23,14 @@ Apply \code{sf::st_make_valid()} to invalid ROIs (which also drops duplicate
 consecutive vertices) and clamp out-of-bounds vertices into the image bounds,
 reporting what changed.
 }
+\examples{
+# a rectangle reaching past the image edge is clamped into the image
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(-2, -2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+fixed <- sg_roi_fix_geometry(proj)
+sg_roi_rois(fixed)$area_px
+}
 \seealso{
 \code{\link[=sg_roi_check_geometry]{sg_roi_check_geometry()}}
 

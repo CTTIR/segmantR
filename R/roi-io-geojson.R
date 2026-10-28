@@ -67,9 +67,12 @@
 #' @family io
 #' @seealso [sg_roi_read_geojson()], [sg_roi_write_qupath()]
 #' @export
-#' @examplesIf requireNamespace("magick", quietly = TRUE) || requireNamespace("tiff", quietly = TRUE)
-#' p <- withr::local_tempfile(fileext = ".geojson")
-#' sg_roi_write_geojson(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), p)
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+#' p <- tempfile(fileext = ".geojson")
+#' sg_roi_write_geojson(proj, p)
 sg_roi_write_geojson <- function(project, path, layer = NULL, level = 0L,
                              flip_y = FALSE, overwrite = FALSE,
                              call = rlang::caller_env()) {
@@ -183,6 +186,13 @@ sg_roi_from_geojson <- function(feature, label = NULL, level = 0L,
 #'   property), or a single [sg_roi_layer] when `layer_name` is supplied.
 #' @family io
 #' @export
+#' @examples
+#' lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+#'                         sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+#' p <- tempfile(fileext = ".geojson")
+#' sg_roi_write_geojson(sg_roi_project(sg_roi_frame(c(20, 20)), lyr), p)
+#' layers <- sg_roi_read_geojson(p)
+#' sg_roi_layer_rois(layers$tissue)[, c("label", "area_px")]
 sg_roi_read_geojson <- function(path, layer_name = NULL, level = 0L, flip_y = FALSE,
                             height = NULL, call = rlang::caller_env()) {
   .sg_roi_check_file(path, call = call)

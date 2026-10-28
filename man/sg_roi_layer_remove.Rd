@@ -20,6 +20,11 @@ not present and returns the layer unchanged.
 \description{
 Remove an ROI from a layer
 }
+\examples{
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(0, 0, 4, 4, label = "tissue", id = "r1"))
+sg_roi_layer_n(sg_roi_layer_remove(lyr, "r1"))
+}
 \seealso{
 Other layers:
 \code{\link[=sg_roi_layer]{sg_roi_layer()}},

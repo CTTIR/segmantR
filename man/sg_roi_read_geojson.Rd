@@ -34,6 +34,14 @@ property), or a single \link{sg_roi_layer} when \code{layer_name} is supplied.
 \description{
 Read ROIs from a GeoJSON file
 }
+\examples{
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+p <- tempfile(fileext = ".geojson")
+sg_roi_write_geojson(sg_roi_project(sg_roi_frame(c(20, 20)), lyr), p)
+layers <- sg_roi_read_geojson(p)
+sg_roi_layer_rois(layers$tissue)[, c("label", "area_px")]
+}
 \seealso{
 Other io:
 \code{\link[=sg_roi_from_geojson]{sg_roi_from_geojson()}},

@@ -24,11 +24,9 @@ the actual level dimensions of an \link{sg_roi_frame}, so it is exact for pyrami
 with any downsampling ratio.
 }
 \examples{
-\dontshow{if (requireNamespace("tiff", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 img <- sg_roi_frame(c(100, 100), list(c(100, 100), c(50, 50), c(25, 25)))
 r <- sg_roi_rect(0, 0, 100, 100, label = "a")
 sg_roi_transform(r, from_level = 0, to_level = 2, img = img)
-\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=sg_roi_rescale]{sg_roi_rescale()}}

@@ -20,6 +20,12 @@ different value).
 \description{
 Object boundaries of a mask
 }
+\examples{
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+m <- sg_roi_mask(sg_roi_project(sg_roi_frame(c(10, 10)), lyr), "labelled")
+sg_roi_mask_boundary(m) * 1L
+}
 \seealso{
 Other masks:
 \code{\link[=sg_roi_mask]{sg_roi_mask()}},

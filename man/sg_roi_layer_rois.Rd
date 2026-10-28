@@ -20,6 +20,12 @@ with the same columns when the layer has no ROIs.
 \description{
 Layer ROI table
 }
+\examples{
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(0, 0, 4, 4, label = "tumour"))
+lyr <- sg_roi_layer_add(lyr, sg_roi_rect(5, 5, 8, 8, label = "stroma"))
+sg_roi_layer_rois(lyr)[, c("label", "area_px")]
+}
 \seealso{
 Other layers:
 \code{\link[=sg_roi_layer]{sg_roi_layer()}},

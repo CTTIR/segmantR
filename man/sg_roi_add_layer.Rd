@@ -19,6 +19,11 @@ A new \link{sg_roi_project} with the layer added. The input is unchanged.
 \description{
 Add a layer to a project
 }
+\examples{
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)))
+proj <- sg_roi_add_layer(proj, sg_roi_layer("tissue"))
+names(proj$layers)
+}
 \seealso{
 Other projects:
 \code{\link[=sg_roi_add_roi]{sg_roi_add_roi()}},

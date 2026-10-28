@@ -19,6 +19,12 @@ tibble with these columns when no ROIs overlap.
 \description{
 Pairwise ROI overlaps within a layer
 }
+\examples{
+lyr <- sg_roi_layer_add(sg_roi_layer("cells"),
+                        sg_roi_rect(0, 0, 4, 4, label = "cell"))
+lyr <- sg_roi_layer_add(lyr, sg_roi_rect(2, 2, 6, 6, label = "cell"))
+sg_roi_rois_overlap(lyr)
+}
 \seealso{
 Other geometry:
 \code{\link[=sg_roi_buffer]{sg_roi_buffer()}},

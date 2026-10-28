@@ -20,6 +20,12 @@ the project unchanged if the identifier is not found.
 \description{
 Remove an ROI from a project
 }
+\examples{
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue", id = "r1"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+nrow(sg_roi_rois(sg_roi_remove_roi(proj, "r1")))
+}
 \seealso{
 Other projects:
 \code{\link[=sg_roi_add_layer]{sg_roi_add_layer()}},

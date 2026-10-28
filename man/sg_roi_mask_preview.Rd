@@ -20,6 +20,12 @@ A downsampled \code{sg_roi_mask} with the legend pixel counts recomputed.
 Nearest-neighbour downsample only (interpolating a label mask would invent
 labels that do not exist).
 }
+\examples{
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(20, 20, 80, 80, label = "tissue"))
+m <- sg_roi_mask(sg_roi_project(sg_roi_frame(c(100, 100)), lyr), "labelled")
+dim(sg_roi_mask_preview(m, max_dim = 25))
+}
 \seealso{
 Other masks:
 \code{\link[=sg_roi_mask]{sg_roi_mask()}},
