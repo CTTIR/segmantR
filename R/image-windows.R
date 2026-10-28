@@ -447,20 +447,3 @@ sg_display_levels <- function(path, channels, cells, positive, negative, x = "x"
   }
   as.list(tab[i, ])
 }
-
-.sg_with_seed <- function(seed, expr) {
-  old <- if (exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
-    get(".Random.seed", envir = globalenv(), inherits = FALSE)
-  }
-  on.exit({
-    if (is.null(old)) {
-      if (exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
-        rm(".Random.seed", envir = globalenv())
-      }
-    } else {
-      assign(".Random.seed", old, envir = globalenv())
-    }
-  }, add = TRUE)
-  set.seed(seed)
-  expr
-}
