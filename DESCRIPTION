@@ -24,6 +24,7 @@ License: MIT + file LICENSE
 URL: https://github.com/cttir/segmantR, https://cttir.github.io/segmantR/
 BugReports: https://github.com/cttir/segmantR/issues
 Encoding: UTF-8
+Language: en-GB
 SystemRequirements: Optional: Python with the 'cellpose', 'stardist' or
     'deepcell' modules for the deep learning backends; QuPath (>= 0.4) to
     run the exported QuPath scripts.

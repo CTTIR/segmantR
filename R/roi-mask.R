@@ -1,4 +1,4 @@
-# The mask ("Schablone") engine: the core deliverable. Rasterises ROI geometry
+# The mask (stencil) engine: the core deliverable. Rasterises ROI geometry
 # to binary, labelled, or multi-class integer masks.
 #
 # PIXEL-COVERAGE CONTRACT (load-bearing; documented in sg_roi_mask() and tested
@@ -146,10 +146,10 @@
 
 # ---- The mask constructor --------------------------------------------------
 
-#' Rasterise ROIs to a mask ("Schablone")
+#' Rasterise ROIs to a mask
 #'
 #' Produce a binary, labelled, or multi-class integer mask from annotations.
-#' This is the package's core output artifact.
+#' This is the package's core output artefact.
 #'
 #' @details
 #' **Pixel-coverage contract.** Pixel `(i, j)` covers the half-open square
@@ -516,7 +516,7 @@ sg_roi_mask_stack <- function(project, layers = NULL, level = 0L,
 #' @param artefact Optional `sg_roi_mask` (bitfield); pixels with any artefact bit
 #'   set are dropped. `NULL` (default) applies no artefact exclusion.
 #' @param keep_label The anatomy label whose region is kept (e.g. `"wound"`).
-#' @param background Integer background/unlabeled value. Default `0`.
+#' @param background Integer background/unlabelled value. Default `0`.
 #' @param call The calling environment, for error reporting.
 #'
 #' @return An `sg_roi_mask` (multiclass) of the surviving state codes, with the

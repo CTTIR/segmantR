@@ -2,7 +2,7 @@
 % Please edit documentation in R/roi-mask.R
 \name{sg_roi_mask}
 \alias{sg_roi_mask}
-\title{Rasterise ROIs to a mask ("Schablone")}
+\title{Rasterise ROIs to a mask}
 \usage{
 sg_roi_mask(
   x,
@@ -63,7 +63,7 @@ ROIs.
 }
 \description{
 Produce a binary, labelled, or multi-class integer mask from annotations.
-This is the package's core output artifact.
+This is the package's core output artefact.
 }
 \details{
 \strong{Pixel-coverage contract.} Pixel \verb{(i, j)} covers the half-open square

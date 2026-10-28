@@ -24,7 +24,7 @@ set are dropped. \code{NULL} (default) applies no artefact exclusion.}
 
 \item{keep_label}{The anatomy label whose region is kept (e.g. \code{"wound"}).}
 
-\item{background}{Integer background/unlabeled value. Default \code{0}.}
+\item{background}{Integer background/unlabelled value. Default \code{0}.}
 
 \item{call}{The calling environment, for error reporting.}
 }

@@ -31,7 +31,7 @@ bilinear interpolation. Requested resampling of anisotropic pixels is
 unsupported and raises an error; leave \code{NULL} to retain them unchanged.
 Both pixel sizes must be finite and positive to resample. Partial or
 invalid calibration raises an error; if both sizes are unknown, the
-existing message-and-skip behavior is retained.}
+existing message-and-skip behaviour is retained.}
 }
 \value{
 A new \code{sg_image} object with its \code{history} field updated to

@@ -18,7 +18,7 @@
 #'   unsupported and raises an error; leave `NULL` to retain them unchanged.
 #'   Both pixel sizes must be finite and positive to resample. Partial or
 #'   invalid calibration raises an error; if both sizes are unknown, the
-#'   existing message-and-skip behavior is retained.
+#'   existing message-and-skip behaviour is retained.
 #'
 #' @return A new `sg_image` object with its `history` field updated to
 #'   record the preprocessing steps applied.
