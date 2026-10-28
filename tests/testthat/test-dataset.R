@@ -146,3 +146,19 @@ test_that("leakage and tampering in manifests are detected", {
                                              test = 0)),
                class = "sg_validation_error")
 })
+
+test_that("grouped splits fill every requested split when groups allow", {
+  props <- c(train = 0.8, validation = 0.1, test = 0.1)
+  a <- segmantR:::.sg_assign_groups(c("A", "B", "C"), props, 1L)
+  expect_equal(as.vector(table(factor(unlist(a), levels = names(props)))),
+               c(1L, 1L, 1L))
+  b <- segmantR:::.sg_assign_groups(LETTERS[1:4],
+                                    c(train = 0.9, validation = 0.05,
+                                      test = 0.05), 1L)
+  expect_equal(as.vector(table(factor(unlist(b), levels = names(props)))),
+               c(2L, 1L, 1L))
+  pairs <- lapply(c("A", "B", "C"), instance_pair)
+  m <- sg_dataset_manifest(pairs, tile_size = 24L, seed = 1L, min_objects = 0L,
+                           split = props)
+  expect_true(all(lengths(m$split$groups[names(props)]) == 1L))
+})

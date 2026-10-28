@@ -1,5 +1,10 @@
 # segmantR (development version)
 
+* Grouped dataset splits (`sg_dataset_manifest()`,
+  `sg_prepare_training_data()`) no longer leave a requested split empty
+  when there are enough groups to fill every split, for example three
+  subjects with `split = c(train = 0.8, validation = 0.1, test = 0.1)`.
+
 * `sg_roi_write_geojson()` records the level of the written coordinates
   in each feature's `level` property. It used to record the ROI's own
   level, so `sg_roi_read_geojson()` rescaled ROIs drawn at a level other

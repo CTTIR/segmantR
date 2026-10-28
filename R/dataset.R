@@ -337,7 +337,10 @@ sg_dataset_manifest <- function(pairs, tile_size = 256L, overlap = 0L,
   counts <- floor(props * n)
   counts[props > 0 & counts == 0] <- 1
   while (sum(counts) > n) {
-    i <- which.max(counts - props * n)
+    # never take the last group from a requested split
+    over <- counts - props * n
+    over[counts <= as.integer(props > 0)] <- -Inf
+    i <- which.max(over)
     counts[i] <- counts[i] - 1
   }
   while (sum(counts) < n) {
