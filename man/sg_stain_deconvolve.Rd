@@ -11,7 +11,9 @@ sg_stain_deconvolve(image, method = c("macenko", "ruifrok"), stains = NULL)
 (RGB).}
 
 \item{method}{Character string specifying the deconvolution method.
-One of \code{"macenko"} (default) or \code{"ruifrok"}.}
+One of \code{"macenko"} (default), which estimates the two stain vectors
+from the image, or \code{"ruifrok"}, which uses the fixed haematoxylin and
+eosin vectors of Ruifrok and Johnston (2001).}
 
 \item{stains}{Optional 3x3 numeric matrix whose columns are the
 stain vectors (optical density in R, G and B) for haematoxylin, eosin

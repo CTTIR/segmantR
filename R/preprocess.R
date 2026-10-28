@@ -152,7 +152,9 @@ sg_preprocess <- function(image,
 #' @param image An `sg_image` object with at least 3 colour channels
 #'   (RGB).
 #' @param method Character string specifying the deconvolution method.
-#'   One of `"macenko"` (default) or `"ruifrok"`.
+#'   One of `"macenko"` (default), which estimates the two stain vectors
+#'   from the image, or `"ruifrok"`, which uses the fixed haematoxylin and
+#'   eosin vectors of Ruifrok and Johnston (2001).
 #' @param stains Optional 3x3 numeric matrix whose columns are the
 #'   stain vectors (optical density in R, G and B) for haematoxylin, eosin
 #'   and the residual channel, in that order. If `NULL`, stain vectors are
@@ -372,14 +374,15 @@ sg_stain_deconvolve <- function(image,
   -log(pmin(pixels, 1))
 }
 
-#' Ruifrok stain matrix (one stain vector per column)
+#' Ruifrok H&E stain matrix (one stain vector per column)
 #' @noRd
 .ruifrok_stain_matrix <- function() {
-  # Standard Ruifrok & Johnston stain vectors (normalised)
+  # Ruifrok & Johnston haematoxylin and eosin vectors (normalised); the
+  # residual is their normalised cross product.
   matrix(c(
-    0.6500286,  0.7040055,  0.2859569,
-    0.2681468,  0.5688969,  0.7782507,
-    0.7110272,  0.4232710,  0.5615109
+    0.6500286,  0.7040310,  0.2860126,
+    0.0721332,  0.9918321,  0.1051943,
+   -0.3318569, -0.0755933,  0.9402961
   ), nrow = 3L, ncol = 3L)
 }
 

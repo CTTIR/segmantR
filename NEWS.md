@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* The `"ruifrok"` stain matrix of `sg_stain_deconvolve()` (also the
+  Macenko fallback) now holds the haematoxylin and eosin vectors; its
+  second vector was the DAB vector, so the `eosin` channel measured DAB.
+
 * `sg_stain_deconvolve()` reads stain matrices column-wise, as documented,
   for the built-in Ruifrok vectors, Macenko estimates and user matrices
   alike; it used to mix rows and columns and returned wrong

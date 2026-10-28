@@ -184,3 +184,13 @@ test_that("sg_stain_deconvolve recovers known stain concentrations", {
   expect_gt(stats::cor(as.vector(mk$hematoxylin$pixels), c_h), 0.99)
   expect_gt(stats::cor(as.vector(mk$eosin$pixels), c_e), 0.99)
 })
+
+test_that("the Ruifrok defaults are haematoxylin and eosin, not DAB", {
+  stains <- segmantR:::.ruifrok_stain_matrix()
+  expect_equal(unname(colSums(stains^2)), c(1, 1, 1), tolerance = 1e-6)
+  # eosin absorbs mainly green; DAB (0.27, 0.57, 0.78) absorbs mainly blue
+  expect_equal(which.max(stains[, 2]), 2L)
+  expect_lt(stains[1, 2], 0.1)
+  expect_equal(sum(stains[, 1] * stains[, 3]), 0, tolerance = 1e-6)
+  expect_equal(sum(stains[, 2] * stains[, 3]), 0, tolerance = 1e-6)
+})
