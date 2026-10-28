@@ -384,6 +384,16 @@
     }
     pg <- tiff::readTIFF(path, as.is = TRUE, all = TRUE)
     pg <- pg[seq_len(min(length(pg), n_pages))]
+    # as.is = TRUE keeps the stored integers of single-sample images only;
+    # multi-sample (e.g. RGB) images come back scaled to [0, 1]
+    if (fmt != 3) {
+      pg <- lapply(pg, function(a) {
+        if (is.integer(a)) return(a)
+        a <- round(a * (2^bits - 1))
+        if (bits <= 16) storage.mode(a) <- "integer"
+        a
+      })
+    }
     planes <- lapply(pg, function(a) {
       if (length(dim(a)) == 3L) a[, , 1] else a
     })

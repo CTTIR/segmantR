@@ -1,5 +1,10 @@
 # segmantR (development version)
 
+* Compressed (for example LZW) multi-sample TIFFs such as RGB images are
+  read with the integer values of their declared dtype, as uncompressed
+  ones are; they came back scaled to [0, 1]. This affects
+  `sg_import_interchange()` and dataset and training masks stored as TIFF.
+
 * Every exported function has a runnable example; Shiny launches run only
   in interactive sessions. The help topics `example_images` and
   `example_masks`, which described data objects that do not exist, are

@@ -151,3 +151,24 @@ test_that("8- and 16-bit TIFFs read as exact integers", {
   tiff::writeTIFF(g16 / 65535, f, bits.per.sample = 16L)
   expect_identical(segmantR:::.sg_read_tiff(f)$data, g16)
 })
+
+test_that("compressed RGB TIFFs read as integers of their dtype", {
+  skip_if_not_installed("tiff")
+  f <- withr::local_tempfile(fileext = ".tif")
+  rgb <- array(as.integer(c(0:254, 255:211)), c(10, 10, 3))
+  tiff::writeTIFF(rgb / 255, f, bits.per.sample = 8L, compression = "LZW")
+  tif <- segmantR:::.sg_read_tiff(f)
+  expect_equal(tif$dtype, "uint8")
+  expect_equal(tif$samples_per_pixel, 3)
+  expect_identical(tif$data, rgb)
+  rgb16 <- array(as.integer(seq(0, 65535, length.out = 48)), c(4, 4, 3))
+  tiff::writeTIFF(rgb16 / 65535, f, bits.per.sample = 16L,
+                  compression = "LZW")
+  tif <- segmantR:::.sg_read_tiff(f)
+  expect_equal(tif$dtype, "uint16")
+  expect_identical(tif$data, rgb16)
+  # single-sample compressed planes were already returned unscaled
+  tiff::writeTIFF(rgb[, , 1] / 255, f, bits.per.sample = 8L,
+                  compression = "LZW")
+  expect_identical(segmantR:::.sg_read_tiff(f)$data, rgb[, , 1])
+})
