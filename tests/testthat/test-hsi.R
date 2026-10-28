@@ -162,3 +162,14 @@ test_that("4-byte ENVI integers decode 0x80000000 without NA", {
   i32 <- sg_read_envi(hdr(3L), value_semantics = "raw")$pixels
   expect_equal(i32, matrix(c(2147483647, -2147483647, -2147483648, 5), 2, 2))
 })
+
+test_that("single-band reads of one-row or one-column windows stay matrices", {
+  d <- withr::local_tempdir()
+  hdr <- write_envi(d)
+  row1 <- sg_read_envi(hdr, bands = 1, window = c(1, 1, 1, 4),
+                       value_semantics = "raw")
+  expect_equal(row1$pixels, matrix(cube_value(1, 1:4, 1), 1, 4))
+  col2 <- sg_read_envi(hdr, bands = 2, window = c(1, 3, 2, 2),
+                       value_semantics = "raw")
+  expect_equal(col2$pixels, matrix(cube_value(1:3, 2, 2), 3, 1))
+})

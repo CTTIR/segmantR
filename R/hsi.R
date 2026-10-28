@@ -513,7 +513,7 @@ sg_read_envi <- function(path, bands = NULL, window = NULL,
     n_nodata <- sum(hit)
     out[hit] <- NA_real_
   }
-  if (length(bands) == 1L) out <- out[, , 1]
+  if (length(bands) == 1L) out <- matrix(out, nrow = nr, ncol = nc)
   band_names <- info$band_names %||% paste0("band_", seq_len(nb))
   band_tbl <- tibble::tibble(
     name = band_names[bands],

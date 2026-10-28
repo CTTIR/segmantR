@@ -1,5 +1,8 @@
 # segmantR (development version)
 
+* `sg_read_envi()` keeps a matrix when one band is read from a one-row or
+  one-column window; it used to drop to a vector and fail.
+
 * uint32 TIFF planes and 4-byte ENVI integers decode the value 2^31 (and
   ENVI int32 -2^31) exactly instead of as `NA`. 8- and 16-bit reading is
   unchanged.
