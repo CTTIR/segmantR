@@ -22,6 +22,7 @@ Hyperspectral
 IoU
 KISSKI
 LLM
+LZW
 Lifecycle
 Macenko
 Mesmer
@@ -74,6 +75,7 @@ io
 magick
 multiclass
 nonfinite
+openssl
 pkgdown
 polygonised
 pretrained
