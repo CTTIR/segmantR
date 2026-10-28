@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* Standardize the named v5 package logo across README, documentation pages
+  and available application headers, with matching light and dark artwork.
+
+
 * Adds independent `sg_roi_*` histology annotation objects, layers, project
   provenance, geometry operations, GeoJSON/QuPath exchange and integer ROI masks.
   A metadata-only frame records explicit pyramid dimensions and pixel calibration.

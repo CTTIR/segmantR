@@ -58,7 +58,8 @@ sg_app <- function(input = NULL, state = NULL, control = "off", ...) {
                                 " (optional backend)", ""))
   )
   ui <- shiny::fluidPage(
-    shiny::titlePanel("segmantR"),
+    shiny::titlePanel(shiny::tagList(.cttir_brand_logo(), "segmantR"),
+      windowTitle = "segmantR"),
     shiny::sidebarLayout(
       shiny::sidebarPanel(
         shiny::h4("Data"),
