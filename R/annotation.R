@@ -72,7 +72,7 @@ sg_create_annotation_task <- function(image, initial_mask = NULL,
   result <- structure(
     list(
       patches = patches,
-      image_id = image$metadata$id %||% NA_character_,
+      image_id = image$id %||% image$metadata$id %||% NA_character_,
       n_patches = length(patches),
       patch_size = patch_size,
       created = Sys.time()

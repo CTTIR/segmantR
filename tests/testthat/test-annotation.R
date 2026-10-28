@@ -96,3 +96,11 @@ test_that("sg_apply_corrections rejects malformed correction operations", {
   expect_error(sg_apply_corrections(mask, list(list(action = "add"))),
                "pixels")
 })
+
+test_that("annotation tasks record the image id", {
+  img <- new_sg_image(matrix(stats::runif(100 * 100), 100, 100),
+                      id = "slide-1")
+  task <- suppressMessages(sg_create_annotation_task(img, n_patches = 2L,
+                                                     patch_size = 32L))
+  expect_equal(task$image_id, "slide-1")
+})
