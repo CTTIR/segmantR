@@ -256,3 +256,26 @@ test_that(".patch_sampler random strategy oversamples when n exceeds grid", {
                                        strategy = "random")
   expect_true(length(patches) > 0L)
 })
+
+test_that(".morpho_dilate reaches the image border", {
+  b <- matrix(0L, 6, 6)
+  b[1, 1] <- 1L
+  d <- segmantR:::.morpho_dilate(b, size = 3L)
+  expect_equal(sum(d), 4L)
+  expect_equal(d[1:2, 1:2], matrix(1L, 2, 2))
+  # opening an all-foreground plane leaves it unchanged
+  open <- segmantR:::.morphological_cleanup(matrix(1L, 12, 12), open_size = 5L,
+                                            fill_holes = FALSE)
+  expect_equal(sum(open), 144L)
+})
+
+test_that("threshold opening keeps the full extent of border objects", {
+  px <- matrix(0, 40, 40)
+  px[1:15, 10:25] <- 1
+  px[25:35, 25:35] <- 1
+  m <- suppressMessages(sg_segment_threshold(
+    new_sg_image(px), method = "otsu", min_area = 1L,
+    morphology = list(open = 5L, fill_holes = FALSE)
+  ))
+  expect_equal(sort(as.vector(table(m$labels[m$labels > 0L]))), c(121L, 240L))
+})

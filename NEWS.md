@@ -1,5 +1,10 @@
 # segmantR (development version)
 
+* The morphological opening in `sg_segment_threshold()` (default
+  `open = 5`) dilates up to the image edge, so objects touching the
+  border keep their full extent instead of losing a band of
+  `open %/% 2` pixels.
+
 * Bilinear upsampling in `sg_preprocess()` no longer extrapolates at the
   top and left edges, where it could produce values outside the input
   range (for example negative intensities).
