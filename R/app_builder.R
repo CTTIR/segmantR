@@ -25,8 +25,8 @@
 #' @examples
 #' app <- sg_app(list(image = sg_example_image("fluorescence_nuclei")))
 #' class(app)
-#' \dontrun{
-#' shiny::runApp(app)
+#' if (interactive()) {
+#'   shiny::runApp(app)
 #' }
 sg_app <- function(input = NULL, state = NULL, control = "off", ...) {
   opts <- list(...)

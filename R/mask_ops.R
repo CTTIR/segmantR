@@ -292,13 +292,11 @@ sg_mask_to_polygons <- function(mask, simplify = TRUE, tolerance = 1.0) {
 #' @return The output file path, returned invisibly.
 #' @export
 #' @examples
-#' \donttest{
 #' labels <- matrix(0L, nrow = 10, ncol = 10)
 #' labels[3:8, 3:8] <- 1L
 #' mask <- new_sg_mask(labels)
 #' tmp <- tempfile(fileext = ".csv")
 #' sg_export_mask(mask, tmp, format = "csv")
-#' }
 sg_export_mask <- function(mask, path, format = c("tiff", "png", "geojson",
                                                    "qupath", "csv")) {
   if (!inherits(mask, "sg_mask")) {

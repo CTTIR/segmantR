@@ -21,8 +21,8 @@
 #' @return `NULL`, invisibly.
 #' @export
 #' @examples
-#' \dontrun{
-#' sg_run_app()
+#' if (interactive()) {
+#'   sg_run_app(image = sg_example_image("fluorescence_nuclei"))
 #' }
 sg_run_app <- function(image = NULL, mask = NULL, port = NULL,
                        launch.browser = TRUE) {

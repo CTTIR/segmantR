@@ -32,7 +32,7 @@ directly, the pre-loaded objects are also stored in the option
 when it stops. \code{\link[=sg_app]{sg_app()}} itself does not use options.
 }
 \examples{
-\dontrun{
-sg_run_app()
+if (interactive()) {
+  sg_run_app(image = sg_example_image("fluorescence_nuclei"))
 }
 }

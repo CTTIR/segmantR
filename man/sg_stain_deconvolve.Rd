@@ -29,11 +29,9 @@ Applies colour deconvolution to an H&E-stained image to separate
 the haematoxylin and eosin channels.
 }
 \examples{
-\donttest{
 # Requires a colour image
 pixels <- array(runif(300), dim = c(10, 10, 3))
 img <- new_sg_image(pixels, channels = c("R", "G", "B"))
 stains <- sg_stain_deconvolve(img)
 names(stains)
-}
 }

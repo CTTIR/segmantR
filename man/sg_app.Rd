@@ -34,8 +34,8 @@ code entry of any kind.
 \examples{
 app <- sg_app(list(image = sg_example_image("fluorescence_nuclei")))
 class(app)
-\dontrun{
-shiny::runApp(app)
+if (interactive()) {
+  shiny::runApp(app)
 }
 }
 \seealso{
