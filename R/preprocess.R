@@ -404,12 +404,17 @@ sg_stain_deconvolve <- function(image,
   }
   od_sub <- od_flat[keep, , drop = FALSE]
   pca <- stats::prcomp(od_sub, center = TRUE, scale. = FALSE, rank. = 2L)
-  proj <- od_sub %*% pca$rotation[, 1:2]
+  # The sign of a principal axis is arbitrary. Point both axes into the
+  # positive OD octant (as Macenko et al. do), otherwise the angles of the
+  # stained pixels wrap around +-pi and the extreme angles are wrong.
+  axes <- pca$rotation[, 1:2]
+  axes <- sweep(axes, 2L, ifelse(colSums(axes) < 0, -1, 1), `*`)
+  proj <- od_sub %*% axes
   angles <- atan2(proj[, 2], proj[, 1])
   min_angle <- stats::quantile(angles, 0.01)
   max_angle <- stats::quantile(angles, 0.99)
-  v1 <- pca$rotation[, 1:2] %*% c(cos(min_angle), sin(min_angle))
-  v2 <- pca$rotation[, 1:2] %*% c(cos(max_angle), sin(max_angle))
+  v1 <- axes %*% c(cos(min_angle), sin(min_angle))
+  v2 <- axes %*% c(cos(max_angle), sin(max_angle))
   v1 <- v1 / sqrt(sum(v1^2))
   v2 <- v2 / sqrt(sum(v2^2))
   # Haematoxylin absorbs more red than eosin: put it in the first column

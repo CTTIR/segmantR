@@ -1,5 +1,12 @@
 # segmantR (development version)
 
+* The Macenko stain estimate of `sg_stain_deconvolve()` (the default
+  `method`) points the principal axes into the positive optical density
+  octant before it measures stain angles. With the arbitrary sign of the
+  axes, the stain vectors were wrong for about half of simulated H&E
+  images and haematoxylin and eosin were mixed; results change for those
+  images.
+
 * `sg_create_annotation_task()` with both `region` and `initial_mask`
   crops the mask to the region before scoring patches; the
   region-relative patches used to be scored on the wrong part of the mask.

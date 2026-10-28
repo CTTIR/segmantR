@@ -185,6 +185,20 @@ test_that("sg_stain_deconvolve recovers known stain concentrations", {
   expect_gt(stats::cor(as.vector(mk$eosin$pixels), c_e), 0.99)
 })
 
+test_that("Macenko recovers the stain vectors whatever the PCA axis signs", {
+  stains <- segmantR:::.ruifrok_stain_matrix()
+  # about half of these seeds give a first principal axis pointing away
+  # from the positive optical density octant
+  cosines <- vapply(1:40, function(s) {
+    set.seed(s)
+    conc <- cbind(stats::runif(900, 0, 1.5), stats::runif(900, 0, 1.5))
+    rgb <- array(exp(-(conc %*% t(stains[, 1:2]))), dim = c(30, 30, 3))
+    est <- segmantR:::.estimate_macenko_stains(rgb)
+    c(h = sum(est[, 1] * stains[, 1]), e = sum(est[, 2] * stains[, 2]))
+  }, numeric(2))
+  expect_gte(min(cosines), 0.999)
+})
+
 test_that("the Ruifrok defaults are haematoxylin and eosin, not DAB", {
   stains <- segmantR:::.ruifrok_stain_matrix()
   expect_equal(unname(colSums(stains^2)), c(1, 1, 1), tolerance = 1e-6)
