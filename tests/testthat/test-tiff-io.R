@@ -112,3 +112,42 @@ test_that("OME-XML description carries shape, channels and pixel size", {
   expect_match(xml, "PhysicalSizeX=\"0.5\"", fixed = TRUE)
   expect_match(xml, "CD&lt;3&gt;", fixed = TRUE)
 })
+
+test_that("uint32 values at and above 2^31 read back exactly", {
+  f <- withr::local_tempfile(fileext = ".tif")
+  x <- matrix(c(0, 1, 4294967295, 123456789, 2147483648, 2147483647), 2, 3)
+  segmantR:::.sg_write_tiff(x, f, dtype = "uint32")
+  tif <- segmantR:::.sg_read_tiff(f)
+  expect_equal(tif$dtype, "uint32")
+  expect_identical(tif$data, x)
+  # values that fit an R integer keep integer storage
+  segmantR:::.sg_write_tiff(matrix(c(0, 7, 2147483647, 3), 2, 2), f,
+                            dtype = "uint32")
+  expect_identical(segmantR:::.sg_read_tiff(f)$data,
+                   matrix(c(0L, 7L, 2147483647L, 3L), 2, 2))
+})
+
+test_that("8- and 16-bit TIFFs read as exact integers", {
+  f <- withr::local_tempfile(fileext = ".tif")
+  u8 <- matrix(as.integer(c(0:254, 255)), 16, 16)
+  segmantR:::.sg_write_tiff(u8, f, dtype = "uint8")
+  tif <- segmantR:::.sg_read_tiff(f)
+  expect_equal(tif$dtype, "uint8")
+  expect_identical(tif$data, u8)
+  u16 <- array(as.integer(c(0L, 1L, 255L, 256L, 32767L, 32768L, 65534L,
+                            65535L, seq(1000L, 31000L, by = 1000L))),
+               c(5, 4, 2))
+  segmantR:::.sg_write_tiff(u16, f, dtype = "uint16")
+  tif <- segmantR:::.sg_read_tiff(f)
+  expect_equal(tif$dtype, "uint16")
+  expect_identical(tif$data, u16)
+  skip_if_not_installed("tiff")
+  rgb <- array(as.integer(c(0:254, 255:211)), c(10, 10, 3))
+  tiff::writeTIFF(rgb / 255, f, bits.per.sample = 8L, compression = "none")
+  tif <- segmantR:::.sg_read_tiff(f)
+  expect_equal(tif$samples_per_pixel, 3)
+  expect_identical(tif$data, rgb)
+  g16 <- matrix(as.integer(seq(0, 65535, length.out = 64)), 8, 8)
+  tiff::writeTIFF(g16 / 65535, f, bits.per.sample = 16L)
+  expect_identical(segmantR:::.sg_read_tiff(f)$data, g16)
+})

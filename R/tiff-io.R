@@ -254,6 +254,25 @@
   list(endian = endian, pages = pages, size = size)
 }
 
+#' Decode 4-byte integers without the NA of readBin(): R reads the bit
+#' pattern 0x80000000 as NA_integer_, so the two 16-bit halves are combined
+#' as doubles instead. Unsigned values stay integer when all of them fit
+#' into an R integer (as readBin() returned them before).
+#' @noRd
+.sg_decode_int32 <- function(buf, n, endian, signed = FALSE) {
+  h <- readBin(buf, "integer", n = 2L * n, size = 2L, signed = FALSE,
+               endian = endian)
+  h <- matrix(as.numeric(h), nrow = 2L)
+  v <- if (identical(endian, "big")) h[1, ] * 65536 + h[2, ] else
+    h[2, ] * 65536 + h[1, ]
+  if (signed) {
+    v <- ifelse(v >= 2147483648, v - 4294967296, v)
+  } else if (all(v <= 2147483647)) {
+    v <- as.integer(v)
+  }
+  v
+}
+
 #' Read a TIFF into an array with dtype information
 #' @return List: `data` (y-x matrix or y-x-page array), `dtype`,
 #'   `description`, `compression`, `n_pages`, `samples_per_pixel`.
@@ -308,11 +327,11 @@
     }))[seq_len(n_val * size_b)]
     vals <- if (fmt == 3) {
       readBin(buf, "double", n = n_val, size = size_b, endian = info$endian)
+    } else if (bits == 32 && fmt == 1) {
+      .sg_decode_int32(buf, n_val, info$endian)
     } else {
-      v <- readBin(buf, "integer", n = n_val, size = size_b,
-                   signed = fmt == 2 || size_b == 4, endian = info$endian)
-      if (bits == 32 && fmt == 1) v <- ifelse(v < 0, v + 4294967296, v)
-      v
+      readBin(buf, "integer", n = n_val, size = size_b,
+              signed = fmt == 2 || size_b == 4, endian = info$endian)
     }
     data <- aperm(array(vals, dim = c(spp, width, height)), c(3L, 2L, 1L))
     return(list(data = data, dtype = dtype, description = desc,
@@ -342,9 +361,7 @@
         readBin(buf, "double", n = width * height, size = size_b,
                 endian = info$endian)
       } else if (bits == 32 && fmt == 1) {
-        v <- readBin(buf, "integer", n = width * height, size = 4L,
-                     endian = info$endian)
-        ifelse(v < 0, v + 4294967296, v)
+        .sg_decode_int32(buf, width * height, info$endian)
       } else if (bits == 64) {
         .sg_abort("64-bit integer TIFF is not supported.",
                   code = "DTYPE_MISMATCH")

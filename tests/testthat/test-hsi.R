@@ -145,3 +145,20 @@ test_that("registered band operations compute exact values", {
   plain <- new_sg_image(arr)
   expect_error(sg_select_channel(plain, wavelength_nm = 500), "wavelengths")
 })
+
+test_that("4-byte ENVI integers decode 0x80000000 without NA", {
+  d <- withr::local_tempdir()
+  bytes <- as.raw(c(0xff, 0xff, 0xff, 0x7f, 0, 0, 0, 0x80,
+                    1, 0, 0, 0x80, 5, 0, 0, 0))
+  writeBin(bytes, file.path(d, "cube"))
+  hdr <- function(type) {
+    writeLines(c("ENVI", "samples = 2", "lines = 2", "bands = 1",
+                 sprintf("data type = %d", type), "interleave = bsq",
+                 "byte order = 0"), file.path(d, "cube.hdr"))
+    file.path(d, "cube.hdr")
+  }
+  u32 <- sg_read_envi(hdr(13L), value_semantics = "raw")$pixels
+  expect_equal(u32, matrix(c(2147483647, 2147483649, 2147483648, 5), 2, 2))
+  i32 <- sg_read_envi(hdr(3L), value_semantics = "raw")$pixels
+  expect_equal(i32, matrix(c(2147483647, -2147483647, -2147483648, 5), 2, 2))
+})

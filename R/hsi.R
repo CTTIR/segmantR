@@ -477,10 +477,11 @@ sg_read_envi <- function(path, bands = NULL, window = NULL,
     if (type$what == "double") {
       return(readBin(raw_vals, "double", n = n, size = sz, endian = endian))
     }
-    v <- readBin(raw_vals, "integer", n = n, size = sz,
-                 signed = type$signed || sz == 4L, endian = endian)
-    if (!type$signed && sz == 4L) v <- ifelse(v < 0, v + 4294967296, v)
-    v
+    if (sz == 4L) {
+      return(.sg_decode_int32(raw_vals, n, endian, signed = type$signed))
+    }
+    readBin(raw_vals, "integer", n = n, size = sz, signed = type$signed,
+            endian = endian)
   }
   read_at <- function(offset, n_values) {
     seek(con, info$header_offset + offset * sz)

@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* uint32 TIFF planes and 4-byte ENVI integers decode the value 2^31 (and
+  ENVI int32 -2^31) exactly instead of as `NA`. 8- and 16-bit reading is
+  unchanged.
+
 * `sg_create_annotation_task()` records the image's `id` as `image_id`
   instead of `NA`.
 
