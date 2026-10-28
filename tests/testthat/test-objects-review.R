@@ -32,6 +32,8 @@ test_that("subsetting shifts the origin and records non-contiguous subsets", {
 })
 
 test_that("sg_read_image returns [y, x] orientation for non-square PNGs", {
+  # Without EBImage, PNG files are read by imager.
+  skip_if_not_installed("imager")
   f <- withr::local_tempfile(fileext = ".png")
   grDevices::png(f, width = 40, height = 20)
   graphics::par(mar = c(0, 0, 0, 0))

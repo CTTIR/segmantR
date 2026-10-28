@@ -282,6 +282,12 @@ sg_read_image <- function(path, ...) {
       channels <- paste0("ch", seq_len(dim(img)[3]))
     }
   } else {
+    if (!requireNamespace("imager", quietly = TRUE)) {
+      .sg_abort_unavailable(
+        "Reading this image format",
+        "Install 'EBImage' or 'imager' (or 'tiff' for TIFF files)."
+      )
+    }
     img <- imager::load.image(path)
     arr <- as.array(img)
     # imager stores arrays as [x, y, z, channel]; take z = 1 and reorder.

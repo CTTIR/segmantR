@@ -3,7 +3,12 @@
 * Standardize the named v5 package logo across README, documentation pages
   and available application headers, with matching light and dark artwork.
 
-
+* `sg_image_channels()`, `sg_read_window()`, `sg_read_field()` and
+  `sg_read_fields()` read rectangular pixel windows of single channels from
+  multi-channel TIFF/QPTIFF images through GDAL; `sg_display_range()`,
+  `sg_slide_display_ranges()` and `sg_display_levels()` derive display
+  ranges from slide samples and from the signal of called-positive cells.
+  imager moves to Suggests.
 * Adds independent `sg_roi_*` histology annotation objects, layers, project
   provenance, geometry operations, GeoJSON/QuPath exchange and integer ROI masks.
   A metadata-only frame records explicit pyramid dimensions and pixel calibration.
