@@ -10,8 +10,10 @@
 #'   One of `"auto"` (default), `"conda"`, or `"virtualenv"`.
 #' @param backends Character vector of backends to install.
 #'   Supported values are `"cellpose"` and `"stardist"`.
-#' @param gpu Logical; if `TRUE` (default), attempts to install
-#'   GPU-enabled versions of the backends.
+#' @param gpu Logical; if `TRUE` (default), installs the GPU-capable
+#'   `tensorflow` build for StarDist instead of `tensorflow-cpu`. Cellpose
+#'   is always installed as `cellpose`; it uses a GPU when the installed
+#'   PyTorch build supports it.
 #'
 #' @return Invisibly returns `TRUE` on success.
 #' @export
@@ -42,26 +44,30 @@ sg_setup_python <- function(envname = "segmantr",
   ))
 
   # Create environment
+  env_type <- "virtualenv"
   if (method == "conda" ||
       (method == "auto" && reticulate::conda_binary() != "")) {
-    tryCatch(
-      reticulate::conda_create(envname = envname),
-      error = function(e) {
-        cli::cli_inform(c(
-          "!" = "Conda environment creation failed; trying virtualenv.",
-          "i" = "{conditionMessage(e)}"
-        ))
-        reticulate::virtualenv_create(envname = envname)
-      }
-    )
+    env_type <- tryCatch({
+      reticulate::conda_create(envname = envname)
+      "conda"
+    }, error = function(e) {
+      cli::cli_inform(c(
+        "!" = "Conda environment creation failed; trying virtualenv.",
+        "i" = "{conditionMessage(e)}"
+      ))
+      reticulate::virtualenv_create(envname = envname)
+      "virtualenv"
+    })
   } else {
     reticulate::virtualenv_create(envname = envname)
   }
 
-  # Install packages
+  # Install packages. Cellpose reaches a GPU through its PyTorch build (the
+  # "gui" extra is the desktop interface); `gpu` only switches StarDist
+  # between tensorflow builds.
   packages <- character(0)
   if ("cellpose" %in% backends) {
-    packages <- c(packages, if (gpu) "cellpose[gui]" else "cellpose")
+    packages <- c(packages, "cellpose")
   }
   if ("stardist" %in% backends) {
     packages <- c(packages, "stardist",
@@ -72,12 +78,13 @@ sg_setup_python <- function(envname = "segmantr",
     cli::cli_inform(c(
       "i" = "Installing Python packages: {.val {packages}}."
     ))
-    reticulate::py_install(packages, envname = envname)
+    reticulate::py_install(packages, envname = envname, method = env_type)
   }
 
+  activate <- if (env_type == "conda") "use_condaenv" else "use_virtualenv"
   cli::cli_inform(c(
     "v" = "Python environment {.val {envname}} is ready.",
-    "i" = "Use {.code reticulate::use_virtualenv('{envname}')} to activate."
+    "i" = "Use {.code reticulate::{activate}('{envname}')} to activate."
   ))
 
   invisible(TRUE)

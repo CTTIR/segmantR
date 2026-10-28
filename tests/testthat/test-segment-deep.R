@@ -115,3 +115,31 @@ test_that("sg_setup_python falls back to virtualenv on conda failure", {
 test_that(".gpu_available returns FALSE when torch is unavailable", {
   expect_false(segmantR:::.gpu_available())
 })
+
+test_that("sg_setup_python installs plain cellpose and names the conda env", {
+  skip_if_not_installed("reticulate")
+  installed <- NULL
+  install_method <- NULL
+  local_mocked_bindings(
+    conda_binary = function(...) "/usr/bin/conda",
+    conda_create = function(envname, ...) invisible(TRUE),
+    py_install = function(packages, envname, method = "auto", ...) {
+      installed <<- packages
+      install_method <<- method
+      invisible(TRUE)
+    },
+    .package = "reticulate"
+  )
+  msgs <- character(0)
+  withCallingHandlers(
+    sg_setup_python(method = "auto", backends = "cellpose", gpu = TRUE),
+    message = function(m) {
+      msgs <<- c(msgs, conditionMessage(m))
+      invokeRestart("muffleMessage")
+    }
+  )
+  expect_equal(installed, "cellpose")
+  expect_equal(install_method, "conda")
+  expect_true(any(grepl("use_condaenv", msgs)))
+  expect_false(any(grepl("use_virtualenv", msgs)))
+})

@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* `sg_setup_python()` installs `cellpose` rather than the `cellpose[gui]`
+  desktop extra when `gpu = TRUE`, installs into the environment type it
+  created, and names `use_condaenv()` after creating a conda environment.
+
 * A layer created without labels keeps the colour of its style, so the
   first ROI label added with `sg_roi_layer_add()` receives it instead of
   a palette colour.
