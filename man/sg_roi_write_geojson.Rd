@@ -21,7 +21,9 @@ sg_roi_write_geojson(
 
 \item{layer}{Optional layer filter.}
 
-\item{level}{Integer pyramid level for the coordinates. Default \code{0}.}
+\item{level}{Integer pyramid level for the coordinates. Default \code{0}. It is
+written to each feature's \code{level} property, which
+\code{\link[=sg_roi_read_geojson]{sg_roi_read_geojson()}} restores.}
 
 \item{flip_y}{Logical; invert the y-axis (for GIS-oriented consumers). Default
 \code{FALSE} (image orientation preserved). The consequence is documented in the

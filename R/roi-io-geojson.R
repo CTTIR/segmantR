@@ -54,7 +54,9 @@
 #' @param project An [sg_roi_project].
 #' @param path Output file path.
 #' @param layer Optional layer filter.
-#' @param level Integer pyramid level for the coordinates. Default `0`.
+#' @param level Integer pyramid level for the coordinates. Default `0`. It is
+#'   written to each feature's `level` property, which
+#'   [sg_roi_read_geojson()] restores.
 #' @param flip_y Logical; invert the y-axis (for GIS-oriented consumers). Default
 #'   `FALSE` (image orientation preserved). The consequence is documented in the
 #'   interop vignette.
@@ -103,7 +105,7 @@ sg_roi_write_geojson <- function(project, path, layer = NULL, level = 0L,
       feat <- if (qupath) {
         .sg_roi_roi_to_qupath_feature(r, nm, g, colour, dialect = dialect)
       } else {
-        .sg_roi_roi_to_feature(r, nm, g)
+        .sg_roi_roi_to_feature(r, nm, g, level)
       }
       features[[length(features) + 1L]] <- feat
     }
@@ -111,14 +113,15 @@ sg_roi_write_geojson <- function(project, path, layer = NULL, level = 0L,
   list(type = "FeatureCollection", features = features)
 }
 
-.sg_roi_roi_to_feature <- function(r, layer_name, g) {
+# `level` is the level of the written coordinates, not the ROI's own level.
+.sg_roi_roi_to_feature <- function(r, layer_name, g, level = r$level) {
   list(
     type = "Feature",
     id = r$id,
     geometry = .sg_roi_sfg_to_geojson(g),
     properties = list(
       roi_id = r$id, layer = layer_name, label = r$label,
-      level = r$level, author = r$author,
+      level = as.integer(level), author = r$author,
       created = format(r$created, "%Y-%m-%dT%H:%M:%S%z"),
       modified = format(r$modified, "%Y-%m-%dT%H:%M:%S%z"),
       source = r$source, segmantR_version = .sg_roi_pkg_version(),

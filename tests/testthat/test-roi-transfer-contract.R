@@ -38,3 +38,19 @@ test_that("QuPath direct roundtrip retains noninteger holes, identity and metada
   raw_hash <- digest::digest(charToRaw("annotatR:roi:stable-cell"),algo="sha256",serialize=FALSE)
   expect_identical(substr(.sg_roi_roi_uuid("stable-cell"),1,8),substr(raw_hash,1,8))
 })
+
+test_that("GeoJSON keeps the geometry of ROIs drawn at a non-zero level", {
+  fr <- sg_roi_frame(c(100, 100), list(c(100, 100), c(50, 50)))
+  roi <- sg_roi_rect(10, 10, 20, 20, label = "a", level = 1L)
+  p <- sg_roi_project(fr, sg_roi_layer_add(sg_roi_layer("L"), roi))
+  before <- sg_roi_rois(p)
+  for (lvl in c(0L, 1L)) {
+    f <- withr::local_tempfile(fileext = ".geojson")
+    sg_roi_write_geojson(p, f, level = lvl)
+    expect_equal(jsonlite::read_json(f)$features[[1]]$properties$level, lvl)
+    after <- sg_roi_rois(sg_roi_project(fr, sg_roi_read_geojson(f)))
+    expect_equal(after$area_px, before$area_px)
+    expect_equal(as.numeric(sf::st_bbox(after$geometry)),
+                 as.numeric(sf::st_bbox(before$geometry)))
+  }
+})

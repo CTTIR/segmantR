@@ -1,5 +1,10 @@
 # segmantR (development version)
 
+* `sg_roi_write_geojson()` records the level of the written coordinates
+  in each feature's `level` property. It used to record the ROI's own
+  level, so `sg_roi_read_geojson()` rescaled ROIs drawn at a level other
+  than the export level.
+
 * `sg_import_interchange()` accepts bundles whose integer image was
   exported with `image_tiff`; the float64 TIFF planes are restored to
   integer storage before the content digest is checked.
