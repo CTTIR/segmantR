@@ -32,6 +32,20 @@ test_that("SHA-256 agrees with the FIPS test vector", {
                    segmantR:::.sg_sha256(charToRaw("abc")))
 })
 
+test_that("SHA-256 fallbacks for R < 4.5 return the same plain strings", {
+  abc <- "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+  f <- withr::local_tempfile()
+  writeBin(charToRaw("abc"), f)
+  if (getRversion() >= "4.5.0") {
+    expect_identical(segmantR:::.sg_sha256(charToRaw("abc")), abc)
+    expect_identical(segmantR:::.sg_sha256_file(f), abc)
+  }
+  skip_if_not_installed("openssl")
+  local_mocked_bindings(.sg_has_tools_sha256 = function() FALSE)
+  expect_identical(segmantR:::.sg_sha256(charToRaw("abc")), abc)
+  expect_identical(segmantR:::.sg_sha256_file(f), abc)
+})
+
 test_that("canonical JSON refuses non-finite numbers and duplicate keys", {
   expect_error(segmantR:::.sg_canonical_json(list(a = NaN)), class = "sg_error")
   expect_error(segmantR:::.sg_canonical_json(Inf), class = "sg_validation_error")

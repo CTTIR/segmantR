@@ -276,10 +276,11 @@
   if (is.character(x)) x <- charToRaw(enc2utf8(paste(x, collapse = "")))
   stopifnot(is.raw(x))
   if (.sg_has_tools_sha256()) {
-    return(unname(tools::sha256sum(bytes = x)))
+    return(unname(.sg_tools_sha256sum(bytes = x)))
   }
   if (requireNamespace("openssl", quietly = TRUE)) {
-    return(as.character(openssl::sha256(x)))
+    # drop the "hash" class so all paths return a plain string
+    return(unclass(as.character(openssl::sha256(x))))
   }
   if (requireNamespace("digest", quietly = TRUE)) {
     return(digest::digest(x, algo = "sha256", serialize = FALSE))
@@ -295,7 +296,7 @@
 .sg_sha256_file <- function(paths) {
   if (length(paths) == 0L) return(character(0))
   if (.sg_has_tools_sha256()) {
-    return(unname(tools::sha256sum(files = paths)))
+    return(unname(.sg_tools_sha256sum(files = paths)))
   }
   vapply(paths, function(p) {
     con <- file(p, open = "rb")
@@ -308,6 +309,13 @@
 .sg_has_tools_sha256 <- function() {
   getRversion() >= "4.5.0" &&
     "sha256sum" %in% getNamespaceExports("tools")
+}
+
+#' tools::sha256sum() exists from R 4.5.0 on. It is looked up at run time so
+#' that checks on older R do not report a missing object.
+#' @noRd
+.sg_tools_sha256sum <- function(...) {
+  getExportedValue("tools", "sha256sum")(...)
 }
 
 #' Prefixed digest of canonical JSON

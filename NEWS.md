@@ -1,5 +1,10 @@
 # segmantR (development version)
 
+* On R < 4.5, SHA-256 digests from the 'openssl' fallback are plain
+  strings like those of `tools::sha256sum()` instead of carrying the class
+  `"hash"`, and `tools::sha256sum()` is looked up at run time, so checks on
+  older R no longer report it as a missing object.
+
 * `sg_roi_write_qupath()` records the level of the written coordinates as
   `annotatr_level` in the feature metadata, as `sg_roi_write_geojson()`
   does in its `level` property; it used to record the ROI's own level.
