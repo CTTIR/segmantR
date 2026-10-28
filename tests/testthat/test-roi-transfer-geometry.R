@@ -126,3 +126,19 @@ test_that("geometry mutators do not modify their input", {
   invisible(sg_roi_flip_y(r, 50))
   expect_identical(r, snapshot)
 })
+
+test_that("empty set-operation results are empty polygons without warnings", {
+  a <- sg_roi_rect(0, 0, 5, 5, label = "x")
+  b <- sg_roi_rect(10, 10, 15, 15, label = "x")
+  ri <- expect_no_warning(sg_roi_intersect(a, b))
+  expect_length(ri$geometry, 1L)
+  expect_true(sf::st_is_empty(ri$geometry))
+  expect_equal(sg_roi_area(ri), 0)
+  rd <- expect_no_warning(sg_roi_difference(a, sg_roi_rect(-1, -1, 6, 6,
+                                                           label = "x")))
+  expect_equal(sg_roi_area(rd), 0)
+  lyr <- sg_roi_layer_add(sg_roi_layer("L"), ri)
+  expect_equal(nrow(sg_roi_layer_rois(lyr)), 1L)
+  p <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+  expect_equal(sum(sg_roi_mask(p)), 0L)
+})

@@ -56,6 +56,10 @@
   if (length(g) > 1L) {
     g <- sf::st_sfc(sf::st_combine(g)[[1]], crs = sf::NA_crs_)
   }
+  if (length(g) == 0L) {
+    # e.g. the intersection of disjoint ROIs: keep one empty polygon
+    g <- sf::st_sfc(sf::st_polygon(), crs = sf::NA_crs_)
+  }
   valid <- sf::st_is_valid(g)
   if (!isTRUE(valid)) {
     g <- sf::st_make_valid(g)

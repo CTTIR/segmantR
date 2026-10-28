@@ -1,5 +1,10 @@
 # segmantR (development version)
 
+* `sg_roi_intersect()` and `sg_roi_difference()` return an ROI with an
+  empty polygon when the result is empty. They used to warn about a
+  repaired geometry and return an ROI without geometry that broke
+  `sg_roi_area()`, `sg_roi_centroid()` and layer summaries.
+
 * `sg_read_envi()` keeps a matrix when one band is read from a one-row or
   one-column window; it used to drop to a vector and fail.
 
