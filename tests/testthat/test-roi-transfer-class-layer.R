@@ -62,3 +62,14 @@ test_that("layer print and format produce output", {
   expect_output(print(lyr), "sg_roi_layer")
   expect_type(format(lyr), "character")
 })
+
+test_that("a layer created without labels keeps its style colour", {
+  ly <- sg_roi_layer("tissue", style = sg_roi_style(colour = "red"))
+  ly <- sg_roi_layer_add(ly, sg_roi_rect(0, 0, 5, 5, label = "tissue"))
+  expect_equal(ly$style$colour, c(tissue = "red"))
+  named <- sg_roi_layer("L", style = sg_roi_style(colour = c(b = "blue")))
+  named <- sg_roi_layer_add(named, sg_roi_rect(0, 0, 5, 5, label = "b"))
+  expect_equal(named$style$colour, c(b = "blue"))
+  expect_equal(sg_roi_layer("x")$style$colour, setNames(character(0),
+                                                        character(0)))
+})

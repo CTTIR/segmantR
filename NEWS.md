@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* A layer created without labels keeps the colour of its style, so the
+  first ROI label added with `sg_roi_layer_add()` receives it instead of
+  a palette colour.
+
 * ROI constructors match the reserved `...` names `author`, `source` and
   `id` exactly; attributes such as `idx` or `source_file` no longer
   overwrite them by partial matching.
