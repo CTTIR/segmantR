@@ -3,7 +3,8 @@
 Written and read by a real QuPath 0.7.0 installation (headless, system OpenJDK 25.0.4,
 `java -Djava.awt.headless=true -cp "<QuPath>/lib/app/*" qupath.QuPath script <file.groovy>`)
 on 2026-09-14. The Groovy scripts and full provenance (hashes, exit codes) are in
-`data-raw/qupath-fixtures/`.
+`data-raw/qupath-fixtures/` of hyperannotatR (formerly annotatR), from which these
+fixtures were transferred.
 
 | File | Produced by | Role in tests |
 |---|---|---|

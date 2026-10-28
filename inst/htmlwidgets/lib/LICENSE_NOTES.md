@@ -1,15 +1,16 @@
 # Bundled front-end libraries
 
-For v0.0.1 the annotation canvas (`sgcanvas`) is implemented as a self-contained
-HTML5 canvas in `inst/htmlwidgets/sgcanvas.js`, with no external JavaScript
-libraries. The widget therefore has no third-party front-end code to attribute
-and works fully offline (no CDN requests).
+The cell annotation canvas (`sgcanvas`) is a self-contained HTML5 canvas in
+`inst/htmlwidgets/sgcanvas.js` with its own stylesheet in
+`inst/htmlwidgets/lib/sgcanvas/`. It bundles no external JavaScript
+libraries, so there is no third-party front-end code to attribute, and it
+works fully offline (no CDN requests).
 
-## Planned for a later release
+## Possible later additions
 
-The locked design targets OpenSeadragon (BSD-3-Clause) for gigapixel deep-zoom
-and Annotorious (BSD-3-Clause) for W3C Web Annotation drawing. When those are
-vendored here, their exact versions and licences will be recorded in this file,
-and attribution added to the README Acknowledgements. The R interface in
-`R/widget-canvas.R` and the JS message protocol are already shaped for that
-swap; see STATE.md ("Deferred to v0.0.2").
+OpenSeadragon (BSD-3-Clause) for gigapixel deep zoom and Annotorious
+(BSD-3-Clause) for W3C Web Annotation drawing may be vendored here later.
+Their exact versions and licences would then be recorded in this file and
+attributed in the README. The R interface in `R/canvas.R` and the
+JavaScript message protocol are shaped so that such a swap does not change
+the R side.

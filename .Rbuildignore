@@ -22,3 +22,6 @@
 ^\.zenodo\.json$
 ^CITATION\.cff$
 ^tools/branding$
+^man/figures/(icon-|logo-dark|logo-light|logo-mono|logo-symbol|logo\.|logo-with-name-mono)
+^man/figures/logo-with-name(-dark)?\.(pdf|svg)$
+^inst/roi-transfer$
