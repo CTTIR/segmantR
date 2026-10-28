@@ -18,8 +18,12 @@ Prints a human-readable model card for a trained segmentation model and
 returns the card contents as a tibble.
 }
 \examples{
+# a dedicated directory with a stand-in weight file
+weights <- file.path(tempfile("model"), "cellpose_weights")
+dir.create(dirname(weights))
+writeBin(as.raw(1:16), weights)
 mdl <- new_sg_trained_model(
-  model_path = tempdir(),
+  model_path = weights,
   backend = "cellpose",
   base_model = "cyto3",
   training_metrics = list(n_epochs = 100L),

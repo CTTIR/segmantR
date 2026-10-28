@@ -30,7 +30,14 @@ schema and major version and the backend are checked. Archives written by
 segmantR 0.1.0 have no checksums; they load with \code{integrity = "unverified"} unless \code{allow_legacy = FALSE}.
 }
 \examples{
-\donttest{
-# model <- sg_load_model("my_model.segmantR")
-}
+# a dedicated directory with a stand-in weight file
+weights <- file.path(tempfile("model"), "cellpose_weights")
+dir.create(dirname(weights))
+writeBin(as.raw(1:16), weights)
+mdl <- new_sg_trained_model(weights, backend = "cellpose",
+                            base_model = "cyto3",
+                            training_metrics = list(n_epochs = 50L))
+archive <- sg_package_model(mdl, tempfile(fileext = ".segmantR"))
+model <- sg_load_model(archive)
+model$integrity
 }

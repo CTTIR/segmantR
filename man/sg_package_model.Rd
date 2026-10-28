@@ -57,13 +57,15 @@ weights under \verb{weights/} (or a hashed relative reference when
 Python environments are never copied into a bundle.
 }
 \examples{
-\donttest{
+# a dedicated directory with a stand-in weight file
+weights <- file.path(tempfile("model"), "cellpose_weights")
+dir.create(dirname(weights))
+writeBin(as.raw(1:16), weights)
 mdl <- new_sg_trained_model(
-  model_path = tempdir(),
+  model_path = weights,
   backend = "cellpose",
   base_model = "cyto3",
   training_metrics = list(n_epochs = 50L)
 )
 out <- sg_package_model(mdl, tempfile(fileext = ".segmantR"))
-}
 }

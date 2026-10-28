@@ -29,8 +29,12 @@
 #' @return An object of class `sg_trained_model`.
 #' @export
 #' @examples
+#' # a dedicated directory with a stand-in weight file
+#' weights <- file.path(tempfile("model"), "cellpose_weights")
+#' dir.create(dirname(weights))
+#' writeBin(as.raw(1:16), weights)
 #' mdl <- new_sg_trained_model(
-#'   model_path = tempdir(),
+#'   model_path = weights,
 #'   backend = "cellpose",
 #'   base_model = "cyto3",
 #'   training_metrics = list(n_epochs = 100L, final_loss = 0.05)
@@ -174,15 +178,17 @@ plot.sg_trained_model <- function(x, ...) {
 #' @return The output file path, returned invisibly.
 #' @export
 #' @examples
-#' \donttest{
+#' # a dedicated directory with a stand-in weight file
+#' weights <- file.path(tempfile("model"), "cellpose_weights")
+#' dir.create(dirname(weights))
+#' writeBin(as.raw(1:16), weights)
 #' mdl <- new_sg_trained_model(
-#'   model_path = tempdir(),
+#'   model_path = weights,
 #'   backend = "cellpose",
 #'   base_model = "cyto3",
 #'   training_metrics = list(n_epochs = 50L)
 #' )
 #' out <- sg_package_model(mdl, tempfile(fileext = ".segmantR"))
-#' }
 sg_package_model <- function(trained_model, output_path, name = NULL,
                              description = NULL,
                              include_training_data = FALSE,
@@ -374,9 +380,16 @@ sg_package_model <- function(trained_model, output_path, name = NULL,
 #' @return An `sg_trained_model` object.
 #' @export
 #' @examples
-#' \donttest{
-#' # model <- sg_load_model("my_model.segmantR")
-#' }
+#' # a dedicated directory with a stand-in weight file
+#' weights <- file.path(tempfile("model"), "cellpose_weights")
+#' dir.create(dirname(weights))
+#' writeBin(as.raw(1:16), weights)
+#' mdl <- new_sg_trained_model(weights, backend = "cellpose",
+#'                             base_model = "cyto3",
+#'                             training_metrics = list(n_epochs = 50L))
+#' archive <- sg_package_model(mdl, tempfile(fileext = ".segmantR"))
+#' model <- sg_load_model(archive)
+#' model$integrity
 sg_load_model <- function(path, expected_digest = NULL, allow_legacy = TRUE) {
   if (!file.exists(path)) {
     cli::cli_abort("Model file not found: {.path {path}}")
@@ -555,8 +568,12 @@ sg_load_model <- function(path, expected_digest = NULL, allow_legacy = TRUE) {
 #'   card contents, returned invisibly.
 #' @export
 #' @examples
+#' # a dedicated directory with a stand-in weight file
+#' weights <- file.path(tempfile("model"), "cellpose_weights")
+#' dir.create(dirname(weights))
+#' writeBin(as.raw(1:16), weights)
 #' mdl <- new_sg_trained_model(
-#'   model_path = tempdir(),
+#'   model_path = weights,
 #'   backend = "cellpose",
 #'   base_model = "cyto3",
 #'   training_metrics = list(n_epochs = 100L),

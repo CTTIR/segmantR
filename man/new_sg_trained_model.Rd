@@ -54,8 +54,12 @@ Constructor for the \code{sg_trained_model} S3 class, representing a trained
 segmentation model with associated metadata.
 }
 \examples{
+# a dedicated directory with a stand-in weight file
+weights <- file.path(tempfile("model"), "cellpose_weights")
+dir.create(dirname(weights))
+writeBin(as.raw(1:16), weights)
 mdl <- new_sg_trained_model(
-  model_path = tempdir(),
+  model_path = weights,
   backend = "cellpose",
   base_model = "cyto3",
   training_metrics = list(n_epochs = 100L, final_loss = 0.05)
