@@ -1,5 +1,12 @@
 # segmantR (development version)
 
+* Every exported function has a runnable example; Shiny launches run only
+  in interactive sessions. The help topics `example_images` and
+  `example_masks`, which described data objects that do not exist, are
+  folded into `?sg_example_image`. `sgCanvasOutput()` and
+  `renderSgCanvas()` explain a missing 'htmlwidgets'. Unused packages are
+  dropped from Suggests.
+
 * The README and `CITATION.cff` no longer cite the Zenodo DOI, which is not
   registered yet; it will be added once the Zenodo record is published.
 
