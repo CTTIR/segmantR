@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* ROI constructors match the reserved `...` names `author`, `source` and
+  `id` exactly; attributes such as `idx` or `source_file` no longer
+  overwrite them by partial matching.
+
 * `sg_roi_intersect()` and `sg_roi_difference()` return an ROI with an
   empty polygon when the result is empty. They used to warn about a
   repaired geometry and return an ROI without geometry that broke

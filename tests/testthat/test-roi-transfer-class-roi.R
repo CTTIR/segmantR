@@ -123,3 +123,17 @@ test_that("roi plot and sf coercions work", {
   expect_s3_class(sf::st_as_sf(r), "sf")
   expect_s3_class(sf::st_geometry(r), "sfc")
 })
+
+test_that("reserved ROI fields are not set by partial name matches", {
+  r <- sg_roi_point(1, 2, label = "cell", idx = 7)
+  expect_false(identical(r$id, "7"))
+  expect_equal(r$attributes$idx, 7)
+  r <- sg_roi_point(1, 2, label = "cell", source_file = "slide.tif")
+  expect_equal(r$source, "manual")
+  expect_equal(r$attributes$source_file, "slide.tif")
+  r <- sg_roi_point(1, 2, label = "cell", authority = "WHO")
+  expect_false(identical(r$author, "WHO"))
+  expect_equal(r$attributes$authority, "WHO")
+  r <- sg_roi_point(1, 2, label = "cell", id = "c1", source = "qc")
+  expect_equal(c(r$id, r$source), c("c1", "qc"))
+})

@@ -79,9 +79,10 @@
   .sg_roi_check_string(label, call = call)
   level <- .sg_roi_check_count(level, call = call)
   g <- .sg_roi_finalize_geometry(geometry, call = call)
-  author <- dots$author %||% .sg_roi_default_author()
-  source <- dots$source %||% "manual"
-  id     <- dots$id %||% .sg_roi_new_id("roi")
+  # [[ ]] matches exactly: `$` would take `idx = 7` as the id
+  author <- dots[["author"]] %||% .sg_roi_default_author()
+  source <- dots[["source"]] %||% "manual"
+  id     <- dots[["id"]] %||% .sg_roi_new_id("roi")
   attrs  <- dots[setdiff(names(dots), c("author", "source", "id"))]
   if (is.null(names(dots))) attrs <- list()
   .new_sg_roi(
