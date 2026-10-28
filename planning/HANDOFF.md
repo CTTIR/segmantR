@@ -105,7 +105,7 @@ failures, 0 skips.
 | Capability report digest | `sha256:f95f455674916367beadeb1aeb0d1f7882823f83313843517c7c17d1bf2449c7` |
 | Groovy templates (sha256) | stardist `4ae3e2ad…b5fb`, import `124da276…5bec`, export `47efc784…62d0` |
 | QuPath fixture bundles | stardist_out `sha256:21b9be62…c3e3`; segmantR_bundle `sha256:be8ccd8b…244d`; import_roundtrip_export `sha256:a9e621ff…be23` |
-| QuPath evidence JSON (sha256) | `ef22a82c59799f88dd0d93e05257c83de4111e49b0bee8652f6f4de74f291c7d` |
+| QuPath evidence JSON (sha256) | `79bbd7e24b4320487994b24a14d3bf06872989f19a5d4c5edecdf354fabdeb98` |
 | Digest vectors / TIFF expected values | `2dc81b7b…d56a` / `20de4383…c6b6` |
 
 QuPath/StarDist evidence (synthetic 128 × 96 uint16 OME-TIFF written by

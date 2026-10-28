@@ -55,7 +55,7 @@
         "script",
         "--args=<workspace>/projectA",
         "--args=<workspace>/nuclei.ome.tif",
-        "/data/GitHub/CTTIR/public/segmantR/tests/testthat/qupath/create_project.groovy"
+        "<repo>/tests/testthat/qupath/create_project.groovy"
       ],
       "exit_status": 0,
       "segmantR_log": [
@@ -67,7 +67,7 @@
         "script",
         "--args=<workspace>/projectB",
         "--args=<workspace>/nuclei.ome.tif",
-        "/data/GitHub/CTTIR/public/segmantR/tests/testthat/qupath/create_project.groovy"
+        "<repo>/tests/testthat/qupath/create_project.groovy"
       ],
       "exit_status": 0,
       "segmantR_log": [
@@ -79,7 +79,7 @@
         "script",
         "--args=<workspace>/projectC",
         "--args=<workspace>/nuclei.ome.tif",
-        "/data/GitHub/CTTIR/public/segmantR/tests/testthat/qupath/create_project.groovy"
+        "<repo>/tests/testthat/qupath/create_project.groovy"
       ],
       "exit_status": 0,
       "segmantR_log": [
