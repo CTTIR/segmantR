@@ -194,3 +194,16 @@ test_that("the Ruifrok defaults are haematoxylin and eosin, not DAB", {
   expect_equal(sum(stains[, 1] * stains[, 3]), 0, tolerance = 1e-6)
   expect_equal(sum(stains[, 2] * stains[, 3]), 0, tolerance = 1e-6)
 })
+
+test_that("upsampling interpolates within the input range", {
+  img <- new_sg_image(matrix(c(0, 1, 1, 1), 2, 2, byrow = TRUE),
+                      resolution = list(x_um = 1, y_um = 1))
+  up <- suppressMessages(sg_preprocess(img, target_resolution = 0.5))
+  expect_equal(dim(up$pixels), c(4L, 4L))
+  expect_gte(min(up$pixels), 0)
+  expect_lte(max(up$pixels), 1)
+  expect_equal(up$pixels[1, 1], 0)
+  m <- matrix(seq_len(16) / 16, 4, 4)
+  up2 <- segmantR:::.resample_2d(m, 2)
+  expect_equal(range(up2), range(m))
+})

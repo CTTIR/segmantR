@@ -322,10 +322,11 @@ sg_stain_deconvolve <- function(image,
   result <- matrix(0, nrow = nr_new, ncol = nc_new)
   for (i in seq_len(nr_new)) {
     for (j in seq_len(nc_new)) {
-      src_r <- (i - 0.5) / scale_factor + 0.5
-      src_c <- (j - 0.5) / scale_factor + 0.5
-      r0 <- max(1L, floor(src_r))
-      c0 <- max(1L, floor(src_c))
+      # Clamp to the pixel-centre grid so edge pixels are not extrapolated
+      src_r <- min(max((i - 0.5) / scale_factor + 0.5, 1), nr)
+      src_c <- min(max((j - 0.5) / scale_factor + 0.5, 1), nc)
+      r0 <- floor(src_r)
+      c0 <- floor(src_c)
       r1 <- min(nr, r0 + 1L)
       c1 <- min(nc, c0 + 1L)
       dr <- src_r - r0

@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* Bilinear upsampling in `sg_preprocess()` no longer extrapolates at the
+  top and left edges, where it could produce values outside the input
+  range (for example negative intensities).
+
 * The `"ruifrok"` stain matrix of `sg_stain_deconvolve()` (also the
   Macenko fallback) now holds the haematoxylin and eosin vectors; its
   second vector was the DAB vector, so the `eosin` channel measured DAB.
