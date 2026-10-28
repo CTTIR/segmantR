@@ -11,6 +11,12 @@
 #'   `"dice"`, `"jaccard"`, `"aji"`, `"panoptic_quality"`, `"ap50"`,
 #'   `"ap75"`, `"f1_detection"`. Default is all.
 #'
+#' @details Instances are matched one-to-one at an intersection-over-union
+#'   (IoU) threshold. `"ap50"` and `"ap75"` are the instance-segmentation
+#'   average precision used by Cellpose and StarDist at IoU 0.5 and 0.75,
+#'   \eqn{TP / (TP + FP + FN)}; `"f1_detection"` is the F1 score of the
+#'   matches at IoU 0.5, \eqn{2TP / (2TP + FP + FN)}.
+#'
 #' @return An `sg_eval` S3 object (a tibble with columns `metric` and `value`)
 #'   with a custom print method.
 #' @export
@@ -229,15 +235,9 @@ print.sg_eval <- function(x, ...) {
   fp <- length(pred_ids) - tp
   fn <- sum(!matched_gt)
 
-  precision <- if (tp + fp > 0L) tp / (tp + fp) else 0
-  recall <- if (tp + fn > 0L) tp / (tp + fn) else 0
-
-  # AP approximated as precision * recall for single threshold
-  if (precision + recall > 0) {
-    2 * precision * recall / (precision + recall)
-  } else {
-    0
-  }
+  # Instance-segmentation AP at one IoU threshold, as reported by Cellpose
+  # and StarDist: TP / (TP + FP + FN).
+  if (tp + fp + fn > 0L) tp / (tp + fp + fn) else 0
 }
 
 #' F1 detection score

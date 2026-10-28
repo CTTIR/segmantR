@@ -70,3 +70,19 @@ test_that("evaluation metrics are reproducible", {
   res <- sg_evaluate_segmentation(pg$pred, pg$gt)
   expect_snapshot_value(round(res$value, 6), style = "serialize")
 })
+
+test_that("ap50 and ap75 are TP / (TP + FP + FN), not F1", {
+  p <- matrix(0L, 20, 20)
+  p[2:5, 2:5] <- 1L
+  p[8:11, 8:11] <- 2L
+  p[15:18, 15:18] <- 3L
+  g <- matrix(0L, 20, 20)
+  g[2:5, 2:5] <- 1L
+  res <- suppressMessages(sg_evaluate_segmentation(
+    new_sg_mask(p), new_sg_mask(g), metrics = c("ap50", "ap75", "f1_detection")
+  ))
+  # one true positive, two false positives, no false negatives
+  expect_equal(res$value[res$metric == "ap50"], 1 / 3)
+  expect_equal(res$value[res$metric == "ap75"], 1 / 3)
+  expect_equal(res$value[res$metric == "f1_detection"], 0.5)
+})

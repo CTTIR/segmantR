@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* `sg_evaluate_segmentation()` reports `ap50` and `ap75` as the
+  instance-segmentation average precision TP / (TP + FP + FN) used by
+  Cellpose and StarDist; they previously repeated the F1 score.
+
 * `sg_segment_watershed()` computes the distance transform inside the
   foreground and floods only foreground pixels, level by level along the
   surface. Previously every image came back as one object covering the

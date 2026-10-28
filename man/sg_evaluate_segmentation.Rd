@@ -28,6 +28,13 @@ with a custom print method.
 Computes standard instance segmentation metrics by comparing a predicted
 mask against a ground truth mask.
 }
+\details{
+Instances are matched one-to-one at an intersection-over-union
+(IoU) threshold. \code{"ap50"} and \code{"ap75"} are the instance-segmentation
+average precision used by Cellpose and StarDist at IoU 0.5 and 0.75,
+\eqn{TP / (TP + FP + FN)}; \code{"f1_detection"} is the F1 score of the
+matches at IoU 0.5, \eqn{2TP / (2TP + FP + FN)}.
+}
 \examples{
 pred_labels <- matrix(0L, nrow = 20, ncol = 20)
 pred_labels[3:8, 3:8] <- 1L
