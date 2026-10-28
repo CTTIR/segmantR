@@ -178,8 +178,9 @@
 # Resolve a stable label -> colour mapping. `colour` may be NULL (cycle the
 # Okabe-Ito palette over the labels), a single colour (recycled), or a named or
 # unnamed character vector of colours. The returned vector is always named by
-# `labels` so the mapping is stable across sessions. Without labels a supplied
-# `colour` is kept as given, so the labels added later still receive it.
+# `labels` (followed by named colours of labels not in use yet) so the mapping
+# is stable across sessions. Without labels a supplied `colour` is kept as
+# given, so the labels added later still receive it.
 .sg_roi_resolve_palette <- function(labels, colour = NULL) {
   labels <- unique(as.character(labels))
   n <- length(labels)
@@ -209,6 +210,10 @@
       idx <- match(missing, labels)
       out[missing] <- pal[((idx - 1L) %% length(pal)) + 1L]
     }
+    # Keep the named colours of labels not in use yet, so a label added
+    # later still receives its colour.
+    unused <- setdiff(names(colour), c(labels, "", NA))
+    out <- c(out, colour[unused])
     return(out)
   }
   out <- rep(colour, length.out = n)

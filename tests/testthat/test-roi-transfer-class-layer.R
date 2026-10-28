@@ -73,3 +73,20 @@ test_that("a layer created without labels keeps its style colour", {
   expect_equal(sg_roi_layer("x")$style$colour, setNames(character(0),
                                                         character(0)))
 })
+
+test_that("named style colours survive until their label is added", {
+  ly <- sg_roi_layer("L", style = sg_roi_style(
+    colour = c(tumour = "red", stroma = "blue")
+  ))
+  ly <- sg_roi_layer_add(ly, sg_roi_rect(0, 0, 4, 4, label = "stroma"))
+  expect_equal(ly$style$colour[["stroma"]], "blue")
+  ly <- sg_roi_layer_add(ly, sg_roi_rect(5, 5, 9, 9, label = "tumour"))
+  expect_equal(ly$style$colour[c("stroma", "tumour")],
+               c(stroma = "blue", tumour = "red"))
+  # the same holds when the vocabulary is given up front
+  ly <- sg_roi_layer("L", labels = "stroma", style = sg_roi_style(
+    colour = c(tumour = "red", stroma = "blue")
+  ))
+  ly <- sg_roi_layer_add(ly, sg_roi_rect(5, 5, 9, 9, label = "tumour"))
+  expect_equal(ly$style$colour[["tumour"]], "red")
+})

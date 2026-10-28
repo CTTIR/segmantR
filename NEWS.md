@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* A layer style with named colours keeps the colours of labels that are
+  not in the layer yet; adding another label first used to drop them, so
+  those labels later received palette colours.
+
 * The Macenko stain estimate of `sg_stain_deconvolve()` (the default
   `method`) points the principal axes into the positive optical density
   octant before it measures stain angles. With the arbitrary sign of the
