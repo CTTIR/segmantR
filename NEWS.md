@@ -29,7 +29,10 @@
   ones are; they came back scaled to [0, 1]. This affects
   `sg_import_interchange()` and dataset and training masks stored as TIFF.
 
-* Every exported function has a runnable example; Shiny launches run only
+* Every exported function has an example. The examples run except where
+  they need Python (`sg_setup_python()`, `sg_train_cellpose()`,
+  `sg_active_learning_loop()` and the Cellpose, StarDist and Mesmer
+  segmentation calls, which stay in `\dontrun{}`); Shiny launches run only
   in interactive sessions. The help topics `example_images` and
   `example_masks`, which described data objects that do not exist, are
   folded into `?sg_example_image`. `sgCanvasOutput()` and
@@ -132,6 +135,13 @@
   foreground and floods only foreground pixels, level by level along the
   surface. Previously every image came back as one object covering the
   whole plane, and `membrane_channel` had no effect; results change.
+
+* The watershed fix above and the morphological opening fixes change the
+  masks of the bundled protocols `watershed.distance.v1`,
+  `watershed.h_minima.v1`, `threshold.otsu.v1`, `threshold.triangle.v1`
+  and `threshold.adaptive.v1`, although their ids, versions and protocol
+  digests are unchanged. Run records tell the results apart by
+  `runtime$segmantR_version`.
 
 * Standardize the named v5 package logo across README, documentation pages
   and available application headers, with matching light and dark artwork.
