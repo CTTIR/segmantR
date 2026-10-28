@@ -12,6 +12,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
+    <!-- Standard logo aliases contain the named v5 light and dark hexes. -->
     <a class="navbar-brand me-2" href="../index.html"><img src="../logo.svg" alt="" class="themakr-navbar-logo" data-cttir-dark-src="../reference/figures/logo-dark.svg">segmantR</a>
 
     <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.0.9000</small>
@@ -50,7 +51,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="segmantr-development-version">segmantR (development version)<a class="anchor" aria-label="anchor" href="#segmantr-development-version"></a></h2>
-<ul><li><p>Adds independent <code>sg_roi_*</code> histology annotation objects, layers, project provenance, geometry operations, GeoJSON/QuPath exchange and integer ROI masks. A metadata-only frame records explicit pyramid dimensions and pixel calibration. These APIs do not require hyperannotatR (formerly annotatR) or an HSI backend. Existing instance-mask APIs remain unchanged. QuPath UUID derivation and legacy metadata keys are retained.</p></li>
+<ul><li><p>Standardize the named v5 package logo across README, documentation pages and available application headers, with matching light and dark artwork.</p></li>
+<li><p>Adds independent <code>sg_roi_*</code> histology annotation objects, layers, project provenance, geometry operations, GeoJSON/QuPath exchange and integer ROI masks. A metadata-only frame records explicit pyramid dimensions and pixel calibration. These APIs do not require hyperannotatR (formerly annotatR) or an HSI backend. Existing instance-mask APIs remain unchanged. QuPath UUID derivation and legacy metadata keys are retained.</p></li>
 <li><p>Direct QuPath ROI exports retain imported measurements, metadata, image planes and nucleus geometry. ROI mask statistics reject invalid physical calibration.</p></li>
 <li><p>Added an independent cell annotation canvas adapted from annotatR, with rectangle, polygon, freehand, circle, edit and erase tools. Corrections preserve image binding, reject overlaps and stale revisions, and enter the existing staged review workflow. No hyperannotatR dependency is required.</p></li>
 <li><p>The <code><a href="../reference/sg_interchange_capabilities.html">sg_interchange_capabilities()</a></code> profile <code>partner_annotatR</code> is renamed <code>partner_hyperannotatR</code> for the planned HSI partner contract; its status remains <code>planned</code>.</p></li>

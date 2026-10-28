@@ -1,5 +1,8 @@
 # Standard protocols, DNN training and QuPath/StarDist exchange
 
+![segmantR logo](figures/logo.svg)![segmantR
+logo](figures/logo-dark.svg)
+
 ``` r
 
 library(segmantR)
@@ -161,7 +164,7 @@ list.files(dest)
 #> [1] "integrity.json"   "manifest.json"    "mask.legend.json" "mask.tif"        
 #> [5] "measurements.csv" "objects.geojson"
 bundle$bundle_digest
-#> [1] "sha256:1fd7089317419ae46e4c25e6c1bfbf5acdfb61fc888626e1e8f64e5ff94fdb1e"
+#> [1] "sha256:51b9221f7210a14089603123555d1a62299f39c23f84960fe9e8de878897fac3"
 ```
 
 Imports verify integrity, schema, dtype, orientation, plane, legend and

@@ -34,6 +34,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
+    <!-- Standard logo aliases contain the named v5 light and dark hexes. -->
     <a class="navbar-brand me-2" href="../index.html"><img src="../logo.svg" alt="" class="themakr-navbar-logo" data-cttir-dark-src="../reference/figures/logo-dark.svg">segmantR</a>
 
     <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.0.9000</small>
@@ -87,6 +88,25 @@
 
     
     
+<!-- cttir-vignette-logo: start -->
+<style>
+.cttir-vignette-logo { float: right; width: 120px; max-width: 30%; margin: 0 0 1rem 1.5rem; }
+.cttir-vignette-logo img { width: 100%; height: auto; border: 0; background: transparent; box-shadow: none; }
+.cttir-vignette-logo .cttir-vignette-logo-light { display: block; }
+.cttir-vignette-logo .cttir-vignette-logo-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  .cttir-vignette-logo .cttir-vignette-logo-light { display: none; }
+  .cttir-vignette-logo .cttir-vignette-logo-dark { display: block; }
+}
+[data-bs-theme="light"] .cttir-vignette-logo .cttir-vignette-logo-light { display: block; }
+[data-bs-theme="light"] .cttir-vignette-logo .cttir-vignette-logo-dark { display: none; }
+[data-bs-theme="dark"] .cttir-vignette-logo .cttir-vignette-logo-light { display: none; }
+[data-bs-theme="dark"] .cttir-vignette-logo .cttir-vignette-logo-dark { display: block; }
+</style>
+<div class="cttir-vignette-logo">
+<p><img class="cttir-vignette-logo-light" src="figures/logo.svg" alt="segmantR logo" width="120" height="139"><img class="cttir-vignette-logo-dark" src="figures/logo-dark.svg" alt="segmantR logo" width="120" height="139"></p>
+</div>
+<!-- cttir-vignette-logo: end -->
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cttir/segmantR" class="external-link">segmantR</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; segmantR v0.1.0.9000 -- Cell Segmentation with Human-in-the-Loop</span></span>
@@ -221,7 +241,7 @@ and a SHA-256 inventory.</p>
 <span><span class="co">#&gt; [1] "integrity.json"   "manifest.json"    "mask.legend.json" "mask.tif"        </span></span>
 <span><span class="co">#&gt; [5] "measurements.csv" "objects.geojson"</span></span>
 <span><span class="va">bundle</span><span class="op">$</span><span class="va">bundle_digest</span></span>
-<span><span class="co">#&gt; [1] "sha256:1fd7089317419ae46e4c25e6c1bfbf5acdfb61fc888626e1e8f64e5ff94fdb1e"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "sha256:51b9221f7210a14089603123555d1a62299f39c23f84960fe9e8de878897fac3"</span></span></code></pre></div>
 <p>Imports verify integrity, schema, dtype, orientation, plane, legend
 and the agreement between GeoJSON and TIFF, and return a
 <strong>staged</strong> mask:</p>
