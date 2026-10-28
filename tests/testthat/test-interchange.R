@@ -359,3 +359,14 @@ test_that("sg_hash_assets writes both inventory formats", {
   writeLines("changed", file.path(d, "a.txt"))
   expect_error(sg_hash_assets(d, verify = TRUE), class = "sg_integrity_error")
 })
+
+test_that("an integer image exported as image_tiff imports with its digest", {
+  img <- new_sg_image(matrix(1:12, 3, 4), value_semantics = "intensity")
+  dir <- withr::local_tempdir()
+  b <- suppressMessages(sg_export_interchange(
+    img, file.path(dir, "bundle"), formats = c("manifest", "image_tiff")
+  ))
+  rep <- suppressMessages(sg_import_interchange(b$path, error = FALSE))
+  expect_true(rep$ok)
+  expect_identical(rep$image$pixels, img$pixels)
+})

@@ -430,6 +430,12 @@ print.sg_validation_report <- function(x, ...) {
   if (!is.null(ip) && !is.null(man$image)) {
     tif <- .sg_read_tiff(file.path(root, ip))
     px <- tif$data
+    # The TIFF stores float64 planes; restore integer storage before the
+    # digest when the manifest recorded an integer image.
+    if (identical(man$image$dtype, "int32") && is.double(px) &&
+        all(is.na(px) | (px == round(px) & abs(px) <= .Machine$integer.max))) {
+      storage.mode(px) <- "integer"
+    }
     if (!identical(as.integer(dim(px)[1:2]), as.integer(unlist(man$image$shape_yx)))) {
       .sg_abort("Image TIFF shape differs from the manifest.",
                 code = "DIMENSION_MISMATCH")

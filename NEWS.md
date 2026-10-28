@@ -1,5 +1,9 @@
 # segmantR (development version)
 
+* `sg_import_interchange()` accepts bundles whose integer image was
+  exported with `image_tiff`; the float64 TIFF planes are restored to
+  integer storage before the content digest is checked.
+
 * `sg_roi_mask()` no longer rasterises right triangles (and other
   polygons with two distinct x and y values) as their bounding rectangle;
   the rectangle fast path now requires four corners and axis-aligned edges.
