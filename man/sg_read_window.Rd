@@ -30,12 +30,12 @@ Parts of the window outside the image are filled with \code{fill}, which makes
 fields at the slide edge keep their nominal size.
 }
 \examples{
-\donttest{
+\dontshow{if (requireNamespace("tiff", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 f <- tempfile(fileext = ".tif")
 plane <- matrix(0:11, nrow = 3, byrow = TRUE)
-segmantR:::.sg_write_tiff(plane, f, dtype = "uint8")
+invisible(tiff::writeTIFF(plane / 255, f, bits.per.sample = 8L))
 sg_read_window(f, 1, x0 = 1, y0 = 0, width = 2, height = 2)
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=sg_read_field]{sg_read_field()}}, \code{\link[=sg_image_channels]{sg_image_channels()}}

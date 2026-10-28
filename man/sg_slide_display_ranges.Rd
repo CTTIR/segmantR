@@ -54,6 +54,17 @@ every \code{step}-th pixel in both directions taken, and \code{\link[=sg_display
 applied per channel. Tiles follow the block grid of the file, so the
 estimate reads few blocks even for very large scans.
 }
+\examples{
+\dontshow{if (requireNamespace("tiff", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+f <- tempfile(fileext = ".tif")
+planes <- list(outer(1:64, 1:64, function(i, j) (i + j) \%\% 200),
+               outer(1:64, 1:64, function(i, j) (i * j) \%\% 250))
+invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+                          bits.per.sample = 8L))
+cells <- data.frame(x = c(10, 30, 50, 60), y = c(12, 40, 55, 5))
+sg_slide_display_ranges(f, c("ch1", "ch2"), cells, n_tiles = 2)
+\dontshow{\}) # examplesIf}
+}
 \seealso{
 \code{\link[=sg_display_levels]{sg_display_levels()}}
 }

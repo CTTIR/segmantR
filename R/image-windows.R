@@ -26,12 +26,12 @@
 #'   name of the plane).
 #' @seealso [sg_read_window()], [sg_read_field()]
 #' @export
-#' @examples
-#' \donttest{
+#' @examplesIf requireNamespace("tiff", quietly = TRUE)
 #' f <- tempfile(fileext = ".tif")
-#' segmantR:::.sg_write_tiff(array(1:24, c(3, 4, 2)), f, dtype = "uint8")
-#' sg_image_channels(f)
-#' }
+#' planes <- list(matrix(1:100, 10, 10), matrix(101:200, 10, 10))
+#' invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+#'                           bits.per.sample = 8L))
+#' sg_image_channels(f)[, c("channel", "name", "width", "height")]
 sg_image_channels <- function(path) {
   path <- .sg_window_path(path)
   info <- file.info(path)
@@ -89,13 +89,11 @@ sg_image_channels <- function(path) {
 #'   (`[y, x]`), with attributes `x0`, `y0` and `channel` (the name).
 #' @seealso [sg_read_field()], [sg_image_channels()]
 #' @export
-#' @examples
-#' \donttest{
+#' @examplesIf requireNamespace("tiff", quietly = TRUE)
 #' f <- tempfile(fileext = ".tif")
 #' plane <- matrix(0:11, nrow = 3, byrow = TRUE)
-#' segmantR:::.sg_write_tiff(plane, f, dtype = "uint8")
+#' invisible(tiff::writeTIFF(plane / 255, f, bits.per.sample = 8L))
 #' sg_read_window(f, 1, x0 = 1, y0 = 0, width = 2, height = 2)
-#' }
 sg_read_window <- function(path, channel, x0, y0, width, height = width, fill = 0) {
   ch <- .sg_window_channel(path, channel)
   for (v in list(x0, y0, width, height)) {
@@ -148,13 +146,14 @@ sg_read_window <- function(path, channel, x0, y0, width, height = width, fill = 
 #'   units).
 #' @seealso [sg_read_fields()], [sg_read_window()]
 #' @export
-#' @examples
-#' \donttest{
+#' @examplesIf requireNamespace("tiff", quietly = TRUE)
 #' f <- tempfile(fileext = ".tif")
-#' segmantR:::.sg_write_tiff(array(1:200, c(10, 10, 2)), f, dtype = "uint8")
-#' fld <- sg_read_field(f, c("ch1", "ch2"), centre = c(2.5, 2.5), size = 2, pixel_size = 0.5)
+#' planes <- list(matrix(1:100, 10, 10), matrix(101:200, 10, 10))
+#' invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+#'                           bits.per.sample = 8L))
+#' fld <- sg_read_field(f, c("ch1", "ch2"), centre = c(2.5, 2.5), size = 2,
+#'                      pixel_size = 0.5)
 #' fld$channels$ch2
-#' }
 sg_read_field <- function(path, channels, centre, size, pixel_size = 1, fill = 0) {
   if (is.data.frame(centre)) centre <- c(centre$x[1], centre$y[1])
   if (is.list(centre)) centre <- unlist(centre)
@@ -200,6 +199,15 @@ sg_read_field <- function(path, channels, centre, size, pixel_size = 1, fill = 0
 #'   table row (as a one-row data frame) in `row`.
 #' @seealso [sg_read_field()]
 #' @export
+#' @examplesIf requireNamespace("tiff", quietly = TRUE)
+#' f <- tempfile(fileext = ".tif")
+#' planes <- list(matrix(1:100, 10, 10), matrix(101:200, 10, 10))
+#' invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+#'                           bits.per.sample = 8L))
+#' cells <- data.frame(id = c("a", "b"), x = c(2.5, 4), y = c(2.5, 3))
+#' fields <- sg_read_fields(cells, f, channels = c("ch1", "ch2"), size = 2,
+#'                          pixel_size = 0.5, id = "id")
+#' fields$b$channels$ch2
 sg_read_fields <- function(centres, paths, channels = character(0), size, pixel_size = 1, fill = 0,
                            x = "x", y = "y", source = NULL, id = NULL, channel_columns = NULL,
                            key_prefix = "") {
@@ -293,6 +301,14 @@ sg_display_range <- function(x, probs = c(0.01, 0.997), lo = NULL, hi_floor = NU
 #'   `pixels` and, with `source`, `source`.
 #' @seealso [sg_display_levels()]
 #' @export
+#' @examplesIf requireNamespace("tiff", quietly = TRUE)
+#' f <- tempfile(fileext = ".tif")
+#' planes <- list(outer(1:64, 1:64, function(i, j) (i + j) %% 200),
+#'                outer(1:64, 1:64, function(i, j) (i * j) %% 250))
+#' invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+#'                           bits.per.sample = 8L))
+#' cells <- data.frame(x = c(10, 30, 50, 60), y = c(12, 40, 55, 5))
+#' sg_slide_display_ranges(f, c("ch1", "ch2"), cells, n_tiles = 2)
 sg_slide_display_ranges <- function(path, channels, cells, x = "x", y = "y", pixel_size = 1,
                                     n_cells = 4000, n_tiles = 60, step = 3,
                                     probs = c(0.01, 0.997), min_span = 1, seed = 0, source = NULL) {
@@ -361,6 +377,15 @@ sg_slide_display_ranges <- function(path, channels, cells, x = "x", y = "y", pix
 #'   `n_positive`.
 #' @seealso [sg_slide_display_ranges()], [sg_display_range()]
 #' @export
+#' @examplesIf requireNamespace("tiff", quietly = TRUE)
+#' f <- tempfile(fileext = ".tif")
+#' plane <- matrix(10, 40, 40)
+#' plane[21:40, ] <- 200
+#' invisible(tiff::writeTIFF(plane / 255, f, bits.per.sample = 8L))
+#' cells <- data.frame(x = c(5, 15, 25, 35), y = c(5, 10, 30, 35),
+#'                     label = c("neg", "neg", "pos", "pos"))
+#' sg_display_levels(f, "ch1", cells, positive = list(ch1 = "pos"),
+#'                   negative = list(ch1 = "neg"), half = 2)
 sg_display_levels <- function(path, channels, cells, positive, negative, x = "x", y = "y",
                               label = "label", pixel_size = 1, half = 7, statistic = 0.9,
                               black = 0.5, white = 0.5, n = 300, seed = 0) {

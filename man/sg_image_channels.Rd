@@ -26,11 +26,13 @@ and macro images) are left out: a plane belongs to the channel set when it
 has one band and the size of the first plane.
 }
 \examples{
-\donttest{
+\dontshow{if (requireNamespace("tiff", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 f <- tempfile(fileext = ".tif")
-segmantR:::.sg_write_tiff(array(1:24, c(3, 4, 2)), f, dtype = "uint8")
-sg_image_channels(f)
-}
+planes <- list(matrix(1:100, 10, 10), matrix(101:200, 10, 10))
+invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+                          bits.per.sample = 8L))
+sg_image_channels(f)[, c("channel", "name", "width", "height")]
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=sg_read_window]{sg_read_window()}}, \code{\link[=sg_read_field]{sg_read_field()}}

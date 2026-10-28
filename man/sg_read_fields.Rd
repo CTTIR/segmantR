@@ -47,6 +47,18 @@ table row (as a one-row data frame) in \code{row}.
 Reads one \code{\link[=sg_read_field]{sg_read_field()}} per row of a table of centres. Each row names
 its image through \code{source}, looked up in \code{paths}.
 }
+\examples{
+\dontshow{if (requireNamespace("tiff", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+f <- tempfile(fileext = ".tif")
+planes <- list(matrix(1:100, 10, 10), matrix(101:200, 10, 10))
+invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+                          bits.per.sample = 8L))
+cells <- data.frame(id = c("a", "b"), x = c(2.5, 4), y = c(2.5, 3))
+fields <- sg_read_fields(cells, f, channels = c("ch1", "ch2"), size = 2,
+                         pixel_size = 0.5, id = "id")
+fields$b$channels$ch2
+\dontshow{\}) # examplesIf}
+}
 \seealso{
 \code{\link[=sg_read_field]{sg_read_field()}}
 }

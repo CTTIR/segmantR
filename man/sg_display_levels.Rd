@@ -65,6 +65,18 @@ Arguments that vary by channel (\code{half}, \code{statistic}, \code{black}, \co
 accept a single value or a named list/vector by channel name, with an
 optional \code{.default} entry.
 }
+\examples{
+\dontshow{if (requireNamespace("tiff", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+f <- tempfile(fileext = ".tif")
+plane <- matrix(10, 40, 40)
+plane[21:40, ] <- 200
+invisible(tiff::writeTIFF(plane / 255, f, bits.per.sample = 8L))
+cells <- data.frame(x = c(5, 15, 25, 35), y = c(5, 10, 30, 35),
+                    label = c("neg", "neg", "pos", "pos"))
+sg_display_levels(f, "ch1", cells, positive = list(ch1 = "pos"),
+                  negative = list(ch1 = "neg"), half = 2)
+\dontshow{\}) # examplesIf}
+}
 \seealso{
 \code{\link[=sg_slide_display_ranges]{sg_slide_display_ranges()}}, \code{\link[=sg_display_range]{sg_display_range()}}
 }
