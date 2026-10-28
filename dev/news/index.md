@@ -6,6 +6,20 @@
   pages and available application headers, with matching light and dark
   artwork.
 
+- [`sg_image_channels()`](https://cttir.github.io/segmantR/dev/reference/sg_image_channels.md),
+  [`sg_read_window()`](https://cttir.github.io/segmantR/dev/reference/sg_read_window.md),
+  [`sg_read_field()`](https://cttir.github.io/segmantR/dev/reference/sg_read_field.md)
+  and
+  [`sg_read_fields()`](https://cttir.github.io/segmantR/dev/reference/sg_read_fields.md)
+  read rectangular pixel windows of single channels from multi-channel
+  TIFF/QPTIFF images through GDAL;
+  [`sg_display_range()`](https://cttir.github.io/segmantR/dev/reference/sg_display_range.md),
+  [`sg_slide_display_ranges()`](https://cttir.github.io/segmantR/dev/reference/sg_slide_display_ranges.md)
+  and
+  [`sg_display_levels()`](https://cttir.github.io/segmantR/dev/reference/sg_display_levels.md)
+  derive display ranges from slide samples and from the signal of
+  called-positive cells. imager moves to Suggests.
+
 - Adds independent `sg_roi_*` histology annotation objects, layers,
   project provenance, geometry operations, GeoJSON/QuPath exchange and
   integer ROI masks. A metadata-only frame records explicit pyramid

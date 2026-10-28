@@ -33,6 +33,10 @@
   : Create an annotation task for human review
 - [`sg_dataset_manifest()`](https://cttir.github.io/segmantR/dev/reference/sg_dataset_manifest.md)
   : Describe a training dataset
+- [`sg_display_levels()`](https://cttir.github.io/segmantR/dev/reference/sg_display_levels.md)
+  : Display levels from positive and negative reference cells
+- [`sg_display_range()`](https://cttir.github.io/segmantR/dev/reference/sg_display_range.md)
+  : Display range of fluorescence values
 - [`sg_envi_info()`](https://cttir.github.io/segmantR/dev/reference/sg_envi_info.md)
   : Read and validate an ENVI header without reading pixel data
 - [`sg_evaluate_segmentation()`](https://cttir.github.io/segmantR/dev/reference/sg_evaluate_segmentation.md)
@@ -53,6 +57,8 @@
   : Filter cells by morphological criteria
 - [`sg_hash_assets()`](https://cttir.github.io/segmantR/dev/reference/sg_hash_assets.md)
   : Hash, write or verify a bundle inventory
+- [`sg_image_channels()`](https://cttir.github.io/segmantR/dev/reference/sg_image_channels.md)
+  : List the channels of a multi-page microscopy TIFF
 - [`sg_import_interchange()`](https://cttir.github.io/segmantR/dev/reference/sg_import_interchange.md)
   : Import interchange data
 - [`sg_import_qupath()`](https://cttir.github.io/segmantR/dev/reference/sg_import_qupath.md)
@@ -109,8 +115,14 @@
   : Validate a protocol, optionally against an image and parameters
 - [`sg_read_envi()`](https://cttir.github.io/segmantR/dev/reference/sg_read_envi.md)
   : Read an ENVI cube window into an sg_image
+- [`sg_read_field()`](https://cttir.github.io/segmantR/dev/reference/sg_read_field.md)
+  : Read a square multichannel field around a point
+- [`sg_read_fields()`](https://cttir.github.io/segmantR/dev/reference/sg_read_fields.md)
+  : Read many square fields, for example cell galleries
 - [`sg_read_image()`](https://cttir.github.io/segmantR/dev/reference/sg_read_image.md)
   : Read an image file
+- [`sg_read_window()`](https://cttir.github.io/segmantR/dev/reference/sg_read_window.md)
+  : Read a rectangular pixel window of one channel
 - [`sg_roi`](https://cttir.github.io/segmantR/dev/reference/sg_roi.md) :
   Histology ROI objects
 - [`sg_roi_add_layer()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_add_layer.md)
@@ -244,6 +256,8 @@
   : Select one analysis channel from an image
 - [`sg_setup_python()`](https://cttir.github.io/segmantR/dev/reference/sg_setup_python.md)
   : Set up a Python environment for deep learning backends
+- [`sg_slide_display_ranges()`](https://cttir.github.io/segmantR/dev/reference/sg_slide_display_ranges.md)
+  : Slide-wide display ranges from sampled image blocks
 - [`sg_stain_deconvolve()`](https://cttir.github.io/segmantR/dev/reference/sg_stain_deconvolve.md)
   : Separate H&E stain channels by colour deconvolution
 - [`sg_stardist_capabilities()`](https://cttir.github.io/segmantR/dev/reference/sg_stardist_capabilities.md)

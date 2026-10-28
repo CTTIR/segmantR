@@ -25,6 +25,8 @@
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_control_capabilities.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_create_annotation_task.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_dataset_manifest.html</loc></url>
+<url><loc>https://cttir.github.io/segmantR/dev/reference/sg_display_levels.html</loc></url>
+<url><loc>https://cttir.github.io/segmantR/dev/reference/sg_display_range.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_envi_info.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_evaluate_segmentation.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_example_image.html</loc></url>
@@ -35,6 +37,7 @@
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_extract_features.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_filter_cells.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_hash_assets.html</loc></url>
+<url><loc>https://cttir.github.io/segmantR/dev/reference/sg_image_channels.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_import_interchange.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_import_qupath.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_interchange_capabilities.html</loc></url>
@@ -62,7 +65,10 @@
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_protocol_schema.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_protocol_validate.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_read_envi.html</loc></url>
+<url><loc>https://cttir.github.io/segmantR/dev/reference/sg_read_field.html</loc></url>
+<url><loc>https://cttir.github.io/segmantR/dev/reference/sg_read_fields.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_read_image.html</loc></url>
+<url><loc>https://cttir.github.io/segmantR/dev/reference/sg_read_window.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_roi.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_roi_add_layer.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_roi_add_roi.html</loc></url>
@@ -128,6 +134,7 @@
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_segment_watershed.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_select_channel.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_setup_python.html</loc></url>
+<url><loc>https://cttir.github.io/segmantR/dev/reference/sg_slide_display_ranges.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_stain_deconvolve.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_stardist_capabilities.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/dev/reference/sg_stardist_manifest.html</loc></url>
