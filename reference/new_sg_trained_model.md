@@ -11,7 +11,11 @@ new_sg_trained_model(
   backend = c("cellpose", "stardist"),
   base_model,
   training_metrics,
-  model_card = list()
+  model_card = list(),
+  runtime = NULL,
+  dataset_manifest = NULL,
+  license = NULL,
+  representation = "unknown"
 )
 ```
 
@@ -36,7 +40,30 @@ new_sg_trained_model(
 - model_card:
 
   Named list of model card metadata (description, author, intended use,
-  etc.).
+  etc.). The versioned card written by
+  [`sg_package_model()`](https://cttir.github.io/segmantR/reference/sg_package_model.md)
+  reads `purpose`, `data_domain`, `channels`, `target_pixel_size_um`,
+  `input_value_semantics`, `normalization`, `limitations` (character),
+  `evaluation` (named list of metrics) and `license` from here.
+
+- runtime:
+
+  Optional runtime description (list) recorded at training time; never a
+  copy of a Python environment.
+
+- dataset_manifest:
+
+  Optional `sg_dataset_manifest` the model was trained on.
+
+- license:
+
+  Optional list with `id` (e.g. an SPDX identifier), `name`, `source`
+  and `text`.
+
+- representation:
+
+  Weight representation: `"pb"`, `"savedmodel"`, `"bioimageio"`,
+  `"pytorch"`, `"keras"`, `"directory"`, `"file"` or `"unknown"`.
 
 ## Value
 
@@ -45,8 +72,12 @@ An object of class `sg_trained_model`.
 ## Examples
 
 ``` r
+# a dedicated directory with a stand-in weight file
+weights <- file.path(tempfile("model"), "cellpose_weights")
+dir.create(dirname(weights))
+writeBin(as.raw(1:16), weights)
 mdl <- new_sg_trained_model(
-  model_path = tempdir(),
+  model_path = weights,
   backend = "cellpose",
   base_model = "cyto3",
   training_metrics = list(n_epochs = 100L, final_loss = 0.05)
@@ -55,8 +86,8 @@ print(mdl)
 #> <sg_trained_model>
 #> Backend: cellpose
 #> Base model: cyto3
-#> Model path: /tmp/RtmpNfLzCr
+#> Model path: /tmp/Rtmp2rSNsE/model1f832601627c/cellpose_weights
 #> Epochs: 100
 #> Final loss: 0.05
-#> Created: 2026-08-22 13:08:28
+#> Created: 2026-10-29 08:09:33
 ```

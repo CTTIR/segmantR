@@ -44,10 +44,10 @@ Requires a working Python installation with `deepcell` installed.
 ## Examples
 
 ``` r
-# \donttest{
 pixels <- array(runif(200), dim = c(10, 10, 2))
 img <- new_sg_image(pixels, channels = c("nuclear", "membrane"))
-# Requires Python + deepcell:
-# mask <- sg_segment_mesmer(img, compartment = "whole-cell")
-# }
+if (FALSE) { # \dontrun{
+# Requires Python with DeepCell
+mask <- sg_segment_mesmer(img, compartment = "whole-cell")
+} # }
 ```

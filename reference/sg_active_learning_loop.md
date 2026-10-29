@@ -52,8 +52,10 @@ results), `$final_model` (trained model path or object), and `$metrics`
 ## Examples
 
 ``` r
-# \donttest{
-# Requires Python + Cellpose and interactive session:
-# result <- sg_active_learning_loop(image, n_rounds = 3L)
-# }
+if (FALSE) { # \dontrun{
+# Requires Python with Cellpose and an interactive review session
+img <- sg_example_image("fluorescence_nuclei")
+result <- sg_active_learning_loop(img, n_rounds = 3L,
+                                  patches_per_round = 2L, patch_size = 32L)
+} # }
 ```

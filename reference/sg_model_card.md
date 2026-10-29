@@ -23,8 +23,12 @@ contents, returned invisibly.
 ## Examples
 
 ``` r
+# a dedicated directory with a stand-in weight file
+weights <- file.path(tempfile("model"), "cellpose_weights")
+dir.create(dirname(weights))
+writeBin(as.raw(1:16), weights)
 mdl <- new_sg_trained_model(
-  model_path = tempdir(),
+  model_path = weights,
   backend = "cellpose",
   base_model = "cyto3",
   training_metrics = list(n_epochs = 100L),
@@ -34,8 +38,8 @@ sg_model_card(mdl)
 #> ── Model Card ──────────────────────────────────────────────────────────────────
 #> Backend: cellpose
 #> Base Model: cyto3
-#> Model Path: /tmp/RtmpNfLzCr
-#> Created: 2026-08-22 13:08:31
+#> Model Path: /tmp/Rtmp2rSNsE/model1f833968e19b/cellpose_weights
+#> Created: 2026-10-29 08:09:43
 #> Metric: n_epochs: 100
 #> author: Test User
 #> tissue: lung

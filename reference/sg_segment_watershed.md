@@ -2,7 +2,10 @@
 
 Segments cells using a marker-controlled watershed algorithm. Seeds
 (markers) are detected automatically via distance-transform peaks or
-h-minima, and the watershed flood fills from these seeds.
+h-minima inside the Otsu foreground of `channel`. The watershed then
+floods from these seeds, level by level along the surface, so that
+object boundaries follow its ridges; pixels outside the foreground are
+never flooded (only `expand_pixels` grows objects beyond it).
 
 ## Usage
 
@@ -71,9 +74,9 @@ set.seed(42)
 pixels <- matrix(runif(400), nrow = 20, ncol = 20)
 img <- new_sg_image(pixels)
 mask <- sg_segment_watershed(img, seed_method = "distance", h = 0.3)
-#> ℹ Generated 1 seed via "distance".
-#> ✔ Watershed segmented 1 object.
+#> ℹ Generated 31 seeds via "distance".
+#> ✔ Watershed segmented 31 objects.
 print(mask)
-#> <sg_mask>: 20 x 20, 1 cell
+#> <sg_mask>: 20 x 20, 31 cells
 #> Method: watershed
 ```

@@ -71,6 +71,11 @@ sg_segment_threshold(
 
 An `sg_mask` object with labelled cell regions.
 
+## Details
+
+Pixels that are `NA`, such as nodata values of a raster, count as
+background.
+
 ## Examples
 
 ``` r

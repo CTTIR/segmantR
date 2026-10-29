@@ -13,7 +13,8 @@ sg_segment_propagate(
   nuclear_mask,
   membrane_image = NULL,
   lambda = 0.01,
-  expand_max = 20L
+  expand_max = 20L,
+  engine = c("auto", "voronoi_r", "ebimage")
 )
 ```
 
@@ -42,6 +43,13 @@ sg_segment_propagate(
 - expand_max:
 
   Integer; maximum number of propagation iterations. Default is `20L`.
+
+- engine:
+
+  `"auto"` (default, historic behaviour: EBImage when it is installed
+  and no membrane image is given, otherwise pure R), `"voronoi_r"`
+  (always the pure-R engine) or `"ebimage"` (always EBImage; errors
+  instead of falling back).
 
 ## Value
 

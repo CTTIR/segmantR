@@ -34,12 +34,27 @@ sg_setup_python(
 
 - gpu:
 
-  Logical; if `TRUE` (default), attempts to install GPU-enabled versions
-  of the backends.
+  Logical; if `TRUE` (default), installs the GPU-capable `tensorflow`
+  build for StarDist instead of `tensorflow-cpu`. Cellpose is always
+  installed as `cellpose`; it uses a GPU when the installed PyTorch
+  build supports it.
 
 ## Value
 
 Invisibly returns `TRUE` on success.
+
+## Selecting Python
+
+segmantR never starts, downloads or installs Python by itself; without a
+configured Python, recent versions of 'reticulate' would provision one
+with 'uv'. The deep learning backends count as available only when
+Python is already running in the session (for example after
+`reticulate::use_virtualenv("segmantr")` and
+[`reticulate::py_config()`](https://rstudio.github.io/reticulate/reference/py_config.html)),
+when the environment variable `RETICULATE_PYTHON` or
+`RETICULATE_PYTHON_ENV` names a Python, or when the option
+`segmantR.python` is `TRUE`, which lets 'reticulate' find (or provision)
+a Python on first use.
 
 ## Examples
 

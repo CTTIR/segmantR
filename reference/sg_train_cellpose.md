@@ -53,8 +53,11 @@ An `sg_trained_model` object.
 ## Examples
 
 ``` r
-# \donttest{
-# Requires Python + Cellpose:
-# trained <- sg_train_cellpose(training_data, base_model = "cyto3")
-# }
+if (FALSE) { # \dontrun{
+# Requires Python with Cellpose (see sg_setup_python())
+pair <- list(image = sg_example_image("fluorescence_nuclei"),
+             mask = sg_example_mask("fluorescence_nuclei"))
+trained <- sg_train_cellpose(list(pair), base_model = "cyto3",
+                             n_epochs = 10L)
+} # }
 ```
