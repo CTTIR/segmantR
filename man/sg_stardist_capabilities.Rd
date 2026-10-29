@@ -17,8 +17,9 @@ detected installation).}
 \item{extension_version}{Optional StarDist extension version (default:
 detected jar in the QuPath user directory).}
 
-\item{check_python}{Logical; probe the Python \code{stardist} module
-(initialises Python).}
+\item{check_python}{Logical; probe the Python \code{stardist} module. Python
+is initialised only when one has been selected (see the section
+"Selecting Python" in \code{\link[=sg_setup_python]{sg_setup_python()}}).}
 }
 \value{
 An \code{sg_stardist_capabilities} list with \code{qupath}, \code{extension},

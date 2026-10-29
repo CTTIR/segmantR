@@ -8,8 +8,9 @@ sg_protocol_list(check_available = FALSE)
 }
 \arguments{
 \item{check_available}{Logical; if \code{TRUE}, probe optional Python backends
-(this initialises Python through reticulate). Default \code{FALSE} reports
-\code{NA} availability for optional backends.}
+through reticulate; Python is initialised only when one has been
+selected (see the section "Selecting Python" in \code{\link[=sg_setup_python]{sg_setup_python()}}).
+Default \code{FALSE} reports \code{NA} availability for optional backends.}
 }
 \value{
 A tibble with one row per protocol: \code{id}, \code{version}, \code{title},

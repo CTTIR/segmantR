@@ -208,20 +208,93 @@ test_that(".check_ebimage returns FALSE when EBImage is absent", {
 
 test_that(".check_cellpose errors when the module is unavailable", {
   skip_if_not_installed("reticulate")
-  local_mocked_bindings(.sg_py_module_available = function(module) FALSE)
+  local_mocked_bindings(.sg_python_selected = function() TRUE,
+                        .sg_py_module_available = function(module) FALSE)
   expect_error(segmantR:::.check_cellpose(), "module not found")
 })
 
 test_that(".check_stardist errors when the module is unavailable", {
   skip_if_not_installed("reticulate")
-  local_mocked_bindings(.sg_py_module_available = function(module) FALSE)
+  local_mocked_bindings(.sg_python_selected = function() TRUE,
+                        .sg_py_module_available = function(module) FALSE)
   expect_error(segmantR:::.check_stardist(), "module not found")
 })
 
 test_that(".check_mesmer errors when the module is unavailable", {
   skip_if_not_installed("reticulate")
-  local_mocked_bindings(.sg_py_module_available = function(module) FALSE)
+  local_mocked_bindings(.sg_python_selected = function() TRUE,
+                        .sg_py_module_available = function(module) FALSE)
   expect_error(segmantR:::.check_mesmer(), "module not found")
+})
+
+test_that(".sg_python_selected needs a running or chosen Python", {
+  skip_if_not_installed("reticulate")
+  skip_if(reticulate::py_available(initialize = FALSE),
+          "Python is already running in this session")
+  withr::local_envvar(RETICULATE_PYTHON = NA, RETICULATE_PYTHON_ENV = NA)
+  withr::local_options(segmantR.python = NULL)
+  expect_false(segmantR:::.sg_python_selected())
+  withr::with_options(list(segmantR.python = TRUE),
+                      expect_true(segmantR:::.sg_python_selected()))
+  withr::with_envvar(c(RETICULATE_PYTHON = "/opt/python/bin/python3"),
+                     expect_true(segmantR:::.sg_python_selected()))
+  withr::with_envvar(c(RETICULATE_PYTHON_ENV = "segmantr"),
+                     expect_true(segmantR:::.sg_python_selected()))
+  expect_false(reticulate::py_available(initialize = FALSE))
+})
+
+test_that("Python probes report unavailable without a chosen Python", {
+  local_mocked_bindings(.sg_has_pkg = function(pkg) TRUE,
+                        .sg_python_selected = function() FALSE)
+  expect_false(segmantR:::.sg_py_module_available("cellpose"))
+  expect_false(segmantR:::.gpu_available())
+  expect_error(segmantR:::.check_cellpose(), "needs a Python selected")
+  expect_error(segmantR:::.check_stardist(), "needs a Python selected")
+  expect_error(segmantR:::.check_mesmer(), "needs a Python selected")
+  st <- segmantR:::.sg_backend_status("python-stardist")
+  expect_false(st$available)
+  expect_match(st$reason, "does not start or install Python")
+})
+
+test_that("availability probes never start or install Python", {
+  skip_on_cran()
+  skip_if_not_installed("callr")
+  skip_if_not_installed("reticulate")
+  lib <- dirname(system.file(package = "segmantR"))
+  skip_if_not(file.exists(file.path(lib, "segmantR", "Meta", "package.rds")),
+              "prerequisite: an installed segmantR (R CMD check provides it)")
+  # A fresh R process with an empty home: without a chosen Python, recent
+  # reticulate versions would download one with 'uv' into ~/.cache and
+  # ~/.local/share.
+  home <- withr::local_tempdir("home")
+  xdg <- c(XDG_CACHE_HOME = ".cache", XDG_DATA_HOME = ".local/share",
+           XDG_CONFIG_HOME = ".config", XDG_STATE_HOME = ".local/state")
+  env <- c(callr::rcmd_safe_env(), HOME = home,
+           vapply(xdg, function(d) file.path(home, d), character(1)))
+  res <- callr::r(function(lib) {
+    Sys.unsetenv(c("RETICULATE_PYTHON", "RETICULATE_PYTHON_ENV",
+                   "R_USER_CACHE_DIR", "R_USER_DATA_DIR",
+                   "R_USER_CONFIG_DIR"))
+    options(segmantR.python = NULL)
+    ns <- loadNamespace("segmantR", lib.loc = lib)
+    protos <- suppressMessages(segmantR::sg_protocol_list(
+      check_available = TRUE))
+    caps <- segmantR::sg_interchange_capabilities(check_backends = TRUE)
+    py_caps <- Filter(function(b) startsWith(b$name, "python-"),
+                      caps$backends)
+    c(module = ns$.sg_py_module_available("cellpose"),
+      gpu = ns$.gpu_available(),
+      stardist = ns$.sg_backend_status("python-stardist")$available,
+      protocols = any(protos$available[protos$requires_python]),
+      capabilities = any(vapply(py_caps, `[[`, logical(1), "available")),
+      started = reticulate::py_available(initialize = FALSE))
+  }, args = list(lib = lib), env = env)
+  expect_identical(res, c(module = FALSE, gpu = FALSE, stardist = FALSE,
+                          protocols = FALSE, capabilities = FALSE,
+                          started = FALSE))
+  expect_identical(list.files(home, all.files = TRUE, recursive = TRUE,
+                              include.dirs = TRUE, no.. = TRUE),
+                   character(0))
 })
 
 test_that(".watershed_seeds supports the markers method", {

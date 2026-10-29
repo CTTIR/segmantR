@@ -108,6 +108,12 @@ test_that("sg_setup_python falls back to virtualenv on conda failure", {
 })
 
 test_that(".gpu_available returns FALSE when torch is unavailable", {
+  skip_on_cran()
+  skip_if_not_installed("reticulate")
+  # Only a Python the user has started or chosen may be asked for torch
+  skip_if_not(segmantR:::.sg_python_selected(),
+              "prerequisite: a Python selected for reticulate")
+  skip_if(reticulate::py_module_available("torch"), "torch is installed")
   expect_false(segmantR:::.gpu_available())
 })
 

@@ -8,7 +8,9 @@ sg_interchange_capabilities(check_backends = FALSE)
 }
 \arguments{
 \item{check_backends}{Logical; probe optional Python backends
-(initialises Python through reticulate).}
+through reticulate. Python is initialised only when one has been
+selected (see the section "Selecting Python" in \code{\link[=sg_setup_python]{sg_setup_python()}});
+otherwise they are reported as unavailable.}
 }
 \value{
 An \code{sg_capabilities} list conforming to

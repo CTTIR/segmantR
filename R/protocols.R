@@ -236,8 +236,9 @@
 #' List registered segmentation protocols
 #'
 #' @param check_available Logical; if `TRUE`, probe optional Python backends
-#'   (this initialises Python through reticulate). Default `FALSE` reports
-#'   `NA` availability for optional backends.
+#'   through reticulate; Python is initialised only when one has been
+#'   selected (see the section "Selecting Python" in [sg_setup_python()]).
+#'   Default `FALSE` reports `NA` availability for optional backends.
 #'
 #' @return A tibble with one row per protocol: `id`, `version`, `title`,
 #'   `family`, `backend`, `delegate`, `requires_python`, `status`

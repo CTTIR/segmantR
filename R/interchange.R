@@ -44,7 +44,9 @@
 #' evidence exist.
 #'
 #' @param check_backends Logical; probe optional Python backends
-#'   (initialises Python through reticulate).
+#'   through reticulate. Python is initialised only when one has been
+#'   selected (see the section "Selecting Python" in [sg_setup_python()]);
+#'   otherwise they are reported as unavailable.
 #'
 #' @return An `sg_capabilities` list conforming to
 #'   `capabilities.schema.json`, with a `digest` over its content.

@@ -241,6 +241,8 @@ sg_train_stardist <- function(training_data, base_model = NULL,
 #'                             base_model = "none", training_metrics = list())
 #' img <- sg_example_image("fluorescence_nuclei")
 #' run <- sg_predict_model(mdl, img, output = "run")
+#' # "unavailable" unless a Python with 'stardist' has been selected
+#' # (see sg_setup_python())
 #' run$record$status
 #' }
 sg_predict_model <- function(model, image, ..., protocol = NULL,

@@ -34,6 +34,19 @@ Creates and configures a Python virtual environment or conda
 environment with the requested deep learning segmentation backends
 (Cellpose, StarDist) installed.
 }
+\section{Selecting Python}{
+
+segmantR never starts, downloads or installs Python by itself; without a
+configured Python, recent versions of 'reticulate' would provision one
+with 'uv'. The deep learning backends count as available only when
+Python is already running in the session (for example after
+\code{reticulate::use_virtualenv("segmantr")} and \code{reticulate::py_config()}),
+when the environment variable \code{RETICULATE_PYTHON} or
+\code{RETICULATE_PYTHON_ENV} names a Python, or when the option
+\code{segmantR.python} is \code{TRUE}, which lets 'reticulate' find (or provision)
+a Python on first use.
+}
+
 \examples{
 \dontrun{
 sg_setup_python(backends = "cellpose")

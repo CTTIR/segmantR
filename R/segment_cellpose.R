@@ -15,6 +15,17 @@
 #'   is always installed as `cellpose`; it uses a GPU when the installed
 #'   PyTorch build supports it.
 #'
+#' @section Selecting Python:
+#' segmantR never starts, downloads or installs Python by itself; without a
+#' configured Python, recent versions of 'reticulate' would provision one
+#' with 'uv'. The deep learning backends count as available only when
+#' Python is already running in the session (for example after
+#' `reticulate::use_virtualenv("segmantr")` and `reticulate::py_config()`),
+#' when the environment variable `RETICULATE_PYTHON` or
+#' `RETICULATE_PYTHON_ENV` names a Python, or when the option
+#' `segmantR.python` is `TRUE`, which lets 'reticulate' find (or provision)
+#' a Python on first use.
+#'
 #' @return Invisibly returns `TRUE` on success.
 #' @export
 #' @examples
@@ -84,7 +95,8 @@ sg_setup_python <- function(envname = "segmantr",
   activate <- if (env_type == "conda") "use_condaenv" else "use_virtualenv"
   cli::cli_inform(c(
     "v" = "Python environment {.val {envname}} is ready.",
-    "i" = "Use {.code reticulate::{activate}('{envname}')} to activate."
+    "i" = paste("Use {.code reticulate::{activate}('{envname}')} and",
+                "{.code reticulate::py_config()} to activate it.")
   ))
 
   invisible(TRUE)
@@ -267,6 +279,7 @@ sg_segment_cellpose <- function(image,
 #' Check if GPU is available for Cellpose
 #' @noRd
 .gpu_available <- function() {
+  if (!.sg_python_selected()) return(FALSE)
   tryCatch({
     torch <- reticulate::import("torch", convert = TRUE)
     torch$cuda$is_available()

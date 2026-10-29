@@ -36,8 +36,9 @@
 #'   detected installation).
 #' @param extension_version Optional StarDist extension version (default:
 #'   detected jar in the QuPath user directory).
-#' @param check_python Logical; probe the Python `stardist` module
-#'   (initialises Python).
+#' @param check_python Logical; probe the Python `stardist` module. Python
+#'   is initialised only when one has been selected (see the section
+#'   "Selecting Python" in [sg_setup_python()]).
 #'
 #' @return An `sg_stardist_capabilities` list with `qupath`, `extension`,
 #'   `python`, `options` (tibble) and `parameters` (tibble from

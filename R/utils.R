@@ -14,10 +14,41 @@
   requireNamespace(pkg, quietly = TRUE)
 }
 
+#' Has the user started or selected a Python?
+#'
+#' Without a configured Python, recent reticulate versions download and
+#' install one with 'uv' on first use. segmantR therefore uses Python only
+#' when it is already running in the session, when `RETICULATE_PYTHON` or
+#' `RETICULATE_PYTHON_ENV` names one, or when `options(segmantR.python =
+#' TRUE)` lets reticulate choose. `py_available(initialize = FALSE)` only
+#' reads reticulate's state.
+#' @noRd
+.sg_python_selected <- function() {
+  if (!.sg_has_pkg("reticulate")) return(FALSE)
+  if (reticulate::py_available(initialize = FALSE)) return(TRUE)
+  isTRUE(getOption("segmantR.python")) ||
+    nzchar(Sys.getenv("RETICULATE_PYTHON")) ||
+    nzchar(Sys.getenv("RETICULATE_PYTHON_ENV"))
+}
+
+#' Stop unless the user has started or selected a Python
+#' @noRd
+.sg_require_python <- function(what) {
+  if (.sg_python_selected()) return(invisible(TRUE))
+  cli::cli_abort(c(
+    "{what} needs a Python selected for {.pkg reticulate}.",
+    "i" = "segmantR does not start or install Python by itself.",
+    "i" = paste("Start one with {.code reticulate::use_virtualenv('segmantr')}",
+                "and {.code reticulate::py_config()}, set",
+                "{.envvar RETICULATE_PYTHON}, or allow reticulate to choose",
+                "with {.code options(segmantR.python = TRUE)}.")
+  ))
+}
+
 #' Is a Python module available through reticulate?
 #' @noRd
 .sg_py_module_available <- function(module) {
-  reticulate::py_module_available(module)
+  .sg_python_selected() && reticulate::py_module_available(module)
 }
 
 #' Check if Cellpose is available
@@ -29,6 +60,7 @@
       "i" = "Install with: {.code install.packages('reticulate')}"
     ))
   }
+  .sg_require_python("Cellpose segmentation")
   if (!.sg_py_module_available("cellpose")) {
     cli::cli_abort(c(
       "Cellpose Python module not found.",
@@ -48,6 +80,7 @@
       "i" = "Install with: {.code install.packages('reticulate')}"
     ))
   }
+  .sg_require_python("StarDist segmentation")
   if (!.sg_py_module_available("stardist")) {
     cli::cli_abort(c(
       "StarDist Python module not found.",
@@ -66,6 +99,7 @@
       "i" = "Install with: {.code install.packages('reticulate')}"
     ))
   }
+  .sg_require_python("Mesmer segmentation")
   if (!.sg_py_module_available("deepcell")) {
     cli::cli_abort(c(
       "DeepCell Python module not found.",
