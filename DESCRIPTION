@@ -29,6 +29,8 @@ SystemRequirements: Optional: Python with the 'cellpose', 'stardist' or
     'deepcell' modules for the deep learning backends; QuPath (>= 0.4) to
     run the exported QuPath scripts.
 Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 4.1.0)
 Imports:
     digest,
     dplyr,
