@@ -18,3 +18,5 @@ jobs:
       # Bioconductor repository declared.
       bioc-repository: true
       macos-xquartz: true
+    secrets:
+      CTTIR_PRIVATE_TERMS: ${{ secrets.CTTIR_PRIVATE_TERMS }}
