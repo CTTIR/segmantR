@@ -108,12 +108,22 @@ test_that("slide ranges sample whole blocks reproducibly and levels separate cel
 })
 
 test_that("the image-window code carries no study identifiers", {
-  src <- system.file(package = "segmantR")
-  files <- list.files(file.path(src, "R"), full.names = TRUE)
-  if (!length(files) && dir.exists(test_path("../../R"))) files <- test_path("../../R/image-windows.R")
-  skip_if(!length(files), "sources not available")
-  txt <- paste(unlist(lapply(files[grepl("image-windows", files)], readLines, warn = FALSE)), collapse = "\n")
-  # names of studies and people come from the environment, never from this file
+  # the patterns (a regular expression) come from the environment, never
+  # from this file
   private <- Sys.getenv("CTTIR_PRIVATE_TERMS")
-  expect_false(grepl(paste(c("PRJ-2026", if (nzchar(private)) private), collapse = "|"), txt))
+  skip_if(!nzchar(private), "prerequisite: set CTTIR_PRIVATE_TERMS")
+  src <- c(file.path(system.file(package = "segmantR"), "R", "image-windows.R"),
+           test_path("..", "..", "R", "image-windows.R"))
+  src <- src[file.exists(src)]
+  txt <- if (length(src)) {
+    readLines(src[[1]], warn = FALSE)
+  } else {
+    # installed package without sources: check the code of every function
+    ns <- asNamespace("segmantR")
+    unlist(lapply(ls(ns, all.names = TRUE), function(nm) {
+      deparse(get(nm, envir = ns))
+    }))
+  }
+  expect_gt(length(txt), 0L)
+  expect_false(any(grepl(private, txt, perl = TRUE)))
 })
