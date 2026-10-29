@@ -1,5 +1,14 @@
 # segmantR (development version)
 
+* segmantR no longer starts or installs Python by itself. Without a
+  configured Python, recent 'reticulate' versions download one with 'uv',
+  and the backend checks (for example `sg_protocol_list(check_available =
+  TRUE)` or a StarDist run through `sg_predict_model()`) triggered that.
+  The Cellpose, StarDist and Mesmer backends now count as available only
+  when Python is already running, when `RETICULATE_PYTHON` or
+  `RETICULATE_PYTHON_ENV` names one, or with `options(segmantR.python =
+  TRUE)`; see "Selecting Python" in `?sg_setup_python`.
+
 * `sg_segment_threshold()` treats `NA` pixels, such as nodata values, as
   background. An `NA` inside an object used to stop the morphological
   opening with an error, and with `method = "adaptive"` it blanked the
