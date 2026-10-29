@@ -52,6 +52,6 @@ Other geometry:
 ``` r
 sg_roi_flip_y(sg_roi_rect(0, 0, 10, 5, label = "a"), height = 100)
 #> <sg_roi> a (POLYGON)
-#> id: "roi_000000012"  |  level: 0  |  source: manual
+#> id: "roi_000000018"  |  level: 0  |  source: manual
 #> bbox: [0, 95] - [10, 100]
 ```

@@ -69,3 +69,21 @@ row (as a one-row data frame) in `row`.
 ## See also
 
 [`sg_read_field()`](https://cttir.github.io/segmantR/dev/reference/sg_read_field.md)
+
+## Examples
+
+``` r
+f <- tempfile(fileext = ".tif")
+planes <- list(matrix(1:100, 10, 10), matrix(101:200, 10, 10))
+invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+                          bits.per.sample = 8L))
+cells <- data.frame(id = c("a", "b"), x = c(2.5, 4), y = c(2.5, 3))
+fields <- sg_read_fields(cells, f, channels = c("ch1", "ch2"), size = 2,
+                         pixel_size = 0.5, id = "id")
+fields$b$channels$ch2
+#>      [,1] [,2] [,3] [,4]
+#> [1,]  165  175  185  195
+#> [2,]  166  176  186  196
+#> [3,]  167  177  187  197
+#> [4,]  168  178  188  198
+```

@@ -50,7 +50,7 @@ A `shiny.appobj`.
 app <- sg_app(list(image = sg_example_image("fluorescence_nuclei")))
 class(app)
 #> [1] "shiny.appobj"
-if (FALSE) { # \dontrun{
-shiny::runApp(app)
-} # }
+if (interactive()) {
+  shiny::runApp(app)
+}
 ```

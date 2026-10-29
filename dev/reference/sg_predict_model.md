@@ -51,8 +51,8 @@ mdl <- new_sg_trained_model(tempfile("model"), backend = "stardist",
                             base_model = "none", training_metrics = list())
 img <- sg_example_image("fluorescence_nuclei")
 run <- sg_predict_model(mdl, img, output = "run")
-#> Downloading uv...
-#> Done!
+# "unavailable" unless a Python with 'stardist' has been selected
+# (see sg_setup_python())
 run$record$status
 #> [1] "unavailable"
 # }

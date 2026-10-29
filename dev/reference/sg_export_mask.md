@@ -34,12 +34,10 @@ The output file path, returned invisibly.
 ## Examples
 
 ``` r
-# \donttest{
 labels <- matrix(0L, nrow = 10, ncol = 10)
 labels[3:8, 3:8] <- 1L
 mask <- new_sg_mask(labels)
 tmp <- tempfile(fileext = ".csv")
 sg_export_mask(mask, tmp, format = "csv")
-#> ✔ Mask exported to /tmp/RtmpJ7CMlI/file1fe0118bb365.csv ("csv").
-# }
+#> ✔ Mask exported to /tmp/RtmpCaBjCO/file1f345aeb73ad.csv ("csv").
 ```

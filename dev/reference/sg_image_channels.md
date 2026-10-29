@@ -37,15 +37,12 @@ plane).
 ## Examples
 
 ``` r
-# \donttest{
 f <- tempfile(fileext = ".tif")
-segmantR:::.sg_write_tiff(array(1:24, c(3, 4, 2)), f, dtype = "uint8")
-sg_image_channels(f)
-#>   channel name directory width height block_width block_height datatype
-#> 1       1  ch1         1     4      3           4            3     Byte
-#> 2       2  ch2         2     4      3           4            3     Byte
-#>                                                dsn
-#> 1 GTIFF_DIR:1:/tmp/RtmpJ7CMlI/file1fe03c609ce6.tif
-#> 2 GTIFF_DIR:2:/tmp/RtmpJ7CMlI/file1fe03c609ce6.tif
-# }
+planes <- list(matrix(1:100, 10, 10), matrix(101:200, 10, 10))
+invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+                          bits.per.sample = 8L))
+sg_image_channels(f)[, c("channel", "name", "width", "height")]
+#>   channel name width height
+#> 1       1  ch1    10     10
+#> 2       2  ch2    10     10
 ```

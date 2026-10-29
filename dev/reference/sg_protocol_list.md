@@ -12,9 +12,11 @@ sg_protocol_list(check_available = FALSE)
 
 - check_available:
 
-  Logical; if `TRUE`, probe optional Python backends (this initialises
-  Python through reticulate). Default `FALSE` reports `NA` availability
-  for optional backends.
+  Logical; if `TRUE`, probe optional Python backends through reticulate;
+  Python is initialised only when one has been selected (see the section
+  "Selecting Python" in
+  [`sg_setup_python()`](https://cttir.github.io/segmantR/dev/reference/sg_setup_python.md)).
+  Default `FALSE` reports `NA` availability for optional backends.
 
 ## Value
 

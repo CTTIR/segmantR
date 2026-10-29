@@ -76,7 +76,7 @@ run
 #> <sg_run> "threshold.otsu.v1" 1.0.0: succeeded
 #> Objects: 8 (instance, draft)
 #> Revision:
-#> sha256:4060328284931abf3fc37d6c056992a3a4f02d50c09b1e4868a6bb6ef355e685
+#> sha256:fc0b0829ae7ff1d61736ab125bcdcaff87900097cbd417fcdd48c60b2fe9a0d1
 str(run$record$delegate$arguments)
 #> List of 6
 #>  $ channel   : int 1
@@ -164,7 +164,7 @@ list.files(dest)
 #> [1] "integrity.json"   "manifest.json"    "mask.legend.json" "mask.tif"        
 #> [5] "measurements.csv" "objects.geojson"
 bundle$bundle_digest
-#> [1] "sha256:94afdcd16b722f16f74260c0eeb27e95d3fef99467971be311abe511cae8ac22"
+#> [1] "sha256:681cf18bc76ca680ee0c93194131c8bca63928a08e1abec188099de26d521913"
 ```
 
 Imports verify integrity, schema, dtype, orientation, plane, legend and

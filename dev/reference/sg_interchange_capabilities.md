@@ -17,8 +17,11 @@ sg_interchange_capabilities(check_backends = FALSE)
 
 - check_backends:
 
-  Logical; probe optional Python backends (initialises Python through
-  reticulate).
+  Logical; probe optional Python backends through reticulate. Python is
+  initialised only when one has been selected (see the section
+  "Selecting Python" in
+  [`sg_setup_python()`](https://cttir.github.io/segmantR/dev/reference/sg_setup_python.md));
+  otherwise they are reported as unavailable.
 
 ## Value
 

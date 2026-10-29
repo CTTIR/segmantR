@@ -70,10 +70,10 @@ An `sg_mask` object with labelled cell regions.
 ## Examples
 
 ``` r
-# \donttest{
 pixels <- matrix(runif(400), nrow = 20, ncol = 20)
 img <- new_sg_image(pixels)
-# Requires Python + stardist:
-# mask <- sg_segment_stardist(img, model = "2D_versatile_fluo")
-# }
+if (FALSE) { # \dontrun{
+# Requires Python with StarDist (see sg_setup_python())
+mask <- sg_segment_stardist(img, model = "2D_versatile_fluo")
+} # }
 ```

@@ -49,10 +49,9 @@ attributes `x0`, `y0` and `channel` (the name).
 ## Examples
 
 ``` r
-# \donttest{
 f <- tempfile(fileext = ".tif")
 plane <- matrix(0:11, nrow = 3, byrow = TRUE)
-segmantR:::.sg_write_tiff(plane, f, dtype = "uint8")
+invisible(tiff::writeTIFF(plane / 255, f, bits.per.sample = 8L))
 sg_read_window(f, 1, x0 = 1, y0 = 0, width = 2, height = 2)
 #>      [,1] [,2]
 #> [1,]    1    2
@@ -63,5 +62,4 @@ sg_read_window(f, 1, x0 = 1, y0 = 0, width = 2, height = 2)
 #> [1] 0
 #> attr(,"channel")
 #> [1] "ch1"
-# }
 ```

@@ -30,7 +30,8 @@ sg_create_annotation_task(
 - region:
 
   Optional numeric vector `c(row_min, row_max, col_min, col_max)` to
-  restrict patch sampling to a sub-region.
+  restrict patch sampling to a sub-region. Patch coordinates are then
+  relative to the region, and `initial_mask` is cropped to it.
 
 - n_patches:
 
@@ -56,5 +57,5 @@ task <- sg_create_annotation_task(img, n_patches = 4L, patch_size = 32L)
 print(task)
 #> <sg_annotation_task>
 #> Patches: 4 (32 x 32 px)
-#> Created: 2026-10-28 18:28:06
+#> Created: 2026-10-29 05:34:25
 ```

@@ -39,7 +39,8 @@ sg_roi_write_qupath(
 
 - level:
 
-  Integer pyramid level. Default `0`.
+  Integer pyramid level for the coordinates. Default `0`. It is recorded
+  as `annotatr_level` in the feature metadata of the `"qupath"` dialect.
 
 - overwrite:
 
@@ -76,6 +77,9 @@ Other io:
 ## Examples
 
 ``` r
-p <- withr::local_tempfile(fileext = ".geojson")
-sg_roi_write_qupath(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), p)
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+p <- tempfile(fileext = ".geojson")
+sg_roi_write_qupath(proj, p)
 ```

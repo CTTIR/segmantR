@@ -1,7 +1,5 @@
 # segmantR ![segmantR logo](reference/figures/logo-with-name.png)
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21889962.svg)](https://doi.org/10.5281/zenodo.21889962)
-
 segmantR segments microscopy images, records reproducible segmentation
 protocols, and exchanges masks and measurements with downstream tools.
 The core threshold and watershed workflows use R; optional external
@@ -77,9 +75,7 @@ If you use this software, please cite it as:
 
 > Heller, R. (2026). *segmantR: Cell segmentation of histology slides
 > with human-in-the-loop training* (Version 0.1.0) \[Computer
-> software\]. Zenodo. <https://doi.org/10.5281/zenodo.21889962>
-
-DOI: [10.5281/zenodo.21889962](https://doi.org/10.5281/zenodo.21889962)
+> software\]. <https://github.com/CTTIR/segmantR>
 
 ## Documentation and support
 

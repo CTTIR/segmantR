@@ -31,3 +31,12 @@ Other layers:
 [`sg_roi_layer_remove()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_remove.md),
 [`sg_roi_layer_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_rois.md),
 [`sg_roi_style()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_style.md)
+
+## Examples
+
+``` r
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(0, 0, 4, 4, label = "tissue"))
+sg_roi_layer_n(lyr)
+#> [1] 1
+```

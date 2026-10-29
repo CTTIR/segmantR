@@ -80,3 +80,18 @@ with `source`, `source`.
 ## See also
 
 [`sg_display_levels()`](https://cttir.github.io/segmantR/dev/reference/sg_display_levels.md)
+
+## Examples
+
+``` r
+f <- tempfile(fileext = ".tif")
+planes <- list(outer(1:64, 1:64, function(i, j) (i + j) %% 200),
+               outer(1:64, 1:64, function(i, j) (i * j) %% 250))
+invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+                          bits.per.sample = 8L))
+cells <- data.frame(x = c(10, 30, 50, 60), y = c(12, 40, 55, 5))
+sg_slide_display_ranges(f, c("ch1", "ch2"), cells, n_tiles = 2)
+#>   channel   lo      hi tiles pixels
+#> 1     ch1 8.00 125.000     1    484
+#> 2     ch2 1.83 247.551     1    484
+```

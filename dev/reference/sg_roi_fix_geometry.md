@@ -56,3 +56,16 @@ Other geometry:
 [`sg_roi_simplify()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_simplify.md),
 [`sg_roi_snap()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_snap.md),
 [`sg_roi_transform()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_transform.md)
+
+## Examples
+
+``` r
+# a rectangle reaching past the image edge is clamped into the image
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(-2, -2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+fixed <- sg_roi_fix_geometry(proj)
+#> ✔ Repaired 1 ROI.
+sg_roi_rois(fixed)$area_px
+#> [1] 64
+```

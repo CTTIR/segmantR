@@ -40,3 +40,12 @@ Other projects:
 [`sg_roi_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rois.md),
 [`sg_roi_summary()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_summary.md),
 [`sg_roi_validate()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_validate.md)
+
+## Examples
+
+``` r
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)),
+                       list(sg_roi_layer("tumour"), sg_roi_layer("stroma")))
+names(sg_roi_remove_layer(proj, "stroma")$layers)
+#> [1] "tumour"
+```

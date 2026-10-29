@@ -51,6 +51,6 @@ Other geometry:
 ``` r
 sg_roi_snap(sg_roi_point(3.4, 5.6, label = "a"), grid = 1)
 #> <sg_roi> a (POINT)
-#> id: "roi_000000031"  |  level: 0  |  source: manual
+#> id: "roi_000000052"  |  level: 0  |  source: manual
 #> bbox: [3, 6] - [3, 6]
 ```

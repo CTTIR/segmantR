@@ -30,7 +30,9 @@ sg_stardist_capabilities(
 
 - check_python:
 
-  Logical; probe the Python `stardist` module (initialises Python).
+  Logical; probe the Python `stardist` module. Python is initialised
+  only when one has been selected (see the section "Selecting Python" in
+  [`sg_setup_python()`](https://cttir.github.io/segmantR/dev/reference/sg_setup_python.md)).
 
 ## Value
 

@@ -66,6 +66,6 @@ img <- sg_roi_frame(c(100, 100), list(c(100, 100), c(50, 50), c(25, 25)))
 r <- sg_roi_rect(0, 0, 100, 100, label = "a")
 sg_roi_transform(r, from_level = 0, to_level = 2, img = img)
 #> <sg_roi> a (POLYGON)
-#> id: "roi_000000033"  |  level: 2  |  source: manual
+#> id: "roi_000000054"  |  level: 2  |  source: manual
 #> bbox: [0, 0] - [25, 25]
 ```

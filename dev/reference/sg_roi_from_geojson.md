@@ -71,6 +71,6 @@ feat <- list(geometry = list(type = "Polygon",
   coordinates = list(list(c(0, 0), c(4, 0), c(4, 4), c(0, 4), c(0, 0)))))
 sg_roi_from_geojson(feat, label = "region")
 #> <sg_roi> region (POLYGON)
-#> id: "roi_000000014"  |  level: 0  |  source: manual
+#> id: "roi_000000020"  |  level: 0  |  source: manual
 #> bbox: [0, 0] - [4, 4]
 ```

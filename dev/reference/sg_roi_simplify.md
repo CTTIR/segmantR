@@ -51,6 +51,6 @@ Other geometry:
 ``` r
 sg_roi_simplify(sg_roi_circle(50, 50, 10, n_seg = 128, label = "a"), 1)
 #> <sg_roi> a (POLYGON)
-#> id: "roi_000000030"  |  level: 0  |  source: manual
+#> id: "roi_000000051"  |  level: 0  |  source: manual
 #> bbox: [40, 40] - [60, 60]
 ```

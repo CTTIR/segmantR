@@ -49,3 +49,14 @@ sg_canvas(
 ## Value
 
 An HTML widget.
+
+## Examples
+
+``` r
+img <- new_sg_image(matrix(seq_len(72), 8, 9), id = "slide")
+msk <- new_sg_mask(matrix(0L, 8, 9), image_id = "slide")
+widget <- sg_canvas(img, msk, tool = "polygon")
+class(widget)
+#> [1] "sgcanvas"   "htmlwidget"
+if (interactive()) widget
+```

@@ -18,13 +18,16 @@ sg_stain_deconvolve(image, method = c("macenko", "ruifrok"), stains = NULL)
 - method:
 
   Character string specifying the deconvolution method. One of
-  `"macenko"` (default) or `"ruifrok"`.
+  `"macenko"` (default), which estimates the two stain vectors from the
+  image, or `"ruifrok"`, which uses the fixed haematoxylin and eosin
+  vectors of Ruifrok and Johnston (2001).
 
 - stains:
 
-  Optional 3x3 numeric matrix whose columns are the stain vectors. If
-  `NULL`, stain vectors are estimated from the image using the specified
-  `method`.
+  Optional 3x3 numeric matrix whose columns are the stain vectors
+  (optical density in R, G and B) for haematoxylin, eosin and the
+  residual channel, in that order. If `NULL`, stain vectors are
+  estimated from the image using the specified `method`.
 
 ## Value
 
@@ -34,12 +37,10 @@ A named list of `sg_image` objects, one per stain channel. Typically
 ## Examples
 
 ``` r
-# \donttest{
 # Requires a colour image
 pixels <- array(runif(300), dim = c(10, 10, 3))
 img <- new_sg_image(pixels, channels = c("R", "G", "B"))
 stains <- sg_stain_deconvolve(img)
 names(stains)
 #> [1] "hematoxylin" "eosin"       "residual"   
-# }
 ```

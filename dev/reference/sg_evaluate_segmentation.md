@@ -35,6 +35,14 @@ sg_evaluate_segmentation(
 An `sg_eval` S3 object (a tibble with columns `metric` and `value`) with
 a custom print method.
 
+## Details
+
+Instances are matched one-to-one at an intersection-over-union (IoU)
+threshold. `"ap50"` and `"ap75"` are the instance-segmentation average
+precision used by Cellpose and StarDist at IoU 0.5 and 0.75, \\TP /
+(TP + FP + FN)\\; `"f1_detection"` is the F1 score of the matches at IoU
+0.5, \\2TP / (2TP + FP + FN)\\.
+
 ## Examples
 
 ``` r

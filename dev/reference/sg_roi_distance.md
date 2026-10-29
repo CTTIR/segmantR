@@ -41,3 +41,12 @@ Other geometry:
 [`sg_roi_simplify()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_simplify.md),
 [`sg_roi_snap()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_snap.md),
 [`sg_roi_transform()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_transform.md)
+
+## Examples
+
+``` r
+a <- sg_roi_rect(0, 0, 4, 4, label = "a")
+b <- sg_roi_rect(10, 0, 14, 4, label = "b")
+sg_roi_distance(a, b)
+#> [1] 6
+```

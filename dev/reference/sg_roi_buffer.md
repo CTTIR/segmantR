@@ -51,6 +51,6 @@ Other geometry:
 ``` r
 sg_roi_buffer(sg_roi_point(10, 10, label = "a"), dist = 5)
 #> <sg_roi> a (POLYGON)
-#> id: "roi_000000003"  |  level: 0  |  source: manual
+#> id: "roi_000000006"  |  level: 0  |  source: manual
 #> bbox: [5, 5] - [15, 15]
 ```

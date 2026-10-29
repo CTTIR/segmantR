@@ -32,7 +32,10 @@ An `sg_image` object.
 ## Examples
 
 ``` r
-# \donttest{
-# img <- sg_read_image("path/to/image.tiff")
-# }
+f <- tempfile(fileext = ".tif")
+EBImage::writeImage(EBImage::Image(matrix(seq(0, 1, length.out = 200), 20, 10)),
+                    f)
+img <- sg_read_image(f)
+dim(img$pixels)
+#> [1] 10 20
 ```

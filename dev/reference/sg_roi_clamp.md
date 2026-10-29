@@ -52,6 +52,6 @@ Other geometry:
 ``` r
 sg_roi_clamp(sg_roi_rect(-5, -5, 20, 20, label = "a"), dims = c(10, 10))
 #> <sg_roi> a (POLYGON)
-#> id: "roi_000000009"  |  level: 0  |  source: manual
+#> id: "roi_000000012"  |  level: 0  |  source: manual
 #> bbox: [0, 0] - [10, 10]
 ```

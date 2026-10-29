@@ -40,3 +40,17 @@ Other layers:
 [`sg_roi_layer_n()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_n.md),
 [`sg_roi_layer_remove()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layer_remove.md),
 [`sg_roi_style()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_style.md)
+
+## Examples
+
+``` r
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(0, 0, 4, 4, label = "tumour"))
+lyr <- sg_roi_layer_add(lyr, sg_roi_rect(5, 5, 8, 8, label = "stroma"))
+sg_roi_layer_rois(lyr)[, c("label", "area_px")]
+#> # A tibble: 2 × 2
+#>   label  area_px
+#>   <chr>    <dbl>
+#> 1 tumour      16
+#> 2 stroma       9
+```

@@ -42,7 +42,7 @@ sg_roi_mask_derive(
 
 - background:
 
-  Integer background/unlabeled value. Default `0`.
+  Integer background/unlabelled value. Default `0`.
 
 - call:
 
@@ -69,7 +69,9 @@ Other masks:
 ## Examples
 
 ``` r
-proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
 # A single-layer project derives trivially; the four-layer HSI workflow passes
 # separate anatomy/state/artefact masks. See the masks vignette.
 m <- sg_roi_mask(proj, "multiclass")

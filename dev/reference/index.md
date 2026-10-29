@@ -2,10 +2,6 @@
 
 ## All functions
 
-- [`example_images`](https://cttir.github.io/segmantR/dev/reference/example_images.md)
-  : Example segmantR images
-- [`example_masks`](https://cttir.github.io/segmantR/dev/reference/example_masks.md)
-  : Example segmantR masks
 - [`new_sg_image()`](https://cttir.github.io/segmantR/dev/reference/new_sg_image.md)
   : Create a new sg_image object
 - [`new_sg_mask()`](https://cttir.github.io/segmantR/dev/reference/new_sg_mask.md)
@@ -178,7 +174,7 @@
 - [`sg_roi_layers()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_layers.md)
   : Layer summary table
 - [`sg_roi_mask()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask.md)
-  : Rasterise ROIs to a mask ("Schablone")
+  : Rasterise ROIs to a mask
 - [`sg_roi_mask_boundary()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_boundary.md)
   : Object boundaries of a mask
 - [`sg_roi_mask_derive()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_mask_derive.md)

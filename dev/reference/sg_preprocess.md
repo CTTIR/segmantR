@@ -45,7 +45,7 @@ sg_preprocess(
   unsupported and raises an error; leave `NULL` to retain them
   unchanged. Both pixel sizes must be finite and positive to resample.
   Partial or invalid calibration raises an error; if both sizes are
-  unknown, the existing message-and-skip behavior is retained.
+  unknown, the existing message-and-skip behaviour is retained.
 
 ## Value
 

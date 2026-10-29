@@ -42,3 +42,12 @@ Other projects:
 [`sg_roi_rois()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_rois.md),
 [`sg_roi_summary()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_summary.md),
 [`sg_roi_validate()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_validate.md)
+
+## Examples
+
+``` r
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)))
+proj <- sg_roi_add_layer(proj, sg_roi_layer("tissue"))
+names(proj$layers)
+#> [1] "tissue"
+```

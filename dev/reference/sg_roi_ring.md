@@ -74,6 +74,6 @@ Other geometry:
 inj <- sg_roi_rect(10, 10, 20, 20, label = "injury")
 sg_roi_ring(inj, outer = 3, label = "penumbra")
 #> <sg_roi> penumbra (POLYGON)
-#> id: "roi_000000026"  |  level: 0  |  source: derived
+#> id: "roi_000000044"  |  level: 0  |  source: derived
 #> bbox: [7, 7] - [23, 23]
 ```

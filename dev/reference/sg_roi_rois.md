@@ -106,6 +106,14 @@ Other projects:
 ## Examples
 
 ``` r
-# proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
-# sg_roi_rois(proj)
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+sg_roi_rois(proj)
+#> # A tibble: 1 × 14
+#>   roi_id    layer label geom_type level area_px centroid_x centroid_y n_vertices
+#>   <chr>     <chr> <chr> <chr>     <int>   <dbl>      <dbl>      <dbl>      <int>
+#> 1 roi_0000… tiss… tiss… POLYGON       0      36          5          5          5
+#> # ℹ 5 more variables: created <dttm>, modified <dttm>, author <chr>,
+#> #   source <chr>, geometry <POLYGON>
 ```

@@ -53,15 +53,16 @@ matrices), `x0`, `y0`, `n`, `pixel_size`, `centre`, `size` and `extent`
 ## Examples
 
 ``` r
-# \donttest{
 f <- tempfile(fileext = ".tif")
-segmantR:::.sg_write_tiff(array(1:200, c(10, 10, 2)), f, dtype = "uint8")
-fld <- sg_read_field(f, c("ch1", "ch2"), centre = c(2.5, 2.5), size = 2, pixel_size = 0.5)
+planes <- list(matrix(1:100, 10, 10), matrix(101:200, 10, 10))
+invisible(tiff::writeTIFF(lapply(planes, function(p) p / 255), f,
+                          bits.per.sample = 8L))
+fld <- sg_read_field(f, c("ch1", "ch2"), centre = c(2.5, 2.5), size = 2,
+                     pixel_size = 0.5)
 fld$channels$ch2
 #>      [,1] [,2] [,3] [,4]
 #> [1,]  134  144  154  164
 #> [2,]  135  145  155  165
 #> [3,]  136  146  156  166
 #> [4,]  137  147  157  167
-# }
 ```

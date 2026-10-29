@@ -72,8 +72,12 @@ An object of class `sg_trained_model`.
 ## Examples
 
 ``` r
+# a dedicated directory with a stand-in weight file
+weights <- file.path(tempfile("model"), "cellpose_weights")
+dir.create(dirname(weights))
+writeBin(as.raw(1:16), weights)
 mdl <- new_sg_trained_model(
-  model_path = tempdir(),
+  model_path = weights,
   backend = "cellpose",
   base_model = "cyto3",
   training_metrics = list(n_epochs = 100L, final_loss = 0.05)
@@ -82,8 +86,8 @@ print(mdl)
 #> <sg_trained_model>
 #> Backend: cellpose
 #> Base model: cyto3
-#> Model path: /tmp/RtmpJ7CMlI
+#> Model path: /tmp/RtmpCaBjCO/model1f346b256917/cellpose_weights
 #> Epochs: 100
 #> Final loss: 0.05
-#> Created: 2026-10-28 18:28:03
+#> Created: 2026-10-29 05:34:22
 ```

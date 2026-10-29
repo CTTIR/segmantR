@@ -54,3 +54,14 @@ Other io:
 [`sg_roi_read_geojson()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_read_geojson.md),
 [`sg_roi_write_geojson()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_write_geojson.md),
 [`sg_roi_write_qupath()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_write_qupath.md)
+
+## Examples
+
+``` r
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+p <- tempfile(fileext = ".geojson")
+sg_roi_write_qupath(sg_roi_project(sg_roi_frame(c(20, 20)), lyr), p)
+sg_roi_layer_n(sg_roi_read_qupath(p))
+#> [1] 1
+```

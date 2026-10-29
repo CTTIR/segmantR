@@ -73,5 +73,5 @@ sg_roi_check_containment(sg_roi_project(sg_roi_frame(c(100, 100)), list(anatomy,
 #> # A tibble: 1 × 5
 #>   roi_id        layer issue                                     severity fixable
 #>   <chr>         <chr> <chr>                                     <chr>    <lgl>  
-#> 1 roi_000000006 state ROI is not contained in layer 'anatomy' … warning  FALSE  
+#> 1 roi_000000009 state ROI is not contained in layer 'anatomy' … warning  FALSE  
 ```

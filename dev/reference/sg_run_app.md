@@ -39,14 +39,15 @@ sg_run_app(image = NULL, mask = NULL, port = NULL, launch.browser = TRUE)
 
 For compatibility with code that starts the bundled app directory
 directly, the pre-loaded objects are also stored in the option
-`segmantR.app_env`;
+`segmantR.app_env` while the app runs; the previous value is restored
+when it stops.
 [`sg_app()`](https://cttir.github.io/segmantR/dev/reference/sg_app.md)
 itself does not use options.
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-sg_run_app()
-} # }
+if (interactive()) {
+  sg_run_app(image = sg_example_image("fluorescence_nuclei"))
+}
 ```

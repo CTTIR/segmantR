@@ -45,7 +45,10 @@ Other masks:
 ## Examples
 
 ``` r
-sg_roi_mask_stats(sg_roi_mask(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), "labelled"))
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+sg_roi_mask_stats(sg_roi_mask(proj, "labelled"))
 #> # A tibble: 1 × 12
 #>   value label   n_px area_px area_physical frac_total bbox_xmin bbox_ymin
 #>   <int> <chr>  <int>   <dbl>         <dbl>      <dbl>     <dbl>     <dbl>

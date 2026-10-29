@@ -93,3 +93,18 @@ optional `.default` entry.
 
 [`sg_slide_display_ranges()`](https://cttir.github.io/segmantR/dev/reference/sg_slide_display_ranges.md),
 [`sg_display_range()`](https://cttir.github.io/segmantR/dev/reference/sg_display_range.md)
+
+## Examples
+
+``` r
+f <- tempfile(fileext = ".tif")
+plane <- matrix(10, 40, 40)
+plane[21:40, ] <- 200
+invisible(tiff::writeTIFF(plane / 255, f, bits.per.sample = 8L))
+cells <- data.frame(x = c(5, 15, 25, 35), y = c(5, 10, 30, 35),
+                    label = c("neg", "neg", "pos", "pos"))
+sg_display_levels(f, "ch1", cells, positive = list(ch1 = "pos"),
+                  negative = list(ch1 = "neg"), half = 2)
+#>   channel lo  hi n_negative n_positive
+#> 1     ch1 10 200          2          2
+```

@@ -33,7 +33,10 @@ sg_roi_write_geojson(
 
 - level:
 
-  Integer pyramid level for the coordinates. Default `0`.
+  Integer pyramid level for the coordinates. Default `0`. It is written
+  to each feature's `level` property, which
+  [`sg_roi_read_geojson()`](https://cttir.github.io/segmantR/dev/reference/sg_roi_read_geojson.md)
+  restores.
 
 - flip_y:
 
@@ -67,6 +70,9 @@ Other io:
 ## Examples
 
 ``` r
-p <- withr::local_tempfile(fileext = ".geojson")
-sg_roi_write_geojson(sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue"))), p)
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
+p <- tempfile(fileext = ".geojson")
+sg_roi_write_geojson(proj, p)
 ```

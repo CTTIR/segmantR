@@ -1,7 +1,7 @@
-# Rasterise ROIs to a mask ("Schablone")
+# Rasterise ROIs to a mask
 
 Produce a binary, labelled, or multi-class integer mask from
-annotations. This is the package's core output artifact.
+annotations. This is the package's core output artefact.
 
 ## Usage
 
@@ -119,7 +119,9 @@ Other masks:
 ## Examples
 
 ``` r
-proj <- sg_roi_project(sg_roi_frame(c(20, 20)), sg_roi_layer_add(sg_roi_layer("tissue"), sg_roi_rect(2, 2, 8, 8, "tissue")))
+lyr <- sg_roi_layer_add(sg_roi_layer("tissue"),
+                        sg_roi_rect(2, 2, 8, 8, label = "tissue"))
+proj <- sg_roi_project(sg_roi_frame(c(20, 20)), lyr)
 m <- sg_roi_mask(proj, type = "multiclass")
 table(as.integer(m))
 #> 
