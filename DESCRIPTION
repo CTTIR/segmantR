@@ -21,8 +21,8 @@ Description: Cell segmentation for histology and multiplexed tissue imaging.
     with a 'StarDist' parameter adapter support reproducible exchange with
     'QuPath' and partner packages.
 License: MIT + file LICENSE
-URL: https://github.com/cttir/segmantR, https://cttir.github.io/segmantR/
-BugReports: https://github.com/cttir/segmantR/issues
+URL: https://github.com/CTTIR/segmantR, https://cttir.github.io/segmantR/
+BugReports: https://github.com/CTTIR/segmantR/issues
 Encoding: UTF-8
 Language: en-GB
 SystemRequirements: Optional: Python with the 'cellpose', 'stardist' or
