@@ -308,6 +308,12 @@
   n_pages <- sum(same_shape)
   planes <- vector("list", n_pages)
   planar <- p1[["284"]] %||% 1
+  if (spp > 1 && planar == 2) {
+    .sg_abort(c("Planar-separate multi-sample TIFF is not supported.",
+                "i" = paste("Save the samples interleaved or as one page",
+                            "per channel.")),
+              code = "DTYPE_MISMATCH")
+  }
   if (comp == 1 && spp > 1 && planar == 1 && bits %in% c(8, 16, 32, 64)) {
     # Chunky (interleaved) samples of the first page: [y, x, sample]
     con <- file(path, open = "rb")

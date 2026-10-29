@@ -9,6 +9,55 @@ as_matrix_row_major <- function(values, shape) {
   matrix(unlist(values), nrow = shape[[1]], ncol = shape[[2]], byrow = TRUE)
 }
 
+# Minimal little-endian TIFF with one strip per plane, for layouts that
+# neither the package writer nor tiff::writeTIFF() produce. Compression 8
+# (Deflate) uses the zlib stream of memCompress().
+write_test_tiff <- function(path, width, height, strips, bits = 8L, spp = 1L,
+                            compression = 1L, photometric = 1L, planar = 1L,
+                            sample_format = 1L, colormap = NULL) {
+  u16 <- function(v) writeBin(as.integer(v), raw(), size = 2L,
+                              endian = "little")
+  u32 <- function(v) writeBin(as.integer(v), raw(), size = 4L,
+                              endian = "little")
+  if (compression == 8L) strips <- lapply(strips, memCompress, type = "gzip")
+  tags <- list(
+    `256` = list(4L, width), `257` = list(4L, height),
+    `258` = list(3L, rep(bits, spp)), `259` = list(3L, compression),
+    `262` = list(3L, photometric), `273` = list(4L, 0L),
+    `277` = list(3L, spp), `278` = list(4L, height),
+    `279` = list(4L, lengths(strips)), `284` = list(3L, planar),
+    `320` = if (!is.null(colormap)) list(3L, colormap),
+    `339` = list(3L, rep(sample_format, spp))
+  )
+  tags <- Filter(Negate(is.null), tags)
+  n_bytes <- function(t) length(t[[2]]) * if (t[[1]] == 3L) 2L else 4L
+  # header and IFD, then tag values longer than 4 bytes, then the strips
+  pos <- 8L + 2L + 12L * length(tags) + 4L
+  n_extra <- sum(vapply(tags, function(t) {
+    if (n_bytes(t) > 4L) n_bytes(t) else 0L
+  }, integer(1)))
+  if (length(strips) > 1L) n_extra <- n_extra + 4L * length(strips)
+  tags[["273"]][[2]] <- pos + n_extra +
+    c(0L, cumsum(lengths(strips)))[seq_along(strips)]
+  ifd <- u16(length(tags))
+  extra <- raw(0)
+  for (id in names(tags)) {
+    t <- tags[[id]]
+    v <- if (t[[1]] == 3L) u16(t[[2]]) else u32(t[[2]])
+    if (length(v) > 4L) {
+      field <- u32(pos + length(extra))
+      extra <- c(extra, v)
+    } else {
+      field <- c(v, raw(4L - length(v)))
+    }
+    ifd <- c(ifd, u16(as.integer(id)), u16(t[[1]]), u32(length(t[[2]])),
+             field)
+  }
+  writeBin(c(charToRaw("II"), u16(42L), u32(8L), ifd, u32(0L), extra,
+             unlist(strips)), path)
+  invisible(path)
+}
+
 test_that("uncompressed integer TIFFs from tifffile read exactly", {
   for (name in c("labels_uint16_le.tif", "labels_uint16_be.tif",
                  "labels_uint32_le.tif", "labels_uint8_le.tif")) {
@@ -188,4 +237,21 @@ test_that("compressed uint32 values at and above 2^31 read back exactly", {
   tiff::writeTIFF(y / 4294967295, f, bits.per.sample = 32L,
                   compression = "LZW")
   expect_identical(segmantR:::.sg_read_tiff(f)$data, y)
+})
+
+test_that("planar-separate multi-sample TIFFs are rejected", {
+  f <- withr::local_tempfile(fileext = ".tif")
+  rgb <- array(as.integer(1:18), c(2, 3, 3))
+  planes <- lapply(1:3, function(k) as.raw(t(rgb[, , k])))
+  for (comp in c(1L, 8L)) {
+    write_test_tiff(f, 3L, 2L, planes, spp = 3L, compression = comp,
+                    photometric = 2L, planar = 2L)
+    err <- expect_error(segmantR:::.sg_read_tiff(f),
+                        class = "sg_validation_error")
+    expect_equal(err$code, "DTYPE_MISMATCH")
+  }
+  # the same samples interleaved read as [y, x, sample]
+  write_test_tiff(f, 3L, 2L, list(as.raw(aperm(rgb, c(3, 2, 1)))),
+                  spp = 3L, photometric = 2L)
+  expect_identical(segmantR:::.sg_read_tiff(f)$data, rgb)
 })
