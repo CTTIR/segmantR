@@ -255,3 +255,19 @@ test_that("planar-separate multi-sample TIFFs are rejected", {
                   spp = 3L, photometric = 2L)
   expect_identical(segmantR:::.sg_read_tiff(f)$data, rgb)
 })
+
+test_that("palette TIFFs read as their colour indices", {
+  f <- withr::local_tempfile(fileext = ".tif")
+  idx <- matrix(as.integer(c(0, 1, 2, 3, 254, 255)), 2, 3)
+  cmap <- as.integer(round(c(seq(0, 65535, length.out = 256),
+                             rev(seq(0, 65535, length.out = 256)),
+                             rep(1000, 256))))
+  for (comp in c(1L, 8L)) {
+    if (comp == 8L) skip_if_not_installed("tiff")
+    write_test_tiff(f, 3L, 2L, list(as.raw(t(idx))), compression = comp,
+                    photometric = 3L, colormap = cmap)
+    tif <- segmantR:::.sg_read_tiff(f)
+    expect_equal(tif$dtype, "uint8")
+    expect_identical(tif$data, idx)
+  }
+})

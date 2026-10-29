@@ -388,13 +388,17 @@
       .sg_abort("Signed compressed TIFF masks are not supported.",
                 code = "DTYPE_MISMATCH")
     }
-    pg <- tiff::readTIFF(path, as.is = TRUE, all = TRUE)
+    # palette images: the stored colour indices, as read uncompressed above,
+    # rather than the 16-bit colour map values
+    palette <- isTRUE(p1[["262"]][1] == 3)
+    pg <- tiff::readTIFF(path, as.is = TRUE, all = TRUE, indexed = palette)
     pg <- pg[seq_len(min(length(pg), n_pages))]
     # as.is = TRUE keeps the stored integers of single-sample images only;
     # multi-sample (e.g. RGB) images come back scaled to [0, 1]
     if (fmt != 3) {
       pg <- lapply(pg, function(a) {
         if (is.integer(a)) {
+          attr(a, "color.map") <- NULL
           # uint32 values from 2^31 come back as negative integers (2^31
           # itself as NA); restore them as doubles, like .sg_decode_int32()
           if (bits == 32 && (anyNA(a) || any(a < 0L, na.rm = TRUE))) {
