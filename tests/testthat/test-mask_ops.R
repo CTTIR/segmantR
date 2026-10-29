@@ -71,10 +71,7 @@ test_that("sg_merge_masks validates inputs and dims", {
 
 test_that("sg_mask_to_polygons returns coordinates without sf", {
   # Force the no-sf fallback regardless of whether sf is installed.
-  local_mocked_bindings(
-    requireNamespace = function(pkg, ...) if (pkg == "sf") FALSE else TRUE,
-    .package = "base"
-  )
+  local_mocked_bindings(.sg_has_pkg = function(pkg) pkg != "sf")
   mask <- two_cell_mask()
   polys <- sg_mask_to_polygons(mask, simplify = FALSE)
   expect_s3_class(polys, "tbl_df")
@@ -124,10 +121,7 @@ test_that("sg_export_mask writes GeoJSON via sf when available", {
 })
 
 test_that("sg_export_mask writes GeoJSON as JSON without sf", {
-  local_mocked_bindings(
-    requireNamespace = function(pkg, ...) if (pkg == "sf") FALSE else TRUE,
-    .package = "base"
-  )
+  local_mocked_bindings(.sg_has_pkg = function(pkg) pkg != "sf")
   mask <- two_cell_mask()
   tmp <- withr::local_tempfile(fileext = ".json")
   sg_export_mask(mask, tmp, format = "geojson")
@@ -150,10 +144,7 @@ test_that("sg_export_mask writes a TIFF when tiff is available", {
 })
 
 test_that("sg_export_mask errors without tiff for tiff format", {
-  local_mocked_bindings(
-    requireNamespace = function(pkg, ...) if (pkg == "tiff") FALSE else TRUE,
-    .package = "base"
-  )
+  local_mocked_bindings(.sg_has_pkg = function(pkg) pkg != "tiff")
   mask <- two_cell_mask()
   tmp <- withr::local_tempfile(fileext = ".tiff")
   expect_error(sg_export_mask(mask, tmp, format = "tiff"), "tiff")

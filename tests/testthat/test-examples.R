@@ -36,12 +36,11 @@ test_that("sg_run_app stores image/mask in options while runApp runs", {
   captured <- NULL
   env <- NULL
   local_mocked_bindings(
-    runApp = function(...) {
+    .sg_run_shiny_app = function(...) {
       captured <<- list(...)
       env <<- getOption("segmantR.app_env")
       invisible(NULL)
-    },
-    .package = "shiny"
+    }
   )
   withr::local_options(segmantR.app_env = "previous")
   img <- sg_example_image("he_breast")

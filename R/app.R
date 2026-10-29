@@ -39,9 +39,15 @@ sg_run_app <- function(image = NULL, mask = NULL, port = NULL,
   if (!is.null(port)) {
     run_args$port <- as.integer(port)
   }
-  do.call(shiny::runApp, run_args)
+  do.call(.sg_run_shiny_app, run_args)
 
   invisible(NULL)
+}
+
+#' Run a Shiny app (a seam so tests need not mock shiny)
+#' @noRd
+.sg_run_shiny_app <- function(...) {
+  shiny::runApp(...)
 }
 
 #' Load a bundled example image

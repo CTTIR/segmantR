@@ -186,26 +186,17 @@ test_that(".mask_to_training_pair bundles inputs", {
 })
 
 test_that(".check_cellpose errors without reticulate or module", {
-  local_mocked_bindings(
-    requireNamespace = function(...) FALSE,
-    .package = "base"
-  )
+  local_mocked_bindings(.sg_has_pkg = function(pkg) FALSE)
   expect_error(segmantR:::.check_cellpose(), "reticulate")
 })
 
 test_that(".check_stardist errors without reticulate", {
-  local_mocked_bindings(
-    requireNamespace = function(...) FALSE,
-    .package = "base"
-  )
+  local_mocked_bindings(.sg_has_pkg = function(pkg) FALSE)
   expect_error(segmantR:::.check_stardist(), "reticulate")
 })
 
 test_that(".check_mesmer errors without reticulate", {
-  local_mocked_bindings(
-    requireNamespace = function(...) FALSE,
-    .package = "base"
-  )
+  local_mocked_bindings(.sg_has_pkg = function(pkg) FALSE)
   expect_error(segmantR:::.check_mesmer(), "reticulate")
 })
 
@@ -217,28 +208,19 @@ test_that(".check_ebimage returns FALSE when EBImage is absent", {
 
 test_that(".check_cellpose errors when the module is unavailable", {
   skip_if_not_installed("reticulate")
-  local_mocked_bindings(
-    py_module_available = function(...) FALSE,
-    .package = "reticulate"
-  )
+  local_mocked_bindings(.sg_py_module_available = function(module) FALSE)
   expect_error(segmantR:::.check_cellpose(), "module not found")
 })
 
 test_that(".check_stardist errors when the module is unavailable", {
   skip_if_not_installed("reticulate")
-  local_mocked_bindings(
-    py_module_available = function(...) FALSE,
-    .package = "reticulate"
-  )
+  local_mocked_bindings(.sg_py_module_available = function(module) FALSE)
   expect_error(segmantR:::.check_stardist(), "module not found")
 })
 
 test_that(".check_mesmer errors when the module is unavailable", {
   skip_if_not_installed("reticulate")
-  local_mocked_bindings(
-    py_module_available = function(...) FALSE,
-    .package = "reticulate"
-  )
+  local_mocked_bindings(.sg_py_module_available = function(module) FALSE)
   expect_error(segmantR:::.check_mesmer(), "module not found")
 })
 

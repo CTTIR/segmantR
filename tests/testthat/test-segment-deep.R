@@ -63,10 +63,7 @@ test_that("sg_segment_mesmer requires at least two channels", {
 })
 
 test_that("sg_setup_python errors without reticulate", {
-  local_mocked_bindings(
-    requireNamespace = function(pkg, ...) if (pkg == "reticulate") FALSE else TRUE,
-    .package = "base"
-  )
+  local_mocked_bindings(.sg_has_pkg = function(pkg) pkg != "reticulate")
   expect_error(sg_setup_python(), "reticulate")
 })
 
@@ -75,16 +72,15 @@ test_that("sg_setup_python builds a virtualenv and installs backends", {
   created <- list()
   installed <- NULL
   local_mocked_bindings(
-    conda_binary = function(...) "",
-    virtualenv_create = function(envname, ...) {
+    .sg_conda_binary = function() "",
+    .sg_virtualenv_create = function(envname) {
       created[["venv"]] <<- envname
       invisible(TRUE)
     },
-    py_install = function(packages, envname, ...) {
+    .sg_py_install = function(packages, envname, method) {
       installed <<- packages
       invisible(TRUE)
-    },
-    .package = "reticulate"
+    }
   )
   res <- sg_setup_python(envname = "test_env", method = "virtualenv",
                          backends = c("cellpose", "stardist"), gpu = FALSE)
@@ -98,14 +94,13 @@ test_that("sg_setup_python falls back to virtualenv on conda failure", {
   skip_if_not_installed("reticulate")
   used_venv <- FALSE
   local_mocked_bindings(
-    conda_binary = function(...) "/usr/bin/conda",
-    conda_create = function(envname, ...) stop("conda boom"),
-    virtualenv_create = function(envname, ...) {
+    .sg_conda_binary = function() "/usr/bin/conda",
+    .sg_conda_create = function(envname) stop("conda boom"),
+    .sg_virtualenv_create = function(envname) {
       used_venv <<- TRUE
       invisible(TRUE)
     },
-    py_install = function(packages, envname, ...) invisible(TRUE),
-    .package = "reticulate"
+    .sg_py_install = function(packages, envname, method) invisible(TRUE)
   )
   res <- sg_setup_python(method = "auto", backends = "cellpose", gpu = TRUE)
   expect_true(res)
@@ -121,14 +116,13 @@ test_that("sg_setup_python installs plain cellpose and names the conda env", {
   installed <- NULL
   install_method <- NULL
   local_mocked_bindings(
-    conda_binary = function(...) "/usr/bin/conda",
-    conda_create = function(envname, ...) invisible(TRUE),
-    py_install = function(packages, envname, method = "auto", ...) {
+    .sg_conda_binary = function() "/usr/bin/conda",
+    .sg_conda_create = function(envname) invisible(TRUE),
+    .sg_py_install = function(packages, envname, method) {
       installed <<- packages
       install_method <<- method
       invisible(TRUE)
-    },
-    .package = "reticulate"
+    }
   )
   msgs <- character(0)
   withCallingHandlers(

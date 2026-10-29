@@ -5,16 +5,31 @@
 #' @noRd
 `%||%` <- function(x, y) if (is.null(x)) y else x
 
+#' Is an optional package installed?
+#'
+#' A seam over requireNamespace() so tests can switch packages off without
+#' mocking base.
+#' @noRd
+.sg_has_pkg <- function(pkg) {
+  requireNamespace(pkg, quietly = TRUE)
+}
+
+#' Is a Python module available through reticulate?
+#' @noRd
+.sg_py_module_available <- function(module) {
+  reticulate::py_module_available(module)
+}
+
 #' Check if Cellpose is available
 #' @noRd
 .check_cellpose <- function() {
-  if (!requireNamespace("reticulate", quietly = TRUE)) {
+  if (!.sg_has_pkg("reticulate")) {
     cli::cli_abort(c(
       "Cellpose segmentation requires the {.pkg reticulate} package.",
       "i" = "Install with: {.code install.packages('reticulate')}"
     ))
   }
-  if (!reticulate::py_module_available("cellpose")) {
+  if (!.sg_py_module_available("cellpose")) {
     cli::cli_abort(c(
       "Cellpose Python module not found.",
       "i" = "Run {.code sg_setup_python(backends = 'cellpose')} to install."
@@ -27,13 +42,13 @@
 #' @noRd
 .check_stardist <- function() {
 
-  if (!requireNamespace("reticulate", quietly = TRUE)) {
+  if (!.sg_has_pkg("reticulate")) {
     cli::cli_abort(c(
       "StarDist segmentation requires the {.pkg reticulate} package.",
       "i" = "Install with: {.code install.packages('reticulate')}"
     ))
   }
-  if (!reticulate::py_module_available("stardist")) {
+  if (!.sg_py_module_available("stardist")) {
     cli::cli_abort(c(
       "StarDist Python module not found.",
       "i" = "Run {.code sg_setup_python(backends = 'stardist')} to install."
@@ -45,13 +60,13 @@
 #' Check if Mesmer/DeepCell is available
 #' @noRd
 .check_mesmer <- function() {
-  if (!requireNamespace("reticulate", quietly = TRUE)) {
+  if (!.sg_has_pkg("reticulate")) {
     cli::cli_abort(c(
       "Mesmer segmentation requires the {.pkg reticulate} package.",
       "i" = "Install with: {.code install.packages('reticulate')}"
     ))
   }
-  if (!reticulate::py_module_available("deepcell")) {
+  if (!.sg_py_module_available("deepcell")) {
     cli::cli_abort(c(
       "DeepCell Python module not found.",
       "i" = "Install with: {.code pip install deepcell} in your Python environment."

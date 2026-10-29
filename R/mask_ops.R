@@ -226,7 +226,7 @@ sg_mask_to_polygons <- function(mask, simplify = TRUE, tolerance = 1.0) {
                           col = numeric(0)))
   }
 
-  use_sf <- requireNamespace("sf", quietly = TRUE)
+  use_sf <- .sg_has_pkg("sf")
 
   if (use_sf) {
     polys <- lapply(cell_ids, function(cid) {
@@ -312,7 +312,7 @@ sg_export_mask <- function(mask, path, format = c("tiff", "png", "geojson",
 
   switch(format,
     tiff = {
-      if (!requireNamespace("tiff", quietly = TRUE)) {
+      if (!.sg_has_pkg("tiff")) {
         cli::cli_abort(c(
           "TIFF export requires the {.pkg tiff} package.",
           "i" = "Install with: {.code install.packages('tiff')}"
@@ -336,7 +336,7 @@ sg_export_mask <- function(mask, path, format = c("tiff", "png", "geojson",
     },
     geojson = {
       polys <- sg_mask_to_polygons(mask, simplify = TRUE)
-      if (requireNamespace("sf", quietly = TRUE) && inherits(polys, "sf")) {
+      if (.sg_has_pkg("sf") && inherits(polys, "sf")) {
         sf::st_write(polys, path, driver = "GeoJSON", quiet = TRUE)
       } else {
         jsonlite::write_json(polys, path, pretty = TRUE)

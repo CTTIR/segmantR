@@ -26,7 +26,7 @@ sg_setup_python <- function(envname = "segmantr",
                             backends = c("cellpose", "stardist"),
                             gpu = TRUE) {
 
-  if (!requireNamespace("reticulate", quietly = TRUE)) {
+  if (!.sg_has_pkg("reticulate")) {
     cli::cli_abort(c(
       "{.pkg reticulate} is required to set up Python environments.",
       "i" = "Install with: {.code install.packages('reticulate')}"
@@ -46,20 +46,20 @@ sg_setup_python <- function(envname = "segmantr",
   # Create environment
   env_type <- "virtualenv"
   if (method == "conda" ||
-      (method == "auto" && reticulate::conda_binary() != "")) {
+      (method == "auto" && .sg_conda_binary() != "")) {
     env_type <- tryCatch({
-      reticulate::conda_create(envname = envname)
+      .sg_conda_create(envname)
       "conda"
     }, error = function(e) {
       cli::cli_inform(c(
         "!" = "Conda environment creation failed; trying virtualenv.",
         "i" = "{conditionMessage(e)}"
       ))
-      reticulate::virtualenv_create(envname = envname)
+      .sg_virtualenv_create(envname)
       "virtualenv"
     })
   } else {
-    reticulate::virtualenv_create(envname = envname)
+    .sg_virtualenv_create(envname)
   }
 
   # Install packages. Cellpose reaches a GPU through its PyTorch build (the
@@ -78,7 +78,7 @@ sg_setup_python <- function(envname = "segmantr",
     cli::cli_inform(c(
       "i" = "Installing Python packages: {.val {packages}}."
     ))
-    reticulate::py_install(packages, envname = envname, method = env_type)
+    .sg_py_install(packages, envname, env_type)
   }
 
   activate <- if (env_type == "conda") "use_condaenv" else "use_virtualenv"
@@ -88,6 +88,22 @@ sg_setup_python <- function(envname = "segmantr",
   ))
 
   invisible(TRUE)
+}
+
+# Thin wrappers around reticulate, so tests can replace them without
+# mocking the reticulate namespace
+.sg_conda_binary <- function() reticulate::conda_binary()
+
+.sg_conda_create <- function(envname) {
+  reticulate::conda_create(envname = envname)
+}
+
+.sg_virtualenv_create <- function(envname) {
+  reticulate::virtualenv_create(envname = envname)
+}
+
+.sg_py_install <- function(packages, envname, method) {
+  reticulate::py_install(packages, envname = envname, method = method)
 }
 
 

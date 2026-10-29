@@ -1,30 +1,17 @@
 test_that("PNG palettes depend on present objects, not maximum label", {
-  palette_sizes <- integer(0)
-  rendered <- NULL
-  rainbow_original <- grDevices::rainbow
+  drawn <- NULL
   local_mocked_bindings(
-    rainbow = function(n, ...) {
-      palette_sizes <<- c(palette_sizes, n)
-      if (n > 8L) cli::cli_abort("unsafe max-label palette allocation")
-      rainbow_original(n, ...)
-    },
-    png = function(...) NULL,
-    dev.off = function(...) NULL,
-    .package = "grDevices"
-  )
-  local_mocked_bindings(
-    par = function(...) NULL,
-    image = function(z, col, ...) rendered <<- list(z = z, col = col),
-    .package = "graphics"
+    .sg_draw_label_image = function(labels, n_colours) {
+      drawn <<- list(labels = labels, n_colours = n_colours)
+    }
   )
   labels <- matrix(c(0L, 2L, .Machine$integer.max, 0L), 2L, 2L)
   mask <- new_sg_mask(labels)
   path <- withr::local_tempfile(fileext = ".png")
   expect_no_error(sg_export_mask(mask, path, format = "png"))
-  expect_identical(palette_sizes, 2L)
-  expected <- matrix(c(0L, 1L, 2L, 0L), 2L, 2L)
-  expect_identical(rendered$z, t(expected[2:1, ]))
-  expect_identical(rendered$col, c("black", rainbow_original(2L)))
+  # one colour per present object, drawn as consecutive ids
+  expect_identical(drawn$n_colours, 2L)
+  expect_identical(drawn$labels, matrix(c(0L, 1L, 2L, 0L), 2L, 2L))
   expect_identical(mask$labels, labels)
 })
 
