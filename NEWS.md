@@ -1,5 +1,19 @@
 # segmantR (development version)
 
+* `sg_segment_threshold()` treats `NA` pixels, such as nodata values, as
+  background. An `NA` inside an object used to stop the morphological
+  opening with an error, and with `method = "adaptive"` it blanked the
+  part of the image below and to the right of it.
+
+* The TIFF reader behind `sg_import_interchange()` and dataset and
+  training masks reads compressed single-sample uint32 values from 2^31
+  as unsigned (they came back negative or `NA`), compressed float images
+  (which failed) and compressed palette images as their colour indices
+  (as uncompressed ones already were) instead of colour map values.
+  Planar-separate multi-sample images, which came back with wrong values,
+  and images with fewer than 8 bits per sample or compressed 64-bit
+  samples now signal a `DTYPE_MISMATCH` error.
+
 * On R < 4.5, SHA-256 digests from the 'openssl' fallback are plain
   strings like those of `tools::sha256sum()` instead of carrying the class
   `"hash"`, and `tools::sha256sum()` is looked up at run time, so checks on
