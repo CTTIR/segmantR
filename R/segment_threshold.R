@@ -4,6 +4,9 @@
 #' intensity threshold, followed by morphological cleanup and
 #' connected-component labelling with size filtering.
 #'
+#' Pixels that are `NA`, such as nodata values of a raster, count as
+#' background.
+#'
 #' @param image An `sg_image` object.
 #' @param channel Integer index of the image channel to threshold.
 #'   Default is `1L`.
@@ -70,6 +73,8 @@ sg_segment_threshold <- function(image,
       ifelse(ch > thresh, 1L, 0L)
     }
   )
+  # NA pixels (for example nodata values) are background
+  binary[is.na(binary)] <- 0L
 
   cli::cli_inform(c(
     "i" = "Threshold applied using {.val {method}} method."

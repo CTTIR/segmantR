@@ -30,6 +30,25 @@ test_that("sg_segment_threshold honours custom morphology settings", {
   expect_s3_class(msk, "sg_mask")
 })
 
+test_that("sg_segment_threshold treats NA pixels as background", {
+  px <- matrix(0.1, 30, 30)
+  px[6:15, 6:15] <- 0.9
+  px[18:27, 18:27] <- 0.8
+  with_na <- px
+  with_na[10, 10] <- NA
+  px[10, 10] <- 0
+  for (method in c("otsu", "triangle", "adaptive")) {
+    m_na <- suppressMessages(sg_segment_threshold(
+      new_sg_image(with_na), method = method, block_size = 7L, min_area = 5L
+    ))
+    m_0 <- suppressMessages(sg_segment_threshold(
+      new_sg_image(px), method = method, block_size = 7L, min_area = 5L
+    ))
+    expect_gt(max(m_na$labels), 0L)
+    expect_identical(m_na$labels, m_0$labels, info = method)
+  }
+})
+
 test_that("sg_segment_threshold validates the channel index", {
   img <- sg_example_image("fluorescence_nuclei")
   expect_error(sg_segment_threshold(img, channel = 5L),

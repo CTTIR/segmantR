@@ -99,6 +99,9 @@
   half <- block_size %/% 2L
   padded <- matrix(0, nrow = nr + 2L * half, ncol = nc + 2L * half)
   padded[(half + 1L):(half + nr), (half + 1L):(half + nc)] <- channel
+  # NA pixels add 0 to the local sums, like the padding, instead of
+  # spreading NA through the integral image
+  padded[is.na(padded)] <- 0
   cum <- .cumsum2d(padded)
   # Integral-image lookups: a row/column index of 0 falls outside the
   # cumulative-sum array and contributes 0 to the windowed total.

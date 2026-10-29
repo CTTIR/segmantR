@@ -53,6 +53,10 @@ Segments cells in an \code{sg_image} by applying a global or local
 intensity threshold, followed by morphological cleanup and
 connected-component labelling with size filtering.
 }
+\details{
+Pixels that are \code{NA}, such as nodata values of a raster, count as
+background.
+}
 \examples{
 set.seed(42)
 pixels <- matrix(runif(400), nrow = 20, ncol = 20)
