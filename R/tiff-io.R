@@ -397,7 +397,9 @@
     # palette images: the stored colour indices, as read uncompressed above,
     # rather than the 16-bit colour map values
     palette <- isTRUE(p1[["262"]][1] == 3)
-    pg <- tiff::readTIFF(path, as.is = TRUE, all = TRUE, indexed = palette)
+    # floats come back as stored without as.is, which refuses them
+    pg <- tiff::readTIFF(path, as.is = fmt != 3, all = TRUE,
+                         indexed = palette)
     pg <- pg[seq_len(min(length(pg), n_pages))]
     # as.is = TRUE keeps the stored integers of single-sample images only;
     # multi-sample (e.g. RGB) images come back scaled to [0, 1]

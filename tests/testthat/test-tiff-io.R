@@ -289,3 +289,21 @@ test_that("sub-8-bit and compressed 64-bit TIFFs are rejected", {
                   sample_format = 3L)
   expect_error(segmantR:::.sg_read_tiff(f), class = "sg_validation_error")
 })
+
+test_that("compressed float TIFFs read their stored values", {
+  skip_if_not_installed("tiff")
+  f <- withr::local_tempfile(fileext = ".tif")
+  f32 <- function(v) writeBin(as.double(v), raw(), size = 4L,
+                              endian = "little")
+  fl <- matrix(c(-3.25, 0, 1000.5, 0.125, 7, 65536.5), 2, 3)
+  write_test_tiff(f, 3L, 2L, list(f32(t(fl))), bits = 32L, compression = 8L,
+                  sample_format = 3L)
+  tif <- segmantR:::.sg_read_tiff(f)
+  expect_equal(tif$dtype, "float32")
+  expect_identical(tif$data, fl)
+  rgb <- array(c(fl, 2 * fl, -fl), c(2, 3, 3))
+  write_test_tiff(f, 3L, 2L, list(f32(aperm(rgb, c(3, 2, 1)))), bits = 32L,
+                  spp = 3L, compression = 8L, photometric = 2L,
+                  sample_format = 3L)
+  expect_identical(segmantR:::.sg_read_tiff(f)$data, rgb)
+})
