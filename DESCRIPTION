@@ -1,6 +1,6 @@
 Package: segmantR
 Title: Cell Segmentation for Histology with Human-in-the-Loop Training
-Version: 0.1.0.9000
+Version: 0.2.0
 Authors@R:
     person("R.", "Heller", , "raban.heller@uni-ulm.de",
            role = c("aut", "cre", "cph"),

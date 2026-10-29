@@ -3,9 +3,6 @@
 0 errors | 0 warnings | 1 note
 
 * This is a new submission.
-* The NOTE also lists the version number 0.1.0.9000 as having large
-  components; it is the development version and will be bumped to a
-  release version before submission.
 
 ## Test environments
 

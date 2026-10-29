@@ -1,4 +1,4 @@
-# segmantR (development version)
+# segmantR 0.2.0
 
 * segmantR no longer starts or installs Python by itself. Without a
   configured Python, recent 'reticulate' versions download one with 'uv',

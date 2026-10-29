@@ -5,7 +5,7 @@
 #'
 #' The pixel array order is always `[y, x, channel]`: the first array row
 #' is the top image row. All arguments after `metadata` are optional
-#' interchange fields added in segmantR 0.1.0.9000; objects created by older
+#' interchange fields added in segmantR 0.2.0; objects created by older
 #' code simply lack them and are treated with the documented defaults.
 #'
 #' @param pixels Numeric array of dimensions H x W (grayscale) or H x W x C
