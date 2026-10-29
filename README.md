@@ -15,9 +15,11 @@ runtimes and model validation.
 
 ## Installation
 
+segmantR is not on CRAN yet. Install it from GitHub:
+
 ```r
-install.packages("remotes")
-remotes::install_github("CTTIR/segmantR", build_vignettes = TRUE)
+# install.packages("pak")
+pak::pak("CTTIR/segmantR")
 ```
 
 See the declared R and package requirements in [DESCRIPTION](https://github.com/CTTIR/segmantR/blob/main/DESCRIPTION).
