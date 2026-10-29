@@ -388,7 +388,16 @@
     # multi-sample (e.g. RGB) images come back scaled to [0, 1]
     if (fmt != 3) {
       pg <- lapply(pg, function(a) {
-        if (is.integer(a)) return(a)
+        if (is.integer(a)) {
+          # uint32 values from 2^31 come back as negative integers (2^31
+          # itself as NA); restore them as doubles, like .sg_decode_int32()
+          if (bits == 32 && (anyNA(a) || any(a < 0L, na.rm = TRUE))) {
+            storage.mode(a) <- "double"
+            a[is.na(a)] <- 2147483648
+            a[a < 0] <- a[a < 0] + 4294967296
+          }
+          return(a)
+        }
         a <- round(a * (2^bits - 1))
         if (bits <= 16) storage.mode(a) <- "integer"
         a

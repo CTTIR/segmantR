@@ -172,3 +172,20 @@ test_that("compressed RGB TIFFs read as integers of their dtype", {
                   compression = "LZW")
   expect_identical(segmantR:::.sg_read_tiff(f)$data, rgb[, , 1])
 })
+
+test_that("compressed uint32 values at and above 2^31 read back exactly", {
+  skip_if_not_installed("tiff")
+  f <- withr::local_tempfile(fileext = ".tif")
+  x <- matrix(c(0, 1, 4294967295, 123456789, 2147483648, 2147483647), 2, 3)
+  tiff::writeTIFF(x / 4294967295, f, bits.per.sample = 32L,
+                  compression = "LZW")
+  tif <- segmantR:::.sg_read_tiff(f)
+  expect_equal(tif$compression, 5)
+  expect_equal(tif$dtype, "uint32")
+  expect_identical(tif$data, x)
+  # values that fit an R integer keep integer storage
+  y <- matrix(c(0L, 7L, 2147483647L, 3L), 2, 2)
+  tiff::writeTIFF(y / 4294967295, f, bits.per.sample = 32L,
+                  compression = "LZW")
+  expect_identical(segmantR:::.sg_read_tiff(f)$data, y)
+})
