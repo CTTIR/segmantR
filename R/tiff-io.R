@@ -378,6 +378,12 @@
       planes[[k]] <- matrix(vals, nrow = height, ncol = width, byrow = TRUE)
     }
   } else {
+    if (!bits %in% c(8, 16, 32)) {
+      .sg_abort(c("TIFF with {bits}-bit samples is not supported.",
+                  "i" = paste("Supported are 8, 16 and 32 bits, and 64-bit",
+                              "floats without compression.")),
+                code = "DTYPE_MISMATCH")
+    }
     if (!requireNamespace("tiff", quietly = TRUE)) {
       .sg_abort_unavailable(
         "Reading compressed or multi-sample TIFF",

@@ -271,3 +271,21 @@ test_that("palette TIFFs read as their colour indices", {
     expect_identical(tif$data, idx)
   }
 })
+
+test_that("sub-8-bit and compressed 64-bit TIFFs are rejected", {
+  f <- withr::local_tempfile(fileext = ".tif")
+  # 4-bit grey, rows of three samples padded to two bytes
+  nibbles <- as.raw(c(0x0f, 0x30, 0x49, 0x10))
+  for (comp in c(1L, 8L)) {
+    write_test_tiff(f, 3L, 2L, list(nibbles), bits = 4L, compression = comp)
+    err <- expect_error(segmantR:::.sg_read_tiff(f),
+                        class = "sg_validation_error")
+    expect_equal(err$code, "DTYPE_MISMATCH")
+  }
+  write_test_tiff(f, 8L, 1L, list(as.raw(0xa5)), bits = 1L, compression = 8L)
+  expect_error(segmantR:::.sg_read_tiff(f), class = "sg_validation_error")
+  f64 <- writeBin(c(0.5, -2), raw(), size = 8L, endian = "little")
+  write_test_tiff(f, 2L, 1L, list(f64), bits = 64L, compression = 8L,
+                  sample_format = 3L)
+  expect_error(segmantR:::.sg_read_tiff(f), class = "sg_validation_error")
+})
