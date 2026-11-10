@@ -6,7 +6,7 @@ logo](figures/logo-dark.svg)
 ``` r
 
 library(segmantR)
-#> segmantR v0.2.0 -- Cell Segmentation with Human-in-the-Loop
+#> segmantR v0.3.0 -- Cell Segmentation with Human-in-the-Loop
 #> Optional backends are checked when used; see sg_interchange_capabilities().
 ```
 
@@ -164,7 +164,7 @@ list.files(dest)
 #> [1] "integrity.json"   "manifest.json"    "mask.legend.json" "mask.tif"        
 #> [5] "measurements.csv" "objects.geojson"
 bundle$bundle_digest
-#> [1] "sha256:b8d7367fa87a7ad43e533fdd99f59f41a76ca6d40daf610d4ba25aa3a19e8b7f"
+#> [1] "sha256:2b1ab8ecd6dd89037bebedaee80e00f30f93de568ed8bbef93b368ef080288bc"
 ```
 
 Imports verify integrity, schema, dtype, orientation, plane, legend and
