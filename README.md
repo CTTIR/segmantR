@@ -73,7 +73,7 @@ See `vignette("protocols-and-interop", package = "segmantR")` and
 
 If you use this software, please cite it as:
 
-> Heller, R. (2026). *segmantR: Cell segmentation of histology slides with human-in-the-loop training* (Version 0.1.0) [Computer software]. https://github.com/CTTIR/segmantR
+> Heller, R. (2026). *segmantR: Cell Segmentation for Histology with Human-in-the-Loop Training* (Version 0.3.0) [Computer software]. https://github.com/CTTIR/segmantR
 
 ## Documentation and support
 

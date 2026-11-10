@@ -2,14 +2,23 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is a new submission.
+* checking CRAN incoming feasibility ... NOTE
+  Maintainer: 'R. Heller <raban.heller@uni-ulm.de>'
+  New submission
+
+  This is a new submission.
 
 ## Test environments
 
-* local: Ubuntu 26.04, R 4.6.1 (`R CMD check --as-cran`, also with
-  `_R_CHECK_DEPENDS_ONLY_=true`)
-* GitHub Actions: ubuntu-latest (R devel, release, oldrel-1),
-  macos-latest (R release), windows-latest (R release)
+* local: macOS 27.0.1 (aarch64-apple-darwin), R 4.6.1,
+  `R CMD check --as-cran` on the built tarball, including the PDF manual
+  (TinyTeX, TeX Live 2026) and the HTML manual validation (HTML Tidy 5.8.0).
+  The Bioconductor package 'EBImage' (Suggests) could not be installed
+  locally (it needs the FFTW system library), so that run used
+  `_R_CHECK_FORCE_SUGGESTS_=false`; the GitHub Actions runs install it.
+* GitHub Actions (r-lib/actions v2, `--as-cran`): ubuntu-latest (R devel,
+  release, oldrel-1), macos-latest (R release), windows-latest (R release),
+  plus an informational ubuntu-latest oldrel-3 row.
 
 ## Optional dependencies
 

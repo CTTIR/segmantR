@@ -1,6 +1,6 @@
 Package: segmantR
 Title: Cell Segmentation for Histology with Human-in-the-Loop Training
-Version: 0.2.0
+Version: 0.3.0
 Authors@R:
     person("R.", "Heller", , "raban.heller@uni-ulm.de",
            role = c("aut", "cre", "cph"),
@@ -67,4 +67,4 @@ Suggests:
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Config/Needs/website: CTTIR/themakR
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1

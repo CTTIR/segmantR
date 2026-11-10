@@ -178,9 +178,11 @@ export(sg_train_cellpose)
 export(sg_train_stardist)
 export(sg_validate_interchange)
 export(sg_validate_training_manifest)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,geom_line)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,labs)
-importFrom(ggplot2,theme_minimal)
+importFrom(ggplot2,
+  aes,
+  geom_line,
+  ggplot,
+  labs,
+  theme_minimal
+)
 importFrom(rlang,.data)

@@ -1,3 +1,17 @@
+# segmantR 0.3.0
+
+* Release metadata are consistent for the CRAN submission: the version is
+  recorded in `DESCRIPTION`, `CITATION.cff` and `.zenodo.json`, and the
+  citation in the README uses the package title and the current version
+  (it still named 0.1.0).
+
+* Documentation was regenerated with roxygen2 8.1.1; the help pages are
+  unchanged.
+
+* The pkgdown site loads self-hosted Plausible analytics, and the README
+  statement on the use of LLM tools mentions fine-tuned and weight-edited
+  local models.
+
 # segmantR 0.2.0
 
 * segmantR no longer starts or installs Python by itself. Without a
