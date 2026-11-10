@@ -60,6 +60,7 @@ a Python on first use.
 
 ``` r
 if (FALSE) { # \dontrun{
+# Requires Python and network access; installs Python modules
 sg_setup_python(backends = "cellpose")
 } # }
 ```

@@ -86,8 +86,8 @@ print(mdl)
 #> <sg_trained_model>
 #> Backend: cellpose
 #> Base model: cyto3
-#> Model path: /tmp/RtmpVdXcUw/model1f3d6b45f383/cellpose_weights
+#> Model path: /tmp/RtmpOQTq7s/model1f0e4a627a0a/cellpose_weights
 #> Epochs: 100
 #> Final loss: 0.05
-#> Created: 2026-11-10 11:38:18
+#> Created: 2026-11-10 17:54:01
 ```
