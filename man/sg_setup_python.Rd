@@ -49,6 +49,7 @@ a Python on first use.
 
 \examples{
 \dontrun{
+# Requires Python and network access; installs Python modules
 sg_setup_python(backends = "cellpose")
 }
 }

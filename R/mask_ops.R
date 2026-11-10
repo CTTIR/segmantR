@@ -390,7 +390,8 @@ sg_export_mask <- function(mask, path, format = c("tiff", "png", "geojson",
 #' Draw consecutive label ids on the current device, top row at the top
 #' @noRd
 .sg_draw_label_image <- function(labels, n_colours) {
-  graphics::par(mar = c(0, 0, 0, 0))
+  old_par <- graphics::par(mar = c(0, 0, 0, 0))
+  on.exit(graphics::par(old_par), add = TRUE)
   graphics::image(t(labels[rev(seq_len(nrow(labels))), ]),
                   col = c("black", grDevices::rainbow(n_colours)),
                   axes = FALSE)
