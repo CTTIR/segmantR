@@ -1,0 +1,20 @@
+citHeader("To cite segmantR in publications, use:")
+
+## `meta` is supplied by R when reading the CITATION (the package DESCRIPTION);
+## fall back to the installed description so citation() also works standalone.
+## Avoid packageVersion(), which errors while the package is not yet installed.
+if (!exists("meta") || is.null(meta)) meta <- packageDescription("segmantR")
+vers <- meta[["Version"]]
+if (is.null(vers) || is.na(vers)) vers <- "unknown"
+
+bibentry(
+  bibtype = "Manual",
+  title = "segmantR: Cell Segmentation for Histology with Human-in-the-Loop Training",
+  author = person(
+    "R.", "Heller",
+    comment = c(ORCID = "0000-0001-8006-9742")
+  ),
+  year = "2026",
+  note = sprintf("R package version %s", vers),
+  url = "https://github.com/CTTIR/segmantR"
+)

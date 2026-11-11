@@ -5,7 +5,7 @@
 [![pkgdown](https://github.com/CTTIR/segmantR/actions/workflows/pkgdown.yaml/badge.svg)](https://cttir.github.io/segmantR/)
 [![Codecov test coverage](https://codecov.io/gh/CTTIR/segmantR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/CTTIR/segmantR?branch=main)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 segmantR segments microscopy images, records reproducible segmentation protocols,
