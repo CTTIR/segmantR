@@ -38,8 +38,8 @@ sg_model_card(mdl)
 #> ── Model Card ──────────────────────────────────────────────────────────────────
 #> Backend: cellpose
 #> Base Model: cyto3
-#> Model Path: /tmp/RtmpOQTq7s/model1f0e11c68874/cellpose_weights
-#> Created: 2026-11-10 17:54:09
+#> Model Path: /tmp/RtmpbDwFCG/model1fcb47c8e11d/cellpose_weights
+#> Created: 2026-11-11 07:41:14
 #> Metric: n_epochs: 100
 #> author: Test User
 #> tissue: lung

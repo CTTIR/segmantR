@@ -7,6 +7,9 @@
   the citation in the README uses the package title and the current
   version (it still named 0.1.0).
 
+- `citation("segmantR")` now returns a proper reference (new
+  `inst/CITATION`), and the README marks the package as stable.
+
 - Documentation was regenerated with roxygen2 8.1.1; the help pages are
   unchanged.
 

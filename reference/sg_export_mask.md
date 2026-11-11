@@ -39,5 +39,5 @@ labels[3:8, 3:8] <- 1L
 mask <- new_sg_mask(labels)
 tmp <- tempfile(fileext = ".csv")
 sg_export_mask(mask, tmp, format = "csv")
-#> ✔ Mask exported to /tmp/RtmpOQTq7s/file1f0e2c8f182d.csv ("csv").
+#> ✔ Mask exported to /tmp/RtmpbDwFCG/file1fcb46b2c0d0.csv ("csv").
 ```

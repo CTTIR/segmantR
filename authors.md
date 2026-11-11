@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/CTTIR/segmantR/blob/main/DESCRIPTION)
+[`inst/CITATION`](https://github.com/CTTIR/segmantR/blob/main/inst/CITATION)
 
 Heller R (2026). *segmantR: Cell Segmentation for Histology with
 Human-in-the-Loop Training*. R package version 0.3.0,
