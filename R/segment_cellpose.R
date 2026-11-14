@@ -12,8 +12,15 @@
 #'   Supported values are `"cellpose"` and `"stardist"`.
 #' @param gpu Logical; if `TRUE` (default), installs the GPU-capable
 #'   `tensorflow` build for StarDist instead of `tensorflow-cpu`. Cellpose
-#'   is always installed as `cellpose`; it uses a GPU when the installed
+#'   is installed as `cellpose>=3,<4`; it uses a GPU when the installed
 #'   PyTorch build supports it.
+#'
+#' @section Cellpose compatibility:
+#' The named legacy models require Cellpose 3.x. Setup constrains the
+#' installation to `cellpose>=3,<4`, including when updating an existing
+#' environment. Cellpose 4 uses a different model/API and is rejected before
+#' model loading; it is not substituted for the requested legacy model.
+#' Restart R after changing an environment already loaded by reticulate.
 #'
 #' @section Selecting Python:
 #' segmantR never starts, downloads or installs Python by itself; without a
@@ -79,7 +86,7 @@ sg_setup_python <- function(envname = "segmantr",
   # between tensorflow builds.
   packages <- character(0)
   if ("cellpose" %in% backends) {
-    packages <- c(packages, "cellpose")
+    packages <- c(packages, "cellpose>=3,<4")
   }
   if ("stardist" %in% backends) {
     packages <- c(packages, "stardist",
@@ -124,7 +131,7 @@ sg_setup_python <- function(envname = "segmantr",
 #'
 #' Segments cells using the Cellpose deep learning model via
 #' `reticulate`. Requires a working Python installation with
-#' `cellpose` installed. Use [sg_setup_python()] to configure the
+#' Cellpose 3.x installed. Use [sg_setup_python()] to configure the
 #' environment.
 #'
 #' @param image An `sg_image` object.

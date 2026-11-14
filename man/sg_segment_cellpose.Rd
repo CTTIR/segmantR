@@ -54,7 +54,7 @@ An \code{sg_mask} object with labelled cell regions.
 \description{
 Segments cells using the Cellpose deep learning model via
 \code{reticulate}. Requires a working Python installation with
-\code{cellpose} installed. Use \code{\link[=sg_setup_python]{sg_setup_python()}} to configure the
+Cellpose 3.x installed. Use \code{\link[=sg_setup_python]{sg_setup_python()}} to configure the
 environment.
 }
 \examples{

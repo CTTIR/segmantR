@@ -86,7 +86,7 @@ test_that("sg_setup_python builds a virtualenv and installs backends", {
                          backends = c("cellpose", "stardist"), gpu = FALSE)
   expect_true(res)
   expect_equal(created[["venv"]], "test_env")
-  expect_true("cellpose" %in% installed)
+  expect_true("cellpose>=3,<4" %in% installed)
   expect_true(any(grepl("tensorflow", installed)))
 })
 
@@ -117,7 +117,7 @@ test_that(".gpu_available returns FALSE when torch is unavailable", {
   expect_false(segmantR:::.gpu_available())
 })
 
-test_that("sg_setup_python installs plain cellpose and names the conda env", {
+test_that("sg_setup_python installs compatible cellpose and names the conda env", {
   skip_if_not_installed("reticulate")
   installed <- NULL
   install_method <- NULL
@@ -138,7 +138,7 @@ test_that("sg_setup_python installs plain cellpose and names the conda env", {
       invokeRestart("muffleMessage")
     }
   )
-  expect_equal(installed, "cellpose")
+  expect_equal(installed, "cellpose>=3,<4")
   expect_equal(install_method, "conda")
   expect_true(any(grepl("use_condaenv", msgs)))
   expect_false(any(grepl("use_virtualenv", msgs)))

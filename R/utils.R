@@ -67,6 +67,28 @@
       "i" = "Run {.code sg_setup_python(backends = 'cellpose')} to install."
     ))
   }
+  .sg_validate_cellpose_version(.sg_cellpose_version())
+  invisible(TRUE)
+}
+
+#' Read installed distribution metadata without importing model code
+#' @noRd
+.sg_cellpose_version <- function() {
+  reticulate::import("importlib.metadata")$version("cellpose")
+}
+
+#' Check the legacy model API version before loading models
+#' @noRd
+.sg_validate_cellpose_version <- function(version) {
+  if (!is.character(version) || length(version) != 1L || is.na(version) ||
+      !grepl(paste0("^3[.][0-9]+([.][0-9]+)*([.]post[0-9]+)?",
+                    "([+][a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*)?$"), version)) {
+    cli::cli_abort(c(
+      "Cellpose 3.x is required for the legacy model API.",
+      "i" = "Run {.code sg_setup_python(backends = 'cellpose')} and restart R.",
+      "i" = "Cellpose 4/SAM is a different model and is not substituted."
+    ))
+  }
   invisible(TRUE)
 }
 

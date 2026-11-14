@@ -23,7 +23,7 @@ Supported values are \code{"cellpose"} and \code{"stardist"}.}
 
 \item{gpu}{Logical; if \code{TRUE} (default), installs the GPU-capable
 \code{tensorflow} build for StarDist instead of \code{tensorflow-cpu}. Cellpose
-is always installed as \code{cellpose}; it uses a GPU when the installed
+is installed as \verb{cellpose>=3,<4}; it uses a GPU when the installed
 PyTorch build supports it.}
 }
 \value{
@@ -34,6 +34,15 @@ Creates and configures a Python virtual environment or conda
 environment with the requested deep learning segmentation backends
 (Cellpose, StarDist) installed.
 }
+\section{Cellpose compatibility}{
+
+The named legacy models require Cellpose 3.x. Setup constrains the
+installation to \verb{cellpose>=3,<4}, including when updating an existing
+environment. Cellpose 4 uses a different model/API and is rejected before
+model loading; it is not substituted for the requested legacy model.
+Restart R after changing an environment already loaded by reticulate.
+}
+
 \section{Selecting Python}{
 
 segmantR never starts, downloads or installs Python by itself; without a
