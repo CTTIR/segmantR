@@ -35,13 +35,22 @@ sg_setup_python(
 - gpu:
 
   Logical; if `TRUE` (default), installs the GPU-capable `tensorflow`
-  build for StarDist instead of `tensorflow-cpu`. Cellpose is always
-  installed as `cellpose`; it uses a GPU when the installed PyTorch
-  build supports it.
+  build for StarDist instead of `tensorflow-cpu`. Cellpose is installed
+  as `cellpose>=3,<4`; it uses a GPU when the installed PyTorch build
+  supports it.
 
 ## Value
 
 Invisibly returns `TRUE` on success.
+
+## Cellpose compatibility
+
+The named legacy models require Cellpose 3.x. Setup constrains the
+installation to `cellpose>=3,<4`, including when updating an existing
+environment. Cellpose 4 uses a different model/API and is rejected
+before model loading; it is not substituted for the requested legacy
+model. Restart R after changing an environment already loaded by
+reticulate.
 
 ## Selecting Python
 

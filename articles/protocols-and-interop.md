@@ -164,7 +164,7 @@ list.files(dest)
 #> [1] "integrity.json"   "manifest.json"    "mask.legend.json" "mask.tif"        
 #> [5] "measurements.csv" "objects.geojson"
 bundle$bundle_digest
-#> [1] "sha256:3b54653ef4832c14918d03facb84ccc1b2c1a4744c0a093c8cb0efc630bddf87"
+#> [1] "sha256:d34659c24c40f56041e1f8b7c2e266db2c1496fd5b7a308fdf6981137af91ff1"
 ```
 
 Imports verify integrity, schema, dtype, orientation, plane, legend and

@@ -2,6 +2,11 @@
 
 ## segmantR 0.3.0
 
+- Python setup now requests Cellpose 3.x for the legacy named models and
+  rejects incompatible versions before model loading. Cellpose 4/SAM is
+  not silently substituted; restart R after changing a loaded Python
+  environment.
+
 - Propagation provenance now records whether lambda was applied and the
   pure-R membrane threshold. Documentation distinguishes EBImage
   distance/gradient weighting from the fixed pure-R membrane barrier;

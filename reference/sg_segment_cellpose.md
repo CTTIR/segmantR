@@ -1,7 +1,7 @@
 # Cellpose cell segmentation
 
 Segments cells using the Cellpose deep learning model via `reticulate`.
-Requires a working Python installation with `cellpose` installed. Use
+Requires a working Python installation with Cellpose 3.x installed. Use
 [`sg_setup_python()`](https://cttir.github.io/segmantR/reference/sg_setup_python.md)
 to configure the environment.
 
