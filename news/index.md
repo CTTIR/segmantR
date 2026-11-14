@@ -2,6 +2,14 @@
 
 ## segmantR 0.3.0
 
+- The EBImage propagation engine honors `expand_max` using the same
+  four-neighbour support bound as the pure-R engine. It previously
+  ignored the bound and could fill the entire image even when
+  `expand_max = 0`. Label assignment inside that bound remains
+  engine-specific. Propagation validates nonnegative integer bounds and
+  matching image/mask dimensions, and records the bound in EBImage
+  result metadata.
+
 - Release metadata are consistent for the CRAN submission: the version
   is recorded in `DESCRIPTION`, `CITATION.cff` and `.zenodo.json`, and
   the citation in the README uses the package title and the current

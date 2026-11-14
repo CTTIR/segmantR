@@ -95,14 +95,18 @@ propagation proceeds uniformly.</p></dd>
 
 
 <dt id="arg-lambda">lambda<a class="anchor" aria-label="anchor" href="#arg-lambda"></a></dt>
-<dd><p>Numeric weight for the membrane penalty in the cost
+<dd><p>Finite nonnegative numeric weight for the membrane penalty in the cost
 function. Higher values make propagation stop more readily at
 membranes. Default is <code>0.01</code>.</p></dd>
 
 
 <dt id="arg-expand-max">expand_max<a class="anchor" aria-label="anchor" href="#arg-expand-max"></a></dt>
-<dd><p>Integer; maximum number of propagation
-iterations. Default is <code>20L</code>.</p></dd>
+<dd><p>Nonnegative integer; maximum number of four-neighbour
+propagation steps from the supplied seed pixels. Default is <code>20L</code>.
+With no membrane, this bounds the support to Manhattan distance
+<code>expand_max</code> pixels from a seed. Both engines honor this support bound;
+EBImage retains its intensity-aware assignment of labels within it, so
+the engines need not assign identical labels. Zero preserves the seeds.</p></dd>
 
 
 <dt id="arg-engine">engine<a class="anchor" aria-label="anchor" href="#arg-engine"></a></dt>

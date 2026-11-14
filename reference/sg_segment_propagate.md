@@ -36,13 +36,18 @@ sg_segment_propagate(
 
 - lambda:
 
-  Numeric weight for the membrane penalty in the cost function. Higher
-  values make propagation stop more readily at membranes. Default is
-  `0.01`.
+  Finite nonnegative numeric weight for the membrane penalty in the cost
+  function. Higher values make propagation stop more readily at
+  membranes. Default is `0.01`.
 
 - expand_max:
 
-  Integer; maximum number of propagation iterations. Default is `20L`.
+  Nonnegative integer; maximum number of four-neighbour propagation
+  steps from the supplied seed pixels. Default is `20L`. With no
+  membrane, this bounds the support to Manhattan distance `expand_max`
+  pixels from a seed. Both engines honor this support bound; EBImage
+  retains its intensity-aware assignment of labels within it, so the
+  engines need not assign identical labels. Zero preserves the seeds.
 
 - engine:
 
