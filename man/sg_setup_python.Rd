@@ -21,8 +21,12 @@ One of \code{"auto"} (default), \code{"conda"}, or \code{"virtualenv"}.}
 \item{backends}{Character vector of backends to install.
 Supported values are \code{"cellpose"} and \code{"stardist"}.}
 
-\item{gpu}{Logical; if \code{TRUE} (default), installs the GPU-capable
-\code{tensorflow} build for StarDist instead of \code{tensorflow-cpu}. Cellpose
+\item{gpu}{Logical; selects the TensorFlow distribution for StarDist.
+On macOS, installs \code{tensorflow} for either value because
+\code{tensorflow-cpu} does not provide macOS wheels. Elsewhere, \code{TRUE}
+(default) selects \code{tensorflow} and \code{FALSE} selects \code{tensorflow-cpu}.
+This does not guarantee GPU support or select an inference device;
+available devices depend on the platform and installed runtime. Cellpose
 is installed as \verb{cellpose>=3,<4}; it uses a GPU when the installed
 PyTorch build supports it.}
 }

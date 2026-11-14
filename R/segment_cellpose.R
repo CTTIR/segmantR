@@ -11,8 +11,12 @@
 #'   One of `"auto"` (default), `"conda"`, or `"virtualenv"`.
 #' @param backends Character vector of backends to install.
 #'   Supported values are `"cellpose"` and `"stardist"`.
-#' @param gpu Logical; if `TRUE` (default), installs the GPU-capable
-#'   `tensorflow` build for StarDist instead of `tensorflow-cpu`. Cellpose
+#' @param gpu Logical; selects the TensorFlow distribution for StarDist.
+#'   On macOS, installs `tensorflow` for either value because
+#'   `tensorflow-cpu` does not provide macOS wheels. Elsewhere, `TRUE`
+#'   (default) selects `tensorflow` and `FALSE` selects `tensorflow-cpu`.
+#'   This does not guarantee GPU support or select an inference device;
+#'   available devices depend on the platform and installed runtime. Cellpose
 #'   is installed as `cellpose>=3,<4`; it uses a GPU when the installed
 #'   PyTorch build supports it.
 #'
@@ -84,14 +88,14 @@ sg_setup_python <- function(envname = "segmantr",
 
   # Install packages. Cellpose reaches a GPU through its PyTorch build (the
   # "gui" extra is the desktop interface); `gpu` only switches StarDist
-  # between tensorflow builds.
+  # between TensorFlow distributions where both are available.
   packages <- character(0)
   if ("cellpose" %in% backends) {
     packages <- c(packages, "cellpose>=3,<4")
   }
   if ("stardist" %in% backends) {
     packages <- c(packages, "stardist", "tensorboard",
-                  if (gpu) "tensorflow" else "tensorflow-cpu")
+                  .sg_tensorflow_package(gpu))
   }
 
   if (length(packages) > 0L) {
@@ -299,4 +303,9 @@ sg_segment_cellpose <- function(image,
   }, error = function(e) {
     FALSE
   })
+}
+
+# Select a distribution available on the target operating system.
+.sg_tensorflow_package <- function(gpu, sysname = Sys.info()[["sysname"]]) {
+  if (gpu || identical(sysname, "Darwin")) "tensorflow" else "tensorflow-cpu"
 }
