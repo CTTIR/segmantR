@@ -722,3 +722,42 @@ utils::globalVariables(c(
   "area", "mean_intensity", "name", "description",
   "fill_value", "panel"
 ))
+
+#' Reject legacy aliases rather than letting Cellpose substitute its default
+#' @noRd
+.sg_check_cellpose_alias <- function(model) {
+  if (!is.character(model) || length(model) != 1L || is.na(model) ||
+      !nzchar(model)) {
+    cli::cli_abort("Cellpose model must be a non-empty name.")
+  }
+  if (model %in% c("tissuenet", "livecell")) {
+    cli::cli_abort(c(
+      "Cellpose 3 does not support the legacy {.val {model}} alias.",
+      "i" = "Use a supported named model or an explicit custom weights file.",
+      "i" = "The default cyto3 model will not be substituted."
+    ))
+  }
+  invisible(TRUE)
+}
+
+#' Resolve Cellpose channel selectors shared by training and inference
+#' @noRd
+.sg_cellpose_channels <- function(channels, n_channels = NULL) {
+  if (!is.list(channels) || (length(channels) &&
+      (is.null(names(channels)) || anyDuplicated(names(channels)) ||
+       any(!names(channels) %in% c("cytoplasm", "nucleus"))))) {
+    cli::cli_abort("{.arg channels} must be a named list of cytoplasm/nucleus selectors.")
+  }
+  values <- lapply(c("cytoplasm", "nucleus"), function(key) {
+    value <- channels[[key]] %||% 0L
+    if (!is.numeric(value) || is.complex(value) || is.object(value) ||
+        !is.null(dim(value)) || length(value) != 1L ||
+        !is.finite(value) || value < 0 || value != floor(value) ||
+        value > .Machine$integer.max ||
+        (!is.null(n_channels) && value > n_channels)) {
+      cli::cli_abort("Cellpose channel selectors must be whole numbers from 0 through the image channel count.")
+    }
+    as.integer(value)
+  })
+  unlist(values, use.names = FALSE)
+}

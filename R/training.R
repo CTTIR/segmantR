@@ -15,6 +15,17 @@
 #' @param save_path Character or `NULL`. Directory to save the trained model.
 #'   When `NULL`, a temporary directory is used.
 #' @param verbose Logical. Print training progress? Default `TRUE`.
+#' @param channels Named list of `cytoplasm` and `nucleus` channel selectors,
+#'   using the same defaults and convention as [sg_segment_cellpose()].
+#'   Use the same selectors when applying the trained model. Zero selects
+#'   grayscale/no nuclear channel; positive values are one-based channels.
+#'   Grayscale selection ignores the nuclear selector and supplies a zero
+#'   second channel, following Cellpose's convention.
+#'
+#' @details Uses the Cellpose 3 `train_seg` API on CPU. Images are converted
+#'   with the same channel selection as inference. Cellpose's default training
+#'   filter requires at least five labeled objects per retained training image.
+#'   The returned model path names the actual saved weights file.
 #'
 #' @return An `sg_trained_model` object.
 #' @export
@@ -28,10 +39,24 @@
 #' }
 sg_train_cellpose <- function(training_data, base_model = "cyto3",
                               n_epochs = 100L, learning_rate = 0.1,
-                              save_path = NULL, verbose = TRUE) {
+                              save_path = NULL, verbose = TRUE,
+                              channels = list(cytoplasm = 0L, nucleus = 1L)) {
+  ch_list <- .sg_cellpose_channels(channels)
+  .sg_check_cellpose_alias(base_model)
   .check_cellpose()
+  if (!is.numeric(n_epochs) || is.complex(n_epochs) || is.object(n_epochs) ||
+      !is.null(dim(n_epochs)) || length(n_epochs) != 1L ||
+      !is.finite(n_epochs) || n_epochs < 1 || n_epochs != floor(n_epochs) ||
+      n_epochs > .Machine$integer.max) {
+    cli::cli_abort("{.arg n_epochs} must be a positive whole number.")
+  }
+  if (!is.numeric(learning_rate) || is.complex(learning_rate) ||
+      is.object(learning_rate) || !is.null(dim(learning_rate)) ||
+      length(learning_rate) != 1L ||
+      !is.finite(learning_rate) || learning_rate <= 0) {
+    cli::cli_abort("{.arg learning_rate} must be positive and finite.")
+  }
   n_epochs <- as.integer(n_epochs)
-
 
   if (!is.list(training_data) || length(training_data) == 0L) {
     cli::cli_abort("{.arg training_data} must be a non-empty list of training pairs.")
@@ -49,6 +74,9 @@ sg_train_cellpose <- function(training_data, base_model = "cyto3",
     if (!inherits(td$mask, "sg_mask")) {
       cli::cli_abort("Element {i}: {.field $mask} must be an {.cls sg_mask} object.")
     }
+    image_dim <- dim(td$image$pixels)
+    n_channels <- if (length(image_dim) == 2L) 1L else image_dim[3L]
+    .sg_cellpose_channels(channels, n_channels)
   }
 
   if (is.null(save_path)) {
@@ -61,6 +89,11 @@ sg_train_cellpose <- function(training_data, base_model = "cyto3",
   # Prepare training data for Cellpose
   np <- reticulate::import("numpy", convert = FALSE)
   cellpose_models <- reticulate::import("cellpose.models", convert = FALSE)
+
+  available_models <- reticulate::py_to_r(cellpose_models$MODEL_NAMES)
+  if (!base_model %in% available_models) {
+    cli::cli_abort("Unknown Cellpose base model {.val {base_model}}; no default is substituted.")
+  }
 
   # Convert images and masks to numpy arrays
   train_images <- lapply(training_data, function(td) {
@@ -83,17 +116,23 @@ sg_train_cellpose <- function(training_data, base_model = "cyto3",
     gpu = reticulate::py_eval("False")
   )
 
-  model_path <- model$train(
+  train_module <- reticulate::import("cellpose.train", convert = FALSE)
+  result <- train_module$train_seg(
+    net = model$net,
     train_data = train_images,
     train_labels = train_masks,
-    n_epochs = as.integer(n_epochs),
+    channel_axis = 0L,
+    channels = ch_list,
+    n_epochs = n_epochs,
     learning_rate = learning_rate,
     save_path = save_path
   )
-
-  model_path_r <- reticulate::py_to_r(model_path)
-  if (is.null(model_path_r) || !is.character(model_path_r)) {
-    model_path_r <- save_path
+  model_path_r <- reticulate::py_to_r(
+    reticulate::import("builtins", convert = FALSE)$str(result[[0L]])
+  )
+  if (!is.character(model_path_r) || length(model_path_r) != 1L ||
+      !file.exists(model_path_r) || dir.exists(model_path_r)) {
+    cli::cli_abort("Cellpose training did not return a saved weights file.")
   }
 
   if (verbose) {
@@ -108,6 +147,7 @@ sg_train_cellpose <- function(training_data, base_model = "cyto3",
       n_epochs = n_epochs,
       learning_rate = learning_rate,
       n_training_images = length(training_data),
+      channels = channels,
       timestamp = Sys.time()
     )
   )

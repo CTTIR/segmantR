@@ -137,10 +137,13 @@ sg_setup_python <- function(envname = "segmantr",
 #' @param image An `sg_image` object.
 #' @param model Character string specifying the Cellpose model.
 #'   One of `"cyto3"` (default), `"cyto2"`, `"nuclei"`,
-#'   `"tissuenet"`, `"livecell"`, or `"custom"`.
+#'   or `"custom"`. Legacy `"tissuenet"` and `"livecell"` aliases are
+#'   rejected because Cellpose 3 cannot load them without substituting a model.
 #' @param channels A named list with elements `cytoplasm` and
-#'   `nucleus`, each an integer channel index (0-based, following
-#'   Cellpose convention). Default is
+#'   `nucleus`, each an integer channel selector (following
+#'   Cellpose convention). Zero selects grayscale/no nuclear channel;
+#'   positive values select one-based image channels. Grayscale selection
+#'   ignores the nuclear selector and supplies a zero second channel. Default is
 #'   `list(cytoplasm = 0L, nucleus = 1L)`.
 #' @param diameter Numeric or `NULL`. Estimated cell diameter in
 #'   pixels. If `NULL`, Cellpose estimates the diameter
@@ -181,7 +184,16 @@ sg_segment_cellpose <- function(image,
 
   stopifnot(inherits(image, "sg_image"))
   model <- match.arg(model)
-  stopifnot(is.list(channels))
+  .sg_check_cellpose_alias(model)
+  if (model == "custom" &&
+      (!is.character(custom_model_path) || length(custom_model_path) != 1L ||
+       is.na(custom_model_path) || !file.exists(custom_model_path) ||
+       dir.exists(custom_model_path))) {
+    cli::cli_abort("{.arg custom_model_path} must name an existing weights file.")
+  }
+  image_dim <- dim(image$pixels)
+  n_channels <- if (length(image_dim) == 2L) 1L else image_dim[3L]
+  ch_list <- .sg_cellpose_channels(channels, n_channels)
   stopifnot(is.numeric(flow_threshold), length(flow_threshold) == 1L)
   stopifnot(is.numeric(cellprob_threshold),
             length(cellprob_threshold) == 1L)
@@ -190,12 +202,6 @@ sg_segment_cellpose <- function(image,
 
   .check_cellpose()
 
-  if (model == "custom" && is.null(custom_model_path)) {
-    cli::cli_abort(c(
-      "{.arg custom_model_path} is required when {.code model = 'custom'}.",
-      "i" = "Provide the path to a trained Cellpose model."
-    ))
-  }
 
   cli::cli_inform(c(
     "i" = "Running Cellpose segmentation with model {.val {model}}."
@@ -220,8 +226,6 @@ sg_segment_cellpose <- function(image,
 
   # Prepare image array
   np_image <- .r_array_to_cellpose(image)
-  ch_list <- as.integer(c(channels$cytoplasm %||% 0L,
-                          channels$nucleus %||% 0L))
 
   # Run evaluation. Cellpose >= 3 removed the `tile` argument (it always
   # tiles internally); pass it only when the installed eval() accepts it.

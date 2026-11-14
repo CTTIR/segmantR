@@ -21,11 +21,14 @@ sg_segment_cellpose(
 
 \item{model}{Character string specifying the Cellpose model.
 One of \code{"cyto3"} (default), \code{"cyto2"}, \code{"nuclei"},
-\code{"tissuenet"}, \code{"livecell"}, or \code{"custom"}.}
+or \code{"custom"}. Legacy \code{"tissuenet"} and \code{"livecell"} aliases are
+rejected because Cellpose 3 cannot load them without substituting a model.}
 
 \item{channels}{A named list with elements \code{cytoplasm} and
-\code{nucleus}, each an integer channel index (0-based, following
-Cellpose convention). Default is
+\code{nucleus}, each an integer channel selector (following
+Cellpose convention). Zero selects grayscale/no nuclear channel;
+positive values select one-based image channels. Grayscale selection
+ignores the nuclear selector and supplies a zero second channel. Default is
 \code{list(cytoplasm = 0L, nucleus = 1L)}.}
 
 \item{diameter}{Numeric or \code{NULL}. Estimated cell diameter in

@@ -10,7 +10,8 @@ sg_train_cellpose(
   n_epochs = 100L,
   learning_rate = 0.1,
   save_path = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  channels = list(cytoplasm = 0L, nucleus = 1L)
 )
 }
 \arguments{
@@ -28,6 +29,13 @@ Default \code{"cyto3"}.}
 When \code{NULL}, a temporary directory is used.}
 
 \item{verbose}{Logical. Print training progress? Default \code{TRUE}.}
+
+\item{channels}{Named list of \code{cytoplasm} and \code{nucleus} channel selectors,
+using the same defaults and convention as \code{\link[=sg_segment_cellpose]{sg_segment_cellpose()}}.
+Use the same selectors when applying the trained model. Zero selects
+grayscale/no nuclear channel; positive values are one-based channels.
+Grayscale selection ignores the nuclear selector and supplies a zero
+second channel, following Cellpose's convention.}
 }
 \value{
 An \code{sg_trained_model} object.
@@ -36,6 +44,12 @@ An \code{sg_trained_model} object.
 Trains (fine-tunes) a Cellpose segmentation model using corrected
 image-mask pairs provided by the user. Requires a working Python
 environment with Cellpose installed (see \code{\link[=sg_setup_python]{sg_setup_python()}}).
+}
+\details{
+Uses the Cellpose 3 \code{train_seg} API on CPU. Images are converted
+with the same channel selection as inference. Cellpose's default training
+filter requires at least five labeled objects per retained training image.
+The returned model path names the actual saved weights file.
 }
 \examples{
 \dontrun{
