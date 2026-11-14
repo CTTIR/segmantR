@@ -2,6 +2,12 @@
 
 ## segmantR 0.3.0
 
+- Propagation provenance now records whether lambda was applied and the
+  pure-R membrane threshold. Documentation distinguishes EBImage
+  distance/gradient weighting from the fixed pure-R membrane barrier;
+  progress messages count actual cells even when label identifiers are
+  sparse.
+
 - The EBImage propagation engine honors `expand_max` using the same
   four-neighbour support bound as the pure-R engine. It previously
   ignored the bound and could fill the entire image even when

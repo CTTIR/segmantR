@@ -90,14 +90,15 @@ labels.</p></dd>
 
 <dt id="arg-membrane-image">membrane_image<a class="anchor" aria-label="anchor" href="#arg-membrane-image"></a></dt>
 <dd><p>An <code>sg_image</code> object (single channel) used
-as a cost surface to penalise crossing membranes. If <code>NULL</code>,
-propagation proceeds uniformly.</p></dd>
+to constrain the pure-R engine: new pixels must have intensity strictly
+below the membrane image's 90th percentile. Supplied seeds are retained.
+A membrane image selects pure R in auto mode.</p></dd>
 
 
 <dt id="arg-lambda">lambda<a class="anchor" aria-label="anchor" href="#arg-lambda"></a></dt>
-<dd><p>Finite nonnegative numeric weight for the membrane penalty in the cost
-function. Higher values make propagation stop more readily at
-membranes. Default is <code>0.01</code>.</p></dd>
+<dd><p>Finite nonnegative numeric weight passed only to EBImage.
+Higher values give Euclidean distance more weight relative to image
+gradients. The pure-R engine does not use this parameter. Default <code>0.01</code>.</p></dd>
 
 
 <dt id="arg-expand-max">expand_max<a class="anchor" aria-label="anchor" href="#arg-expand-max"></a></dt>
@@ -118,7 +119,10 @@ EBImage; errors instead of falling back).</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An <code>sg_mask</code> object with expanded cell labels.</p>
+    <p>An <code>sg_mask</code> object with expanded cell labels. Its <code>model_info</code>
+records the engine, requested <code>lambda</code>, whether <code>lambda_applied</code>, and
+<code>expand_max</code>. For pure R it also records <code>membrane_threshold</code> and
+<code>membrane_quantile</code> (<code>NULL</code> when no membrane image is supplied).</p>
     </div>
 
     <div class="section level2">

@@ -51,7 +51,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="segmantr-030">segmantR 0.3.0<a class="anchor" aria-label="anchor" href="#segmantr-030"></a></h2>
-<ul><li><p>The EBImage propagation engine honors <code>expand_max</code> using the same four-neighbour support bound as the pure-R engine. It previously ignored the bound and could fill the entire image even when <code>expand_max = 0</code>. Label assignment inside that bound remains engine-specific. Propagation validates nonnegative integer bounds and matching image/mask dimensions, and records the bound in EBImage result metadata.</p></li>
+<ul><li><p>Propagation provenance now records whether lambda was applied and the pure-R membrane threshold. Documentation distinguishes EBImage distance/gradient weighting from the fixed pure-R membrane barrier; progress messages count actual cells even when label identifiers are sparse.</p></li>
+<li><p>The EBImage propagation engine honors <code>expand_max</code> using the same four-neighbour support bound as the pure-R engine. It previously ignored the bound and could fill the entire image even when <code>expand_max = 0</code>. Label assignment inside that bound remains engine-specific. Propagation validates nonnegative integer bounds and matching image/mask dimensions, and records the bound in EBImage result metadata.</p></li>
 <li><p>Release metadata are consistent for the CRAN submission: the version is recorded in <code>DESCRIPTION</code>, <code>CITATION.cff</code> and <code>.zenodo.json</code>, and the citation in the README uses the package title and the current version (it still named 0.1.0).</p></li>
 <li><p><code>citation("segmantR")</code> now returns a proper reference (new <code>inst/CITATION</code>), and the README marks the package as stable.</p></li>
 <li><p>Documentation was regenerated with roxygen2 8.1.1; the help pages are unchanged.</p></li>

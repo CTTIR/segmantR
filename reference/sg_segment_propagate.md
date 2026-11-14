@@ -30,15 +30,17 @@ sg_segment_propagate(
 
 - membrane_image:
 
-  An `sg_image` object (single channel) used as a cost surface to
-  penalise crossing membranes. If `NULL`, propagation proceeds
-  uniformly.
+  An `sg_image` object (single channel) used to constrain the pure-R
+  engine: new pixels must have intensity strictly below the membrane
+  image's 90th percentile. Supplied seeds are retained. A membrane image
+  selects pure R in auto mode.
 
 - lambda:
 
-  Finite nonnegative numeric weight for the membrane penalty in the cost
-  function. Higher values make propagation stop more readily at
-  membranes. Default is `0.01`.
+  Finite nonnegative numeric weight passed only to EBImage. Higher
+  values give Euclidean distance more weight relative to image
+  gradients. The pure-R engine does not use this parameter. Default
+  `0.01`.
 
 - expand_max:
 
@@ -58,7 +60,10 @@ sg_segment_propagate(
 
 ## Value
 
-An `sg_mask` object with expanded cell labels.
+An `sg_mask` object with expanded cell labels. Its `model_info` records
+the engine, requested `lambda`, whether `lambda_applied`, and
+`expand_max`. For pure R it also records `membrane_threshold` and
+`membrane_quantile` (`NULL` when no membrane image is supplied).
 
 ## Examples
 
