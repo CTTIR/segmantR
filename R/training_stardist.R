@@ -16,15 +16,19 @@
 #'   prepared dataset directory.
 #' @param base_model Optional pretrained StarDist model name to fine-tune
 #'   (e.g. `"2D_versatile_fluo"`); `NULL` trains from a new configuration.
+#'   Fine-tuning copies its configuration and weights into a new model under
+#'   `save_path`/`name`, preserving the pretrained architecture and cache.
 #' @param n_epochs,steps_per_epoch Training length.
 #' @param learning_rate Adam learning rate.
-#' @param n_rays Number of radial directions.
-#' @param grid Subsampling grid (length 2).
+#' @param n_rays Number of radial directions for a new model. Fine-tuning
+#'   preserves the pretrained architecture.
+#' @param grid Subsampling grid (length 2) for a new model.
 #' @param normalize Percentiles (length 2) for per-tile normalisation,
 #'   recorded in the model card.
 #' @param save_path Directory for the trained model (default: a temporary
 #'   directory).
-#' @param name Model name (directory name below `save_path`).
+#' @param name Model name (one directory component below `save_path`).
+#'   An existing model destination is rejected rather than overwritten.
 #' @param model_card Model card fields (purpose, data_domain, limitations,
 #'   license, ...), see [new_sg_trained_model()].
 #' @param seed Integer seed passed to the Python random number generators.
@@ -32,7 +36,9 @@
 #'
 #' @return An `sg_trained_model` with backend `"stardist"`, the dataset
 #'   manifest, runtime description and evaluation metrics (validation split
-#'   thresholds when available).
+#'   thresholds when available). The model path contains saved configuration
+#'   and weights, and the requested learning rate applies to both new models
+#'   and fine-tuning.
 #' @export
 #' @examples
 #' \donttest{
@@ -54,6 +60,20 @@ sg_train_stardist <- function(training_data, base_model = NULL,
                               save_path = NULL, name = "stardist_model",
                               model_card = list(), seed = 1L,
                               verbose = TRUE) {
+  destination <- .sg_stardist_training_destination(save_path, name)
+  for (value in list(n_epochs = n_epochs, steps_per_epoch = steps_per_epoch)) {
+    if (!is.numeric(value) || is.complex(value) || is.object(value) ||
+        !is.null(dim(value)) || length(value) != 1L || !is.finite(value) ||
+        value < 1 || value != floor(value) || value > .Machine$integer.max) {
+      cli::cli_abort("StarDist training lengths must be positive whole numbers.")
+    }
+  }
+  if (!is.numeric(learning_rate) || is.complex(learning_rate) ||
+      is.object(learning_rate) || !is.null(dim(learning_rate)) ||
+      length(learning_rate) != 1L || !is.finite(learning_rate) ||
+      learning_rate <= 0) {
+    cli::cli_abort("{.arg learning_rate} must be positive and finite.")
+  }
   ts <- .sg_as_training_set(training_data)
   man <- ts$manifest
   sg_validate_training_manifest(if (is.null(ts$path)) man else ts$path,
@@ -91,11 +111,10 @@ sg_train_stardist <- function(training_data, base_model = NULL,
                           status$install_hint,
                           details = list(reason = status$reason))
   }
-  if (is.null(save_path)) save_path <- tempfile("stardist_")
-  dir.create(save_path, recursive = TRUE, showWarnings = FALSE)
+  save_path <- destination$save_path
 
   np <- reticulate::import("numpy", convert = FALSE)
-  models <- reticulate::import("stardist.models")
+  models <- reticulate::import("stardist.models", convert = FALSE)
   csb <- reticulate::import("csbdeep.utils")
   reticulate::py_set_seed(as.integer(seed))
   to_np_image <- function(a) {
@@ -110,8 +129,18 @@ sg_train_stardist <- function(training_data, base_model = NULL,
   if (verbose) {
     cli::cli_inform(c("i" = "Training StarDist on {length(train)} tile{?s} ({length(valid)} validation)."))
   }
+  pretrained <- NULL
   if (!is.null(base_model)) {
-    model <- models$StarDist2D$from_pretrained(base_model)
+    pretrained <- models$StarDist2D$from_pretrained(base_model)
+    conf <- reticulate::import("copy", convert = FALSE)$deepcopy(pretrained$config)
+    if (reticulate::py_to_r(conf$n_channel_in) != n_ch) {
+      cli::cli_abort("The pretrained StarDist model channel count does not match the training data.")
+    }
+    conf$train_learning_rate <- learning_rate
+    conf$train_epochs <- n_epochs
+    conf$train_steps_per_epoch <- steps_per_epoch
+    conf$train_patch_size <- reticulate::tuple(as.integer(man$tile_size),
+                                              as.integer(man$tile_size))
   } else {
     conf <- models$Config2D(
       n_rays = n_rays, grid = as.integer(grid), n_channel_in = as.integer(n_ch),
@@ -119,7 +148,20 @@ sg_train_stardist <- function(training_data, base_model = NULL,
       train_learning_rate = learning_rate,
       train_patch_size = as.integer(c(man$tile_size, man$tile_size))
     )
-    model <- models$StarDist2D(conf, name = name, basedir = save_path)
+  }
+  dir.create(save_path, recursive = TRUE, showWarnings = FALSE)
+  if (!dir.exists(save_path)) {
+    cli::cli_abort("Could not create the StarDist output directory.")
+  }
+  save_path <- normalizePath(save_path, mustWork = TRUE)
+  model <- models$StarDist2D(conf, name = name, basedir = save_path)
+  if (!is.null(pretrained)) {
+    model$keras_model$set_weights(pretrained$keras_model$get_weights())
+    initial_thresholds <- pretrained$thresholds$`_asdict`()
+    model$thresholds <- initial_thresholds
+    jsonlite::write_json(reticulate::py_to_r(initial_thresholds),
+                         file.path(save_path, name, "thresholds.json"),
+                         auto_unbox = TRUE)
   }
   vdata <- if (length(valid)) {
     reticulate::tuple(lapply(valid, function(t) to_np_image(t$image)),
@@ -157,8 +199,15 @@ sg_train_stardist <- function(training_data, base_model = NULL,
     evaluation_split = if (length(valid)) "validation" else "train"
   ), model_card)
   model_dir <- file.path(save_path, name)
+  weight_names <- unlist(lapply(c("train_checkpoint", "train_checkpoint_last"),
+    function(key) reticulate::py_to_r(reticulate::py_get_attr(conf, key))))
+  weight_paths <- file.path(model_dir, weight_names)
+  if (!file.exists(file.path(model_dir, "config.json")) ||
+      !any(file.exists(weight_paths) & !dir.exists(weight_paths))) {
+    cli::cli_abort("StarDist training did not save a configuration and weights file.")
+  }
   new_sg_trained_model(
-    model_path = if (dir.exists(model_dir)) model_dir else save_path,
+    model_path = model_dir,
     backend = "stardist",
     base_model = base_model %||% "none",
     training_metrics = list(n_epochs = n_epochs,
@@ -281,4 +330,24 @@ sg_predict_model <- function(model, image, ..., protocol = NULL,
     return(sg_hash_assets(path)$bundle_digest)
   }
   paste0("sha256:", .sg_sha256_file(path))
+}
+
+#' Validate the destination before training or creating any output
+#' @noRd
+.sg_stardist_training_destination <- function(save_path, name) {
+  if (!is.character(name) || length(name) != 1L || is.na(name) ||
+      !nzchar(trimws(name)) || name %in% c(".", "..") ||
+      grepl("[/\\\\]", name)) {
+    cli::cli_abort("{.arg name} must be a single model directory name.")
+  }
+  if (is.null(save_path)) save_path <- tempfile("stardist_")
+  if (!is.character(save_path) || length(save_path) != 1L ||
+      is.na(save_path) || !nzchar(save_path) ||
+      (file.exists(save_path) && !dir.exists(save_path))) {
+    cli::cli_abort("{.arg save_path} must name an output directory.")
+  }
+  if (file.exists(file.path(save_path, name))) {
+    cli::cli_abort("The requested StarDist model destination already exists; choose a new name or save_path.")
+  }
+  list(save_path = save_path, name = name)
 }

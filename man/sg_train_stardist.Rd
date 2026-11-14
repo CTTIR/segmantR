@@ -26,15 +26,18 @@ sg_train_stardist(
 prepared dataset directory.}
 
 \item{base_model}{Optional pretrained StarDist model name to fine-tune
-(e.g. \code{"2D_versatile_fluo"}); \code{NULL} trains from a new configuration.}
+(e.g. \code{"2D_versatile_fluo"}); \code{NULL} trains from a new configuration.
+Fine-tuning copies its configuration and weights into a new model under
+\code{save_path}/\code{name}, preserving the pretrained architecture and cache.}
 
 \item{n_epochs, steps_per_epoch}{Training length.}
 
 \item{learning_rate}{Adam learning rate.}
 
-\item{n_rays}{Number of radial directions.}
+\item{n_rays}{Number of radial directions for a new model. Fine-tuning
+preserves the pretrained architecture.}
 
-\item{grid}{Subsampling grid (length 2).}
+\item{grid}{Subsampling grid (length 2) for a new model.}
 
 \item{normalize}{Percentiles (length 2) for per-tile normalisation,
 recorded in the model card.}
@@ -42,7 +45,8 @@ recorded in the model card.}
 \item{save_path}{Directory for the trained model (default: a temporary
 directory).}
 
-\item{name}{Model name (directory name below \code{save_path}).}
+\item{name}{Model name (one directory component below \code{save_path}).
+An existing model destination is rejected rather than overwritten.}
 
 \item{model_card}{Model card fields (purpose, data_domain, limitations,
 license, ...), see \code{\link[=new_sg_trained_model]{new_sg_trained_model()}}.}
@@ -54,7 +58,9 @@ license, ...), see \code{\link[=new_sg_trained_model]{new_sg_trained_model()}}.}
 \value{
 An \code{sg_trained_model} with backend \code{"stardist"}, the dataset
 manifest, runtime description and evaluation metrics (validation split
-thresholds when available).
+thresholds when available). The model path contains saved configuration
+and weights, and the requested learning rate applies to both new models
+and fine-tuning.
 }
 \description{
 Trains a StarDist model on a prepared instance dataset. All data checks

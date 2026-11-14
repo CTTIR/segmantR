@@ -32,7 +32,8 @@ Invisibly returns \code{TRUE} on success.
 \description{
 Creates and configures a Python virtual environment or conda
 environment with the requested deep learning segmentation backends
-(Cellpose, StarDist) installed.
+(Cellpose, StarDist) installed. StarDist setup also installs TensorBoard
+for its training log callbacks.
 }
 \section{Cellpose compatibility}{
 

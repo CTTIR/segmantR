@@ -104,6 +104,7 @@ sg_segment_stardist <- function(image,
   # Load model
   sd_model <- if (model == "custom") {
     stardist_mod$StarDist2D(
+      config = NULL,
       name = basename(custom_model_path),
       basedir = dirname(custom_model_path)
     )

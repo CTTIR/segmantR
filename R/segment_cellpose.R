@@ -2,7 +2,8 @@
 #'
 #' Creates and configures a Python virtual environment or conda
 #' environment with the requested deep learning segmentation backends
-#' (Cellpose, StarDist) installed.
+#' (Cellpose, StarDist) installed. StarDist setup also installs TensorBoard
+#' for its training log callbacks.
 #'
 #' @param envname Character string naming the Python environment.
 #'   Default is `"segmantr"`.
@@ -89,7 +90,7 @@ sg_setup_python <- function(envname = "segmantr",
     packages <- c(packages, "cellpose>=3,<4")
   }
   if ("stardist" %in% backends) {
-    packages <- c(packages, "stardist",
+    packages <- c(packages, "stardist", "tensorboard",
                   if (gpu) "tensorflow" else "tensorflow-cpu")
   }
 

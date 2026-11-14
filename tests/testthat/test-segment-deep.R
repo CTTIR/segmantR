@@ -88,6 +88,7 @@ test_that("sg_setup_python builds a virtualenv and installs backends", {
   expect_equal(created[["venv"]], "test_env")
   expect_true("cellpose>=3,<4" %in% installed)
   expect_true(any(grepl("tensorflow", installed)))
+  expect_true("tensorboard" %in% installed)
 })
 
 test_that("sg_setup_python falls back to virtualenv on conda failure", {
