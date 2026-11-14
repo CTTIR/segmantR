@@ -1,5 +1,7 @@
 # segmantR 0.3.0
 
+- `sg_active_learning_loop()` documentation and messages now accurately describe annotation-task preparation. It does not apply corrections or train a model; `final_model` remains the supplied initial model.
+
 - StarDist fine-tuning now saves a separate reloadable model under the requested output directory and applies the requested learning rate. Pretrained weights and architecture are copied without changing the download cache; existing model destinations are rejected. Python setup includes TensorBoard for StarDist training logs. Custom StarDist inference explicitly loads saved configuration and weights instead of creating a random model and overwriting configuration.
 
 - Cellpose fine-tuning now uses the supported Cellpose 3 training API and returns the saved weights file. Training and inference share explicit channel selectors. Obsolete model aliases and missing custom weights fail before fallback model loading.

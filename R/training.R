@@ -153,26 +153,29 @@ sg_train_cellpose <- function(training_data, base_model = "cyto3",
   )
 }
 
-#' Run an active learning loop for iterative segmentation refinement
+#' Prepare annotation tasks for caller-driven segmentation refinement
 #'
-#' Orchestrates a human-in-the-loop (HITL) active learning workflow:
-#' segment, review, correct, retrain, repeat.
+#' Prepares batches of annotation patches for a human-in-the-loop workflow.
+#' This function does not segment images, collect corrections, or retrain a
+#' model. Review the returned tasks, apply corrections, and call the training
+#' functions explicitly when corrected image-mask pairs are available.
 #'
 #' @param image An `sg_image` object.
 #' @param model Character. Segmentation backend to use. Currently only
 #'   `"cellpose"` is supported. Default `"cellpose"`.
-#' @param n_rounds Integer. Number of active learning rounds. Default `5L`.
+#' @param n_rounds Integer. Number of annotation-task batches. Default `5L`.
 #' @param patches_per_round Integer. Patches sampled per round. Default `10L`.
 #' @param patch_size Integer. Patch size in pixels. Default `256L`.
 #' @param initial_model Character. Initial model name. Default `"cyto3"`.
 #'
 #' @return An `sg_hitl_result` S3 object with elements `$rounds` (list of
-#'   per-round results), `$final_model` (trained model path or object),
-#'   and `$metrics` (training metrics across rounds).
+#'   annotation-task records), `$final_model` (the unchanged `initial_model`),
+#'   and `$metrics` (task counts, backend, initial model, and timestamp).
+#'   The result does not contain training or accuracy metrics.
 #' @export
 #' @examples
 #' \dontrun{
-#' # Requires Python with Cellpose and an interactive review session
+#' # Requires Python with Cellpose; prepares annotation tasks only
 #' img <- sg_example_image("fluorescence_nuclei")
 #' result <- sg_active_learning_loop(img, n_rounds = 3L,
 #'                                   patches_per_round = 2L, patch_size = 32L)
@@ -196,7 +199,7 @@ sg_active_learning_loop <- function(image, model = "cellpose",
   all_training_data <- list()
 
   cli::cli_inform(c(
-    "i" = "Starting active learning loop: {n_rounds} round{?s}.",
+    "i" = "Preparing {n_rounds} annotation-task batch{?es}.",
     "i" = "Model: {.val {model}}, base: {.val {initial_model}}."
   ))
 
@@ -239,14 +242,17 @@ sg_active_learning_loop <- function(image, model = "cellpose",
     class = "sg_hitl_result"
   )
 
-  cli::cli_inform(c("v" = "Active learning loop completed ({n_rounds} round{?s})."))
+  cli::cli_inform(c(
+    "v" = "Prepared {n_rounds} annotation-task batch{?es}.",
+    "i" = "No model training or corrections have been applied."
+  ))
   result
 }
 
 #' @export
 print.sg_hitl_result <- function(x, ...) {
   cli::cli_text("{.cls sg_hitl_result}")
-  cli::cli_text("Rounds: {x$n_rounds}")
+  cli::cli_text("Annotation batches: {x$n_rounds}")
   cli::cli_text("Backend: {x$metrics$model_backend}")
   cli::cli_text("Initial model: {x$metrics$initial_model}")
   cli::cli_text("Total patches: {x$metrics$total_patches}")
