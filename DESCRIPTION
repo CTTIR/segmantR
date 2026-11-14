@@ -60,7 +60,7 @@ Suggests:
     reticulate (>= 1.35),
     rmarkdown,
     terra,
-    testthat (>= 3.0.0),
+    testthat (>= 3.1.7),
     tiff,
     withr,
     zip
