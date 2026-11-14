@@ -118,11 +118,12 @@ sg_segment_watershed <- function(image,
 #' @param nuclear_mask An `sg_mask` object providing the nuclear seed
 #'   labels.
 #' @param membrane_image An `sg_image` object (single channel) used
-#'   as a cost surface to penalise crossing membranes. If `NULL`,
-#'   propagation proceeds uniformly.
-#' @param lambda Finite nonnegative numeric weight for the membrane penalty in the cost
-#'   function. Higher values make propagation stop more readily at
-#'   membranes. Default is `0.01`.
+#'   to constrain the pure-R engine: new pixels must have intensity strictly
+#'   below the membrane image's 90th percentile. Supplied seeds are retained.
+#'   A membrane image selects pure R in auto mode.
+#' @param lambda Finite nonnegative numeric weight passed only to EBImage.
+#'   Higher values give Euclidean distance more weight relative to image
+#'   gradients. The pure-R engine does not use this parameter. Default `0.01`.
 #' @param expand_max Nonnegative integer; maximum number of four-neighbour
 #'   propagation steps from the supplied seed pixels. Default is `20L`.
 #'   With no membrane, this bounds the support to Manhattan distance
@@ -134,7 +135,10 @@ sg_segment_watershed <- function(image,
 #'   `"voronoi_r"` (always the pure-R engine) or `"ebimage"` (always
 #'   EBImage; errors instead of falling back).
 #'
-#' @return An `sg_mask` object with expanded cell labels.
+#' @return An `sg_mask` object with expanded cell labels. Its `model_info`
+#'   records the engine, requested `lambda`, whether `lambda_applied`, and
+#'   `expand_max`. For pure R it also records `membrane_threshold` and
+#'   `membrane_quantile` (`NULL` when no membrane image is supplied).
 #' @export
 #' @examples
 #' set.seed(42)
@@ -226,6 +230,7 @@ sg_segment_propagate <- function(image,
         model_info = list(
           method = "propagate:ebimage",
           lambda = lambda,
+          lambda_applied = TRUE,
           expand_max = expand_max
         )
       ))
@@ -233,8 +238,13 @@ sg_segment_propagate <- function(image,
   }
 
   # Pure-R Voronoi propagation
+  membrane_threshold <- if (!is.null(membrane)) {
+    unname(stats::quantile(membrane, 0.9))
+  } else {
+    NULL
+  }
   mask_binary <- if (!is.null(membrane)) {
-    ifelse(membrane < stats::quantile(membrane, 0.9), 1L, 0L)
+    ifelse(membrane < membrane_threshold, 1L, 0L)
   } else {
     NULL
   }
@@ -242,8 +252,7 @@ sg_segment_propagate <- function(image,
   labels <- .voronoi_propagate_r(seeds, mask = mask_binary,
                                  expand_max = expand_max)
 
-  n_cells <- max(labels, na.rm = TRUE)
-  if (is.na(n_cells) || n_cells < 0L) n_cells <- 0L
+  n_cells <- length(.sg_label_ids(labels))
   cli::cli_inform(c(
     "v" = "Propagation assigned {n_cells} cell{?s}."
   ))
@@ -253,6 +262,9 @@ sg_segment_propagate <- function(image,
     model_info = list(
       method = "propagate:voronoi_r",
       lambda = lambda,
+      lambda_applied = FALSE,
+      membrane_threshold = membrane_threshold,
+      membrane_quantile = if (!is.null(membrane)) 0.9 else NULL,
       expand_max = expand_max
     )
   )

@@ -20,12 +20,13 @@ sg_segment_propagate(
 labels.}
 
 \item{membrane_image}{An \code{sg_image} object (single channel) used
-as a cost surface to penalise crossing membranes. If \code{NULL},
-propagation proceeds uniformly.}
+to constrain the pure-R engine: new pixels must have intensity strictly
+below the membrane image's 90th percentile. Supplied seeds are retained.
+A membrane image selects pure R in auto mode.}
 
-\item{lambda}{Finite nonnegative numeric weight for the membrane penalty in the cost
-function. Higher values make propagation stop more readily at
-membranes. Default is \code{0.01}.}
+\item{lambda}{Finite nonnegative numeric weight passed only to EBImage.
+Higher values give Euclidean distance more weight relative to image
+gradients. The pure-R engine does not use this parameter. Default \code{0.01}.}
 
 \item{expand_max}{Nonnegative integer; maximum number of four-neighbour
 propagation steps from the supplied seed pixels. Default is \code{20L}.
@@ -40,7 +41,10 @@ installed and no membrane image is given, otherwise pure R),
 EBImage; errors instead of falling back).}
 }
 \value{
-An \code{sg_mask} object with expanded cell labels.
+An \code{sg_mask} object with expanded cell labels. Its \code{model_info}
+records the engine, requested \code{lambda}, whether \code{lambda_applied}, and
+\code{expand_max}. For pure R it also records \code{membrane_threshold} and
+\code{membrane_quantile} (\code{NULL} when no membrane image is supplied).
 }
 \description{
 Expands nuclear seed regions outward using Voronoi-style
