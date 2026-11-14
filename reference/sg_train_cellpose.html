@@ -68,7 +68,8 @@ environment with Cellpose installed (see <code><a href="sg_setup_python.html">sg
 <span>  n_epochs <span class="op">=</span> <span class="fl">100L</span>,</span>
 <span>  learning_rate <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  save_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  channels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>cytoplasm <span class="op">=</span> <span class="fl">0L</span>, nucleus <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -102,10 +103,26 @@ When <code>NULL</code>, a temporary directory is used.</p></dd>
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical. Print training progress? Default <code>TRUE</code>.</p></dd>
 
+
+<dt id="arg-channels">channels<a class="anchor" aria-label="anchor" href="#arg-channels"></a></dt>
+<dd><p>Named list of <code>cytoplasm</code> and <code>nucleus</code> channel selectors,
+using the same defaults and convention as <code><a href="sg_segment_cellpose.html">sg_segment_cellpose()</a></code>.
+Use the same selectors when applying the trained model. Zero selects
+grayscale/no nuclear channel; positive values are one-based channels.
+Grayscale selection ignores the nuclear selector and supplies a zero
+second channel, following Cellpose's convention.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An <code>sg_trained_model</code> object.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Uses the Cellpose 3 <code>train_seg</code> API on CPU. Images are converted
+with the same channel selection as inference. Cellpose's default training
+filter requires at least five labeled objects per retained training image.
+The returned model path names the actual saved weights file.</p>
     </div>
 
     <div class="section level2">

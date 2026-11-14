@@ -89,13 +89,16 @@ environment.</p>
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>Character string specifying the Cellpose model.
 One of <code>"cyto3"</code> (default), <code>"cyto2"</code>, <code>"nuclei"</code>,
-<code>"tissuenet"</code>, <code>"livecell"</code>, or <code>"custom"</code>.</p></dd>
+or <code>"custom"</code>. Legacy <code>"tissuenet"</code> and <code>"livecell"</code> aliases are
+rejected because Cellpose 3 cannot load them without substituting a model.</p></dd>
 
 
 <dt id="arg-channels">channels<a class="anchor" aria-label="anchor" href="#arg-channels"></a></dt>
 <dd><p>A named list with elements <code>cytoplasm</code> and
-<code>nucleus</code>, each an integer channel index (0-based, following
-Cellpose convention). Default is
+<code>nucleus</code>, each an integer channel selector (following
+Cellpose convention). Zero selects grayscale/no nuclear channel;
+positive values select one-based image channels. Grayscale selection
+ignores the nuclear selector and supplies a zero second channel. Default is
 <code>list(cytoplasm = 0L, nucleus = 1L)</code>.</p></dd>
 
 

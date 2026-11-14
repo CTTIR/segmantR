@@ -2,7 +2,8 @@
 
 Creates and configures a Python virtual environment or conda environment
 with the requested deep learning segmentation backends (Cellpose,
-StarDist) installed.
+StarDist) installed. StarDist setup also installs TensorBoard for its
+training log callbacks.
 
 ## Usage
 
@@ -34,9 +35,13 @@ sg_setup_python(
 
 - gpu:
 
-  Logical; if `TRUE` (default), installs the GPU-capable `tensorflow`
-  build for StarDist instead of `tensorflow-cpu`. Cellpose is installed
-  as `cellpose>=3,<4`; it uses a GPU when the installed PyTorch build
+  Logical; selects the TensorFlow distribution for StarDist. On macOS,
+  installs `tensorflow` for either value because `tensorflow-cpu` does
+  not provide macOS wheels. Elsewhere, `TRUE` (default) selects
+  `tensorflow` and `FALSE` selects `tensorflow-cpu`. This does not
+  guarantee GPU support or select an inference device; available devices
+  depend on the platform and installed runtime. Cellpose is installed as
+  `cellpose>=3,<4`; it uses a GPU when the installed PyTorch build
   supports it.
 
 ## Value

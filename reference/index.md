@@ -12,7 +12,7 @@
   [`renderSgCanvas()`](https://cttir.github.io/segmantR/reference/sgCanvasOutput.md)
   : Shiny bindings for the cell canvas
 - [`sg_active_learning_loop()`](https://cttir.github.io/segmantR/reference/sg_active_learning_loop.md)
-  : Run an active learning loop for iterative segmentation refinement
+  : Prepare annotation tasks for caller-driven segmentation refinement
 - [`sg_app()`](https://cttir.github.io/segmantR/reference/sg_app.md) :
   Build the segmantR Shiny application
 - [`sg_apply_corrections()`](https://cttir.github.io/segmantR/reference/sg_apply_corrections.md)

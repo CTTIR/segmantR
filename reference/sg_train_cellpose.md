@@ -14,7 +14,8 @@ sg_train_cellpose(
   n_epochs = 100L,
   learning_rate = 0.1,
   save_path = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  channels = list(cytoplasm = 0L, nucleus = 1L)
 )
 ```
 
@@ -46,9 +47,26 @@ sg_train_cellpose(
 
   Logical. Print training progress? Default `TRUE`.
 
+- channels:
+
+  Named list of `cytoplasm` and `nucleus` channel selectors, using the
+  same defaults and convention as
+  [`sg_segment_cellpose()`](https://cttir.github.io/segmantR/reference/sg_segment_cellpose.md).
+  Use the same selectors when applying the trained model. Zero selects
+  grayscale/no nuclear channel; positive values are one-based channels.
+  Grayscale selection ignores the nuclear selector and supplies a zero
+  second channel, following Cellpose's convention.
+
 ## Value
 
 An `sg_trained_model` object.
+
+## Details
+
+Uses the Cellpose 3 `train_seg` API on CPU. Images are converted with
+the same channel selection as inference. Cellpose's default training
+filter requires at least five labeled objects per retained training
+image. The returned model path names the actual saved weights file.
 
 ## Examples
 

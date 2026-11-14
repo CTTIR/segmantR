@@ -1,7 +1,10 @@
-# Run an active learning loop for iterative segmentation refinement
+# Prepare annotation tasks for caller-driven segmentation refinement
 
-Orchestrates a human-in-the-loop (HITL) active learning workflow:
-segment, review, correct, retrain, repeat.
+Prepares batches of annotation patches for a human-in-the-loop workflow.
+This function does not segment images, collect corrections, or retrain a
+model. Review the returned tasks, apply corrections, and call the
+training functions explicitly when corrected image-mask pairs are
+available.
 
 ## Usage
 
@@ -29,7 +32,7 @@ sg_active_learning_loop(
 
 - n_rounds:
 
-  Integer. Number of active learning rounds. Default `5L`.
+  Integer. Number of annotation-task batches. Default `5L`.
 
 - patches_per_round:
 
@@ -45,15 +48,17 @@ sg_active_learning_loop(
 
 ## Value
 
-An `sg_hitl_result` S3 object with elements `$rounds` (list of per-round
-results), `$final_model` (trained model path or object), and `$metrics`
-(training metrics across rounds).
+An `sg_hitl_result` S3 object with elements `$rounds` (list of
+annotation-task records), `$final_model` (the unchanged
+`initial_model`), and `$metrics` (task counts, backend, initial model,
+and timestamp). The result does not contain training or accuracy
+metrics.
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
-# Requires Python with Cellpose and an interactive review session
+# Requires Python with Cellpose; prepares annotation tasks only
 img <- sg_example_image("fluorescence_nuclei")
 result <- sg_active_learning_loop(img, n_rounds = 3L,
                                   patches_per_round = 2L, patch_size = 32L)

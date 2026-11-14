@@ -30,13 +30,17 @@ sg_segment_cellpose(
 - model:
 
   Character string specifying the Cellpose model. One of `"cyto3"`
-  (default), `"cyto2"`, `"nuclei"`, `"tissuenet"`, `"livecell"`, or
-  `"custom"`.
+  (default), `"cyto2"`, `"nuclei"`, or `"custom"`. Legacy `"tissuenet"`
+  and `"livecell"` aliases are rejected because Cellpose 3 cannot load
+  them without substituting a model.
 
 - channels:
 
   A named list with elements `cytoplasm` and `nucleus`, each an integer
-  channel index (0-based, following Cellpose convention). Default is
+  channel selector (following Cellpose convention). Zero selects
+  grayscale/no nuclear channel; positive values select one-based image
+  channels. Grayscale selection ignores the nuclear selector and
+  supplies a zero second channel. Default is
   `list(cytoplasm = 0L, nucleus = 1L)`.
 
 - diameter:

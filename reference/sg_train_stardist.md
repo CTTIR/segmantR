@@ -41,6 +41,9 @@ sg_train_stardist(
 
   Optional pretrained StarDist model name to fine-tune (e.g.
   `"2D_versatile_fluo"`); `NULL` trains from a new configuration.
+  Fine-tuning copies its configuration and weights into a new model
+  under `save_path`/`name`, preserving the pretrained architecture and
+  cache.
 
 - n_epochs, steps_per_epoch:
 
@@ -52,11 +55,12 @@ sg_train_stardist(
 
 - n_rays:
 
-  Number of radial directions.
+  Number of radial directions for a new model. Fine-tuning preserves the
+  pretrained architecture.
 
 - grid:
 
-  Subsampling grid (length 2).
+  Subsampling grid (length 2) for a new model.
 
 - normalize:
 
@@ -69,7 +73,8 @@ sg_train_stardist(
 
 - name:
 
-  Model name (directory name below `save_path`).
+  Model name (one directory component below `save_path`). An existing
+  model destination is rejected rather than overwritten.
 
 - model_card:
 
@@ -89,7 +94,9 @@ sg_train_stardist(
 
 An `sg_trained_model` with backend `"stardist"`, the dataset manifest,
 runtime description and evaluation metrics (validation split thresholds
-when available).
+when available). The model path contains saved configuration and
+weights, and the requested learning rate applies to both new models and
+fine-tuning.
 
 ## Examples
 

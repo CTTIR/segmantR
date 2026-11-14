@@ -106,7 +106,9 @@ prepared dataset directory.</p></dd>
 
 <dt id="arg-base-model">base_model<a class="anchor" aria-label="anchor" href="#arg-base-model"></a></dt>
 <dd><p>Optional pretrained StarDist model name to fine-tune
-(e.g. <code>"2D_versatile_fluo"</code>); <code>NULL</code> trains from a new configuration.</p></dd>
+(e.g. <code>"2D_versatile_fluo"</code>); <code>NULL</code> trains from a new configuration.
+Fine-tuning copies its configuration and weights into a new model under
+<code>save_path</code>/<code>name</code>, preserving the pretrained architecture and cache.</p></dd>
 
 
 <dt id="arg-n-epochs-steps-per-epoch">n_epochs, steps_per_epoch<a class="anchor" aria-label="anchor" href="#arg-n-epochs-steps-per-epoch"></a></dt>
@@ -118,11 +120,12 @@ prepared dataset directory.</p></dd>
 
 
 <dt id="arg-n-rays">n_rays<a class="anchor" aria-label="anchor" href="#arg-n-rays"></a></dt>
-<dd><p>Number of radial directions.</p></dd>
+<dd><p>Number of radial directions for a new model. Fine-tuning
+preserves the pretrained architecture.</p></dd>
 
 
 <dt id="arg-grid">grid<a class="anchor" aria-label="anchor" href="#arg-grid"></a></dt>
-<dd><p>Subsampling grid (length 2).</p></dd>
+<dd><p>Subsampling grid (length 2) for a new model.</p></dd>
 
 
 <dt id="arg-normalize">normalize<a class="anchor" aria-label="anchor" href="#arg-normalize"></a></dt>
@@ -136,7 +139,8 @@ directory).</p></dd>
 
 
 <dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
-<dd><p>Model name (directory name below <code>save_path</code>).</p></dd>
+<dd><p>Model name (one directory component below <code>save_path</code>).
+An existing model destination is rejected rather than overwritten.</p></dd>
 
 
 <dt id="arg-model-card">model_card<a class="anchor" aria-label="anchor" href="#arg-model-card"></a></dt>
@@ -156,7 +160,9 @@ license, ...), see <code><a href="new_sg_trained_model.html">new_sg_trained_mode
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An <code>sg_trained_model</code> with backend <code>"stardist"</code>, the dataset
 manifest, runtime description and evaluation metrics (validation split
-thresholds when available).</p>
+thresholds when available). The model path contains saved configuration
+and weights, and the requested learning rate applies to both new models
+and fine-tuning.</p>
     </div>
 
     <div class="section level2">
