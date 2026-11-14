@@ -47,7 +47,6 @@ test_that("sg_segment_propagate expands nuclear seeds", {
 })
 
 test_that("sg_segment_propagate uses a membrane image when provided", {
-  skip_if(requireNamespace("EBImage", quietly = TRUE), "EBImage installed")
   set.seed(42)
   img <- new_sg_image(matrix(stats::runif(400), 20, 20))
   membrane <- new_sg_image(matrix(stats::runif(400), 20, 20))

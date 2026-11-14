@@ -120,11 +120,15 @@ sg_segment_watershed <- function(image,
 #' @param membrane_image An `sg_image` object (single channel) used
 #'   as a cost surface to penalise crossing membranes. If `NULL`,
 #'   propagation proceeds uniformly.
-#' @param lambda Numeric weight for the membrane penalty in the cost
+#' @param lambda Finite nonnegative numeric weight for the membrane penalty in the cost
 #'   function. Higher values make propagation stop more readily at
 #'   membranes. Default is `0.01`.
-#' @param expand_max Integer; maximum number of propagation
-#'   iterations. Default is `20L`.
+#' @param expand_max Nonnegative integer; maximum number of four-neighbour
+#'   propagation steps from the supplied seed pixels. Default is `20L`.
+#'   With no membrane, this bounds the support to Manhattan distance
+#'   `expand_max` pixels from a seed. Both engines honor this support bound;
+#'   EBImage retains its intensity-aware assignment of labels within it, so
+#'   the engines need not assign identical labels. Zero preserves the seeds.
 #' @param engine `"auto"` (default, historic behaviour: EBImage when it is
 #'   installed and no membrane image is given, otherwise pure R),
 #'   `"voronoi_r"` (always the pure-R engine) or `"ebimage"` (always
@@ -151,17 +155,33 @@ sg_segment_propagate <- function(image,
 
   stopifnot(inherits(image, "sg_image"))
   stopifnot(inherits(nuclear_mask, "sg_mask"))
-  stopifnot(is.numeric(lambda), length(lambda) == 1L, lambda >= 0)
+  stopifnot(is.numeric(lambda), length(lambda) == 1L,
+            is.null(dim(lambda)), is.finite(lambda), lambda >= 0)
+  if (!is.numeric(expand_max) || length(expand_max) != 1L ||
+      !is.null(dim(expand_max)) || !is.finite(expand_max) ||
+      expand_max < 0 || expand_max != floor(expand_max) ||
+      expand_max > .Machine$integer.max) {
+    .sg_abort("{.arg expand_max} must be one nonnegative integer within the supported integer range.",
+              code = "PARAMETER_OUT_OF_RANGE")
+  }
   expand_max <- as.integer(expand_max)
   engine <- match.arg(engine)
 
   seeds <- nuclear_mask$labels
+  if (!identical(dim(seeds), dim(image$pixels)[1:2])) {
+    .sg_abort("Image and nuclear mask dimensions must match.",
+              code = "DIMENSION_MISMATCH")
+  }
 
   # Membrane cost surface
   membrane <- NULL
   if (!is.null(membrane_image)) {
     stopifnot(inherits(membrane_image, "sg_image"))
     membrane <- .extract_channel(membrane_image, 1L)
+    if (!identical(dim(membrane), dim(seeds))) {
+      .sg_abort("Membrane image and nuclear mask dimensions must match.",
+                code = "DIMENSION_MISMATCH")
+    }
   }
 
   if (engine == "ebimage") {
@@ -181,7 +201,9 @@ sg_segment_propagate <- function(image,
   if (engine != "voronoi_r" && .check_ebimage() && is.null(membrane_image)) {
     ch <- .extract_channel(image, 1L)
     labels <- tryCatch({
-      eb_result <- .ebimage_propagate(ch, seeds = seeds, lambda = lambda)
+      support <- .sg_propagation_support(seeds, expand_max)
+      eb_result <- .ebimage_propagate(ch, seeds = seeds, lambda = lambda,
+                                      mask = support)
       eb_labels <- as.integer(EBImage::imageData(eb_result))
       dim(eb_labels) <- dim(seeds)
       eb_labels
@@ -203,7 +225,8 @@ sg_segment_propagate <- function(image,
         labels = labels,
         model_info = list(
           method = "propagate:ebimage",
-          lambda = lambda
+          lambda = lambda,
+          expand_max = expand_max
         )
       ))
     }
@@ -244,8 +267,31 @@ sg_segment_propagate <- function(image,
 #' and exercise the pure-R Voronoi fallback regardless of whether EBImage is
 #' installed.
 #' @noRd
-.ebimage_propagate <- function(x, seeds, lambda) {
-  EBImage::propagate(x, seeds = seeds, lambda = lambda)
+.ebimage_propagate <- function(x, seeds, lambda, mask = NULL) {
+  EBImage::propagate(x, seeds = seeds, lambda = lambda, mask = mask)
+}
+
+# Support reachable by synchronous four-neighbour steps, matching the pure-R
+# propagation bound without imposing its label assignment on another engine.
+.sg_propagation_support <- function(seeds, expand_max) {
+  reached <- seeds > 0L
+  nr <- nrow(seeds)
+  nc <- ncol(seeds)
+  steps <- min(expand_max, as.double(nr) + nc - 2)
+  for (i in seq_len(steps)) {
+    grown <- reached
+    if (nr > 1L) {
+      grown[-1L, ] <- grown[-1L, , drop = FALSE] | reached[-nr, , drop = FALSE]
+      grown[-nr, ] <- grown[-nr, , drop = FALSE] | reached[-1L, , drop = FALSE]
+    }
+    if (nc > 1L) {
+      grown[, -1L] <- grown[, -1L, drop = FALSE] | reached[, -nc, drop = FALSE]
+      grown[, -nc] <- grown[, -nc, drop = FALSE] | reached[, -1L, drop = FALSE]
+    }
+    if (identical(grown, reached)) break
+    reached <- grown
+  }
+  reached
 }
 
 #' Level-ordered watershed flood from seeds

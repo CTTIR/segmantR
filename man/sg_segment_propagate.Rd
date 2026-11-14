@@ -23,12 +23,16 @@ labels.}
 as a cost surface to penalise crossing membranes. If \code{NULL},
 propagation proceeds uniformly.}
 
-\item{lambda}{Numeric weight for the membrane penalty in the cost
+\item{lambda}{Finite nonnegative numeric weight for the membrane penalty in the cost
 function. Higher values make propagation stop more readily at
 membranes. Default is \code{0.01}.}
 
-\item{expand_max}{Integer; maximum number of propagation
-iterations. Default is \code{20L}.}
+\item{expand_max}{Nonnegative integer; maximum number of four-neighbour
+propagation steps from the supplied seed pixels. Default is \code{20L}.
+With no membrane, this bounds the support to Manhattan distance
+\code{expand_max} pixels from a seed. Both engines honor this support bound;
+EBImage retains its intensity-aware assignment of labels within it, so
+the engines need not assign identical labels. Zero preserves the seeds.}
 
 \item{engine}{\code{"auto"} (default, historic behaviour: EBImage when it is
 installed and no membrane image is given, otherwise pure R),
