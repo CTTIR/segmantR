@@ -6,6 +6,7 @@
 [![Codecov test coverage](https://codecov.io/gh/CTTIR/segmantR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/CTTIR/segmantR?branch=main)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21889962.svg)](https://doi.org/10.5281/zenodo.21889962)
 <!-- badges: end -->
 
 segmantR segments microscopy images, records reproducible segmentation protocols,

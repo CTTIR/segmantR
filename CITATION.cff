@@ -3,6 +3,7 @@ message: If you use this software, please cite it as below.
 type: software
 title: 'segmantR: Cell Segmentation for Histology with Human-in-the-Loop Training'
 version: 0.3.0
+doi: 10.5281/zenodo.21889962
 authors:
 - family-names: Heller
   given-names: R.
@@ -10,3 +11,7 @@ authors:
 repository-code: https://github.com/CTTIR/segmantR
 url: https://cttir.github.io/segmantR/
 license: MIT
+identifiers:
+- type: doi
+  value: 10.5281/zenodo.21889962
+  description: Zenodo DOI (reserved; resolves once the record is published)
