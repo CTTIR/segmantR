@@ -31,7 +31,7 @@ gradients. The pure-R engine does not use this parameter. Default \code{0.01}.}
 \item{expand_max}{Nonnegative integer; maximum number of four-neighbour
 propagation steps from the supplied seed pixels. Default is \code{20L}.
 With no membrane, this bounds the support to Manhattan distance
-\code{expand_max} pixels from a seed. Both engines honor this support bound;
+\code{expand_max} pixels from a seed. Both engines honour this support bound;
 EBImage retains its intensity-aware assignment of labels within it, so
 the engines need not assign identical labels. Zero preserves the seeds.}
 

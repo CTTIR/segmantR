@@ -48,7 +48,7 @@ environment with Cellpose installed (see \code{\link[=sg_setup_python]{sg_setup_
 \details{
 Uses the Cellpose 3 \code{train_seg} API on CPU. Images are converted
 with the same channel selection as inference. Cellpose's default training
-filter requires at least five labeled objects per retained training image.
+filter requires at least five labelled objects per retained training image.
 The returned model path names the actual saved weights file.
 }
 \examples{

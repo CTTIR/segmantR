@@ -588,7 +588,7 @@
   )
 }
 
-#' Estimate perimeter of a labeled region
+#' Estimate perimeter of a labelled region
 #' @noRd
 .estimate_perimeter <- function(mask_labels, cell_id) {
   nr <- nrow(mask_labels)
