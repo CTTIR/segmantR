@@ -292,10 +292,14 @@ sg_plot_features <- function(features, x = "area", y = "mean_intensity",
     ggplot2::theme_minimal()
 
   if (!is.null(color)) {
-    p <- p + if (is.numeric(features[[color]])) {
-      ggplot2::scale_colour_viridis_c(end = 0.9)
-    } else {
-      ggplot2::scale_colour_viridis_d(end = 0.9)
+    # Other column types (dates, date-times) keep the default scale of
+    # 'ggplot2'; a discrete viridis scale does not accept them.
+    values <- features[[color]]
+    if (is.numeric(values)) {
+      p <- p + ggplot2::scale_colour_viridis_c(end = 0.9)
+    } else if (is.character(values) || is.factor(values) ||
+                 is.logical(values)) {
+      p <- p + ggplot2::scale_colour_viridis_d(end = 0.9)
     }
   }
 

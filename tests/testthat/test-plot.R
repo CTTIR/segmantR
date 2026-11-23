@@ -272,6 +272,18 @@ test_that("sg_plot_features uses one layer and labels the colour legend", {
   expect_error(sg_plot_features(list(area = 1)), "data frame")
 })
 
+test_that("sg_plot_features keeps the default scale for date columns", {
+  feat <- data.frame(area = c(10, 20, 30), mean_intensity = c(0.2, 0.5, 0.8),
+                     day = as.Date("2026-01-01") + 0:2,
+                     flag = c(TRUE, FALSE, TRUE))
+  p <- sg_plot_features(feat, color = "day")
+  expect_null(p$scales$get_scales("colour"))
+  expect_no_error(ggplot2::ggplot_build(p))
+  p_flag <- sg_plot_features(feat, color = "flag")
+  expect_s3_class(p_flag$scales$get_scales("colour"), "ScaleDiscrete")
+  expect_no_error(ggplot2::ggplot_build(p_flag))
+})
+
 test_that("sg_plot_comparison rejects identical panel titles", {
   m <- two_cell_mask()
   expect_error(sg_plot_comparison(m, m, labels = c("A", "A")),
