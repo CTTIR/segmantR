@@ -26,7 +26,7 @@ new_sg_image(
 
 - pixels:
 
-  Numeric array of dimensions H x W (grayscale) or H x W x C
+  Numeric array of dimensions H x W (greyscale) or H x W x C
   (multi-channel).
 
 - channels:

@@ -53,8 +53,8 @@ sg_train_cellpose(
   same defaults and convention as
   [`sg_segment_cellpose()`](https://cttir.github.io/segmantR/reference/sg_segment_cellpose.md).
   Use the same selectors when applying the trained model. Zero selects
-  grayscale/no nuclear channel; positive values are one-based channels.
-  Grayscale selection ignores the nuclear selector and supplies a zero
+  greyscale/no nuclear channel; positive values are one-based channels.
+  Greyscale selection ignores the nuclear selector and supplies a zero
   second channel, following Cellpose's convention.
 
 ## Value

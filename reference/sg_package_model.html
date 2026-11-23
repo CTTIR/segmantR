@@ -111,7 +111,7 @@ record them as a hashed reference relative to the archive directory.</p></dd>
 
 
 <dt id="arg-license">license<a class="anchor" aria-label="anchor" href="#arg-license"></a></dt>
-<dd><p>Optional license list (<code>id</code>, <code>name</code>, <code>source</code>, <code>text</code>);
+<dd><p>Optional licence list (<code>id</code>, <code>name</code>, <code>source</code>, <code>text</code>);
 defaults to <code>trained_model$license</code>.</p></dd>
 
 
@@ -128,7 +128,7 @@ defaults to <code>trained_model$license</code>.</p></dd>
     <p>The archive keeps relative paths and contains a versioned
 <code>model_card.json</code> (schema <code>segmantR-model-card-v1</code>, still carrying the
 fields written by segmantR 0.1.0), <code>runtime.json</code>, <code>dataset_manifest.json</code>
-when the model has one, <code>license.json</code> when a license is given, the
+when the model has one, <code>license.json</code> when a licence is given, the
 weights under <code>weights/</code> (or a hashed relative reference when
 <code>embed_weights = FALSE</code>) and <code>checksums.sha256</code> covering every file.
 Python environments are never copied into a bundle.</p>
@@ -147,7 +147,7 @@ Python environments are never copied into a bundle.</p>
 <span class="r-in"><span>  training_metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>n_epochs <span class="op">=</span> <span class="fl">50L</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">sg_package_model</span><span class="op">(</span><span class="va">mdl</span>, <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".segmantR"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Model packaged to <span style="color: #0000BB;">/tmp/RtmpgATlnS/file1f641ee50f3e.segmantR</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Model packaged to <span style="color: #0000BB;">/tmp/RtmpwLZobS/file203972221854.segmantR</span>.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -55,7 +55,7 @@ sg_package_model(
 
 - license:
 
-  Optional license list (`id`, `name`, `source`, `text`); defaults to
+  Optional licence list (`id`, `name`, `source`, `text`); defaults to
   `trained_model$license`.
 
 - overwrite:
@@ -72,7 +72,7 @@ The archive keeps relative paths and contains a versioned
 `model_card.json` (schema `segmantR-model-card-v1`, still carrying the
 fields written by segmantR 0.1.0), `runtime.json`,
 `dataset_manifest.json` when the model has one, `license.json` when a
-license is given, the weights under `weights/` (or a hashed relative
+licence is given, the weights under `weights/` (or a hashed relative
 reference when `embed_weights = FALSE`) and `checksums.sha256` covering
 every file. Python environments are never copied into a bundle.
 
@@ -90,5 +90,5 @@ mdl <- new_sg_trained_model(
   training_metrics = list(n_epochs = 50L)
 )
 out <- sg_package_model(mdl, tempfile(fileext = ".segmantR"))
-#> ✔ Model packaged to /tmp/RtmpgATlnS/file1f641ee50f3e.segmantR.
+#> ✔ Model packaged to /tmp/RtmpwLZobS/file203972221854.segmantR.
 ```

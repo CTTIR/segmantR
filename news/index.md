@@ -139,6 +139,9 @@
   statement on the use of LLM tools mentions fine-tuned and
   weight-edited local models.
 
+- The help pages and the README use British spelling throughout
+  (greyscale, labelling, licence).
+
 ## segmantR 0.2.0
 
 - segmantR no longer starts or installs Python by itself. Without a

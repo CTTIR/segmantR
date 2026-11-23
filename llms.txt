@@ -120,7 +120,7 @@ and correction, model training, review and QuPath exchange.
 independently.
 
 The offline cell drawing engine was adapted from annotatR under its MIT
-license (copyright 2026 Raban Heller). Its JavaScript and CSS are
+licence (copyright 2026 Raban Heller). Its JavaScript and CSS are
 maintained here as `sgcanvas`; no annotatR or hyperannotatR runtime
 dependency is needed. `sg_canvas(image, mask)` displays cell boundaries
 and

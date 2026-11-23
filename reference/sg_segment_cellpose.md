@@ -38,8 +38,8 @@ sg_segment_cellpose(
 
   A named list with elements `cytoplasm` and `nucleus`, each an integer
   channel selector (following Cellpose convention). Zero selects
-  grayscale/no nuclear channel; positive values select one-based image
-  channels. Grayscale selection ignores the nuclear selector and
+  greyscale/no nuclear channel; positive values select one-based image
+  channels. Greyscale selection ignores the nuclear selector and
   supplies a zero second channel. Default is
   `list(cytoplasm = 0L, nucleus = 1L)`.
 

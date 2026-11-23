@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   protocols-and-interop: protocols-and-interop.html
   segmantR: segmantR.html
-last_built: 2026-11-23T03:59Z
+last_built: 2026-11-23T10:57Z
 urls:
   reference: https://cttir.github.io/segmantR/reference
   article: https://cttir.github.io/segmantR/articles
