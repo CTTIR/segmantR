@@ -137,13 +137,13 @@ print.sg_eval <- function(x, ...) {
 
 # --- Internal metric helpers ---
 
-#' Aggregated Jaccard Index
+#' Pixel overlap between every predicted and every ground-truth instance
+#'
+#' One pass over the pixels instead of one comparison of the whole image per
+#' instance pair: `intersection[p, g]` counts the pixels shared by predicted
+#' instance `pred_ids[p]` and ground-truth instance `gt_ids[g]`, and
+#' IoU = intersection / (area_pred + area_gt - intersection).
 #' @noRd
-# Pixel overlap between every predicted and every ground-truth instance.
-# One pass over the pixels instead of one comparison of the whole image per
-# instance pair: `intersection[p, g]` counts the pixels shared by predicted
-# instance `pred_ids[p]` and ground-truth instance `gt_ids[g]`, and
-# IoU = intersection / (area_pred + area_gt - intersection).
 .sg_instance_overlap <- function(pred_lab, gt_lab, pred_ids, gt_ids) {
   n_pred <- length(pred_ids)
   n_gt <- length(gt_ids)
@@ -169,6 +169,8 @@ print.sg_eval <- function(x, ...) {
   )
 }
 
+#' Aggregated Jaccard Index
+#' @noRd
 .compute_aji <- function(pred_ids, gt_ids, overlap) {
   if (length(gt_ids) == 0L && length(pred_ids) == 0L) return(1.0)
   if (length(gt_ids) == 0L || length(pred_ids) == 0L) return(0.0)
@@ -199,6 +201,8 @@ print.sg_eval <- function(x, ...) {
   numerator / denominator
 }
 
+#' Panoptic Quality
+#' @noRd
 .compute_panoptic_quality <- function(iou_matrix, pred_ids, gt_ids) {
   if (length(gt_ids) == 0L && length(pred_ids) == 0L) return(1.0)
   if (is.null(iou_matrix) || length(gt_ids) == 0L || length(pred_ids) == 0L) {
