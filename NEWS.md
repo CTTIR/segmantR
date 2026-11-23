@@ -19,7 +19,9 @@
   above the darkest fifth of the viridis palette, which was nearly
   invisible on the dark grey background. `sg_plot_features()` uses a
   viridis scale for `color`. `sg_plot_comparison()` reports identical panel
-  titles clearly; its `image` argument is documented as not drawn.
+  titles clearly; its `image` argument is documented as not drawn. Both mask
+  plots keep a small plot margin, so the legend is no longer clipped at the
+  edge of the figure.
 
 * `plot()` for ROIs draws in image orientation (y pointing down) with
   'ggplot2' 4.0.0 or later; the y axis pointed up because `coord_sf()`
@@ -45,6 +47,10 @@
   of the plotting functions use the built-in example image, and their help
   pages name the functions that exist (`sg_extract_features()`,
   `sg_evaluate_segmentation()`).
+
+* Figures on the website keep their true colours in dark mode. The default
+  dark-mode filter inverted them, so that fluorescence images looked like
+  bright-field images and colour bars were reversed.
 
 * Python setup selects `tensorflow` on macOS for both GPU preferences, avoiding
   the unavailable `tensorflow-cpu` macOS distribution. The preference selects
