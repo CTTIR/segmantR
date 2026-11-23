@@ -289,3 +289,12 @@ test_that("sg_plot_metrics accepts sg_evaluate_segmentation() output", {
   expect_no_error(ggplot2::ggplot_build(sg_plot_metrics(ev)))
   expect_error(sg_plot_metrics(list(metric = "a", value = 1)), "data frame")
 })
+
+test_that("mask plots keep a margin so that the legend is not clipped", {
+  m <- two_cell_mask()
+  for (p in list(sg_plot_mask(m), sg_plot_comparison(m, m))) {
+    margin <- as.numeric(p$theme$plot.margin)
+    expect_length(margin, 4L)
+    expect_true(all(margin > 0))
+  }
+})

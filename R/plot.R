@@ -215,7 +215,8 @@ sg_plot_mask <- function(mask,
     ggplot2::geom_raster() +
     ggplot2::scale_y_reverse() +
     ggplot2::coord_fixed() +
-    ggplot2::theme_void()
+    ggplot2::theme_void() +
+    ggplot2::theme(plot.margin = .sg_plot_margin())
 
   if (discrete) {
     # Fixed limits keep the background (NA, drawn in `na.value`) out of the
@@ -359,9 +360,12 @@ sg_plot_comparison <- function(mask_a, mask_b, image = NULL,
     ggplot2::coord_fixed() +
     ggplot2::facet_wrap(ggplot2::vars(.data[["panel"]])) +
     ggplot2::theme_void() +
-    ggplot2::theme(strip.text = ggplot2::element_text(
-      size = 12, margin = ggplot2::margin(b = 6)
-    ))
+    ggplot2::theme(
+      strip.text = ggplot2::element_text(
+        size = 12, margin = ggplot2::margin(b = 6)
+      ),
+      plot.margin = .sg_plot_margin()
+    )
 
   p
 }
@@ -412,6 +416,12 @@ sg_plot_metrics <- function(eval_result) {
 # The darkest fifth of the viridis palettes is nearly indistinguishable from
 # the dark grey ("grey20") mask background, so cell colours start above it.
 .sg_viridis_begin <- 0.2
+
+# theme_void() has no plot margin, which puts the legend flush against the
+# edge of the device and clips its labels.
+.sg_plot_margin <- function() {
+  ggplot2::margin(5.5, 5.5, 5.5, 5.5)
+}
 
 #' Keep only the highlighted labels of a label matrix
 #' @noRd
