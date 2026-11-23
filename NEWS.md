@@ -24,10 +24,10 @@
 * `sg_plot_mask()` and `sg_plot_comparison()` start their colour scales
   above the darkest fifth of the viridis palette, which was nearly
   invisible on the dark grey background. `sg_plot_features()` uses a
-  viridis scale for `color`. `sg_plot_comparison()` reports identical panel
-  titles clearly; its `image` argument is documented as not drawn. Both mask
-  plots keep a small plot margin, so the legend is no longer clipped at the
-  edge of the figure.
+  viridis scale for numeric, character, factor and logical `color` columns.
+  `sg_plot_comparison()` reports identical panel titles clearly; its `image`
+  argument is documented as not drawn. Both mask plots keep a small plot
+  margin, so the legend is no longer clipped at the edge of the figure.
 
 * `plot()` for ROIs draws in image orientation (y pointing down) with
   'ggplot2' 4.0.0 or later; the y axis pointed up because `coord_sf()`
@@ -43,9 +43,10 @@
   image once per cell. `summary()` for masks returns its rows sorted by
   `cell_id`.
 
-* `new_sg_mask()` rejects arrays with more than two dimensions; a 3D array
-  became a wrong matrix with a warning. `sg_extract_features()` reports
-  channel numbers that are out of range.
+* `new_sg_mask()` rejects arrays with more than one plane; a 3D array
+  became a wrong matrix. A single plane stored as an array (height x width
+  x 1) is still accepted. `sg_extract_features()` reports channel numbers
+  that are out of range.
 
 * New "Get started" vignette (`vignette("segmantR")`) with a first
   segmentation, measurement and evaluation workflow, a package help topic
