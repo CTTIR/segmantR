@@ -134,3 +134,17 @@ test_that("circularity and solidity stay within [0, 1]", {
   expect_true(all(f$solidity <= 1 & f$solidity > 0))
   expect_equal(f$solidity[2:3], c(1, 1))
 })
+
+test_that("sg_extract_features rejects channel numbers out of range", {
+  img <- new_sg_image(array(1, c(6, 6, 2)))
+  lab <- matrix(0L, 6, 6)
+  lab[2:3, 2:3] <- 1L
+  expect_error(sg_extract_features(img, new_sg_mask(lab), channels = 9),
+               "out of range")
+  expect_error(sg_extract_features(img, new_sg_mask(lab), channels = 0),
+               "out of range")
+  f <- suppressMessages(sg_extract_features(img, new_sg_mask(lab),
+                                            features = "intensity",
+                                            channels = 2))
+  expect_true("ch2_mean" %in% names(f))
+})

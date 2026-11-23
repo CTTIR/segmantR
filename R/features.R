@@ -77,6 +77,13 @@ sg_extract_features <- function(image, mask,
       }
     } else {
       ch_idx <- as.integer(channels)
+      bad <- is.na(ch_idx) | ch_idx < 1L | ch_idx > n_ch
+      if (any(bad)) {
+        cli::cli_abort(c(
+          "Channel{?s} out of range: {.val {channels[bad]}}",
+          "i" = "The image has {n_ch} channel{?s} (1 to {n_ch})."
+        ))
+      }
     }
     ch_names <- ch_names[ch_idx]
   } else {

@@ -89,3 +89,19 @@ test_that(".filter_by_area passes empty label matrices through", {
   labels <- matrix(0L, 4, 4)
   expect_equal(segmantR:::.filter_by_area(labels, 1L, 100L), labels)
 })
+
+test_that(".filter_by_area relabels sparse ids by value and keeps the shape", {
+  labels <- matrix(0L, 8, 8)
+  labels[1:3, 1:3] <- 30L   # 9 px, kept
+  labels[5, 5] <- 4L        # 1 px, dropped
+  labels[6:8, 6:8] <- 12L   # 9 px, kept
+  out <- segmantR:::.filter_by_area(labels, min_area = 2L, max_area = 20L)
+  expect_identical(dim(out), dim(labels))
+  expect_type(out, "integer")
+  expect_equal(out[6, 6], 1L)  # 12 is the smallest kept id
+  expect_equal(out[1, 1], 2L)
+  expect_equal(out[5, 5], 0L)
+  expect_equal(sort(unique(as.vector(out))), 0:2)
+  # nothing kept: all background
+  expect_true(all(segmantR:::.filter_by_area(labels, 100L, 200L) == 0L))
+})

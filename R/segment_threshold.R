@@ -139,23 +139,13 @@ sg_segment_threshold <- function(image,
 #' Remove objects outside size limits and relabel sequentially
 #' @noRd
 .filter_by_area <- function(labels, min_area, max_area) {
-  cell_ids <- unique(as.vector(labels))
-  cell_ids <- cell_ids[cell_ids > 0L]
-  if (length(cell_ids) == 0L) return(labels)
+  areas <- .sg_label_areas(labels)
+  if (length(areas) == 0L) return(labels)
 
-  areas <- vapply(cell_ids, function(id) sum(labels == id), integer(1))
-  keep <- cell_ids[areas >= min_area & areas <= max_area]
+  keep <- as.integer(names(areas)[areas >= min_area & areas <= max_area])
 
-  # Remove filtered objects
-  labels[!(labels %in% keep)] <- 0L
-
-  # Relabel sequentially
-  if (length(keep) > 0L) {
-    new_id <- 0L
-    for (old_id in sort(keep)) {
-      new_id <- new_id + 1L
-      labels[labels == old_id] <- new_id
-    }
-  }
-  labels
+  # Remove filtered objects and relabel the rest sequentially (by value)
+  out <- labels
+  out[] <- match(labels, sort(keep), nomatch = 0L)
+  out
 }

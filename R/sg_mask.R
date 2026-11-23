@@ -39,10 +39,16 @@ new_sg_mask <- function(labels, image_id = NULL, model_info = NULL,
                         status = c("draft", "staged", "reviewed"),
                         provenance = list(), id = NULL) {
   stopifnot(is.integer(labels) || is.numeric(labels))
-  if (!is.matrix(labels)) {
-    if (is.null(dim(labels))) {
-      cli::cli_abort("{.arg labels} must be a matrix.")
-    }
+  if (length(dim(labels)) != 2L) {
+    n_dim <- length(dim(labels))
+    cli::cli_abort(c(
+      "{.arg labels} must be a matrix.",
+      "x" = if (n_dim == 0L) {
+        "A vector without dimensions was supplied."
+      } else {
+        "An array with {n_dim} dimensions was supplied."
+      }
+    ))
   }
   mask_type <- match.arg(mask_type)
   status <- match.arg(status)
@@ -136,14 +142,13 @@ print.sg_mask <- function(x, ...) {
 
 #' @export
 summary.sg_mask <- function(object, ...) {
-  labels <- object$labels
-  cell_ids <- unique(as.vector(labels))
-  cell_ids <- cell_ids[cell_ids > 0L]
-  if (length(cell_ids) == 0L) {
+  area_tab <- .sg_label_areas(object$labels)
+  if (length(area_tab) == 0L) {
     cli::cli_text("Empty mask (no cells)")
     return(invisible(NULL))
   }
-  areas <- vapply(cell_ids, function(id) sum(labels == id), integer(1))
+  cell_ids <- as.integer(names(area_tab))
+  areas <- unname(area_tab)
   cli::cli_text("{.cls sg_mask}: {length(cell_ids)} cells")
   cli::cli_text("Cell area - min: {min(areas)}, median: {stats::median(areas)}, max: {max(areas)}")
   invisible(tibble::tibble(cell_id = cell_ids, area = areas))

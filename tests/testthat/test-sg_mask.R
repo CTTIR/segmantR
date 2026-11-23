@@ -53,3 +53,21 @@ test_that("summary.sg_mask reports empty masks", {
   expect_snapshot(summary(new_sg_mask(matrix(0L, 4, 4))))
   expect_null(suppressMessages(summary(new_sg_mask(matrix(0L, 4, 4)))))
 })
+
+# ---- regression tests -------------------------------------------------------
+
+test_that("new_sg_mask rejects arrays that are not matrices", {
+  expect_error(new_sg_mask(array(1L, c(2, 2, 2))), "3 dimensions")
+  expect_error(new_sg_mask(array(1L, 4)), "must be a matrix")
+  expect_error(new_sg_mask(1:5), "without dimensions")
+})
+
+test_that("summary.sg_mask sorts cells by id and handles sparse ids", {
+  labels <- matrix(0L, 6, 6)
+  labels[1:2, 1:2] <- 40L
+  labels[4:6, 4:6] <- 7L
+  res <- suppressMessages(summary(new_sg_mask(labels)))
+  expect_equal(res$cell_id, c(7L, 40L))
+  expect_equal(res$area, c(9L, 4L))
+  expect_type(res$area, "integer")
+})
