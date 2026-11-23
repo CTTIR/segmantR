@@ -250,7 +250,7 @@ sg_stardist_parameter_map <- function(protocol = "stardist.2d.v1",
 #' Describe a StarDist model for exchange
 #'
 #' Hashes the model files and records representation, channels, pixel size,
-#' normalisation, license and the runtimes that can load the representation
+#' normalisation, licence and the runtimes that can load the representation
 #' (`.pb` for QuPath/OpenCV, SavedModel for QuPath/TensorFlow, bioimage.io
 #' for the extension's bioimage.io support, a Python model directory for
 #' `stardist`).

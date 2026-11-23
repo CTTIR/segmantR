@@ -33,8 +33,8 @@ When \code{NULL}, a temporary directory is used.}
 \item{channels}{Named list of \code{cytoplasm} and \code{nucleus} channel selectors,
 using the same defaults and convention as \code{\link[=sg_segment_cellpose]{sg_segment_cellpose()}}.
 Use the same selectors when applying the trained model. Zero selects
-grayscale/no nuclear channel; positive values are one-based channels.
-Grayscale selection ignores the nuclear selector and supplies a zero
+greyscale/no nuclear channel; positive values are one-based channels.
+Greyscale selection ignores the nuclear selector and supplies a zero
 second channel, following Cellpose's convention.}
 }
 \value{

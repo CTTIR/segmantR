@@ -109,7 +109,7 @@ segmantR owns microscopy cell/nucleus segmentation, manual annotation and
 correction, model training, review and QuPath exchange. `hyperannotatR`
 (formerly annotatR) owns HSI annotation and evolves independently.
 
-The offline cell drawing engine was adapted from annotatR under its MIT license
+The offline cell drawing engine was adapted from annotatR under its MIT licence
 (copyright 2026 Raban Heller). Its JavaScript and CSS are maintained here as
 `sgcanvas`; no annotatR or hyperannotatR runtime dependency is needed.
 `sg_canvas(image, mask)` displays cell boundaries and `sg_canvas_correct()`

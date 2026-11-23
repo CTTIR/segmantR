@@ -8,7 +8,7 @@
 #' interchange fields added in segmantR 0.2.0; objects created by older
 #' code simply lack them and are treated with the documented defaults.
 #'
-#' @param pixels Numeric array of dimensions H x W (grayscale) or H x W x C
+#' @param pixels Numeric array of dimensions H x W (greyscale) or H x W x C
 #'   (multi-channel).
 #' @param channels Character vector of channel names. If `NULL`, defaults to
 #'   `ch1`, `ch2`, etc.

@@ -361,7 +361,7 @@
   filled
 }
 
-#' Connected component labeling
+#' Connected component labelling
 #' @noRd
 .connected_components <- function(binary) {
   nr <- nrow(binary)

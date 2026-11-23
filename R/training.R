@@ -18,8 +18,8 @@
 #' @param channels Named list of `cytoplasm` and `nucleus` channel selectors,
 #'   using the same defaults and convention as [sg_segment_cellpose()].
 #'   Use the same selectors when applying the trained model. Zero selects
-#'   grayscale/no nuclear channel; positive values are one-based channels.
-#'   Grayscale selection ignores the nuclear selector and supplies a zero
+#'   greyscale/no nuclear channel; positive values are one-based channels.
+#'   Greyscale selection ignores the nuclear selector and supplies a zero
 #'   second channel, following Cellpose's convention.
 #'
 #' @details Uses the Cellpose 3 `train_seg` API on CPU. Images are converted

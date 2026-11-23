@@ -155,7 +155,7 @@ plot.sg_trained_model <- function(x, ...) {
 #' The archive keeps relative paths and contains a versioned
 #' `model_card.json` (schema `segmantR-model-card-v1`, still carrying the
 #' fields written by segmantR 0.1.0), `runtime.json`, `dataset_manifest.json`
-#' when the model has one, `license.json` when a license is given, the
+#' when the model has one, `license.json` when a licence is given, the
 #' weights under `weights/` (or a hashed relative reference when
 #' `embed_weights = FALSE`) and `checksums.sha256` covering every file.
 #' Python environments are never copied into a bundle.
@@ -171,7 +171,7 @@ plot.sg_trained_model <- function(x, ...) {
 #'   `"cellpose"`, or `"both"`.
 #' @param embed_weights Logical; copy weights into the archive (default) or
 #'   record them as a hashed reference relative to the archive directory.
-#' @param license Optional license list (`id`, `name`, `source`, `text`);
+#' @param license Optional licence list (`id`, `name`, `source`, `text`);
 #'   defaults to `trained_model$license`.
 #' @param overwrite Logical; replace an existing archive.
 #'

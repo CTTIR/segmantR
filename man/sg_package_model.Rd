@@ -35,7 +35,7 @@ included; tiles stay in their own integrity-checked dataset directory.}
 \item{embed_weights}{Logical; copy weights into the archive (default) or
 record them as a hashed reference relative to the archive directory.}
 
-\item{license}{Optional license list (\code{id}, \code{name}, \code{source}, \code{text});
+\item{license}{Optional licence list (\code{id}, \code{name}, \code{source}, \code{text});
 defaults to \code{trained_model$license}.}
 
 \item{overwrite}{Logical; replace an existing archive.}
@@ -51,7 +51,7 @@ a \code{model_card.json}, and optionally training data.
 The archive keeps relative paths and contains a versioned
 \code{model_card.json} (schema \code{segmantR-model-card-v1}, still carrying the
 fields written by segmantR 0.1.0), \code{runtime.json}, \code{dataset_manifest.json}
-when the model has one, \code{license.json} when a license is given, the
+when the model has one, \code{license.json} when a licence is given, the
 weights under \verb{weights/} (or a hashed relative reference when
 \code{embed_weights = FALSE}) and \code{checksums.sha256} covering every file.
 Python environments are never copied into a bundle.

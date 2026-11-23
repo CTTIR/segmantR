@@ -20,7 +20,7 @@ new_sg_image(
 )
 }
 \arguments{
-\item{pixels}{Numeric array of dimensions H x W (grayscale) or H x W x C
+\item{pixels}{Numeric array of dimensions H x W (greyscale) or H x W x C
 (multi-channel).}
 
 \item{channels}{Character vector of channel names. If \code{NULL}, defaults to

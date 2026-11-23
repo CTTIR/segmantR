@@ -44,7 +44,7 @@ rule and is what \code{run.json} and the Groovy template verify.
 }
 \description{
 Hashes the model files and records representation, channels, pixel size,
-normalisation, license and the runtimes that can load the representation
+normalisation, licence and the runtimes that can load the representation
 (\code{.pb} for QuPath/OpenCV, SavedModel for QuPath/TensorFlow, bioimage.io
 for the extension's bioimage.io support, a Python model directory for
 \code{stardist}).
