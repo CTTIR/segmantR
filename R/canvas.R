@@ -72,8 +72,13 @@ sg_canvas <- function(image, mask = NULL, channel = 1L, tool = "pan",
 .sg_canvas_binding <- function(image, mask) {
   .sg_assert_image(image)
   .sg_assert_mask(mask)
+  # A protocol run binds its mask to the stable image identifier, which is
+  # the content hash for an image without a declared id, so both forms of
+  # the identifier count as the same image.
+  same_image <- identical(image$id, mask$image_id) ||
+    identical(.sg_image_id(image), mask$image_id)
   if (!identical(dim(image$pixels)[1:2], dim(mask$labels)) ||
-      !identical(image$id, mask$image_id) ||
+      !same_image ||
       !identical(image$origin, mask$origin) ||
       !identical(image$plane, mask$plane)) {
     .sg_abort("Canvas image and mask must have matching dimensions, identity, origin and plane.")

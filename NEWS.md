@@ -1,5 +1,11 @@
 # segmantR 0.3.0
 
+* The cell annotation canvas of the app works after a protocol run on an
+  image without a declared `id`, such as the built-in examples. The run binds
+  its mask to the content hash of the image, which `sg_canvas()` did not
+  accept as the same image, so the canvas showed "Canvas image and mask must
+  have matching dimensions, identity, origin and plane" after every run.
+
 * `sg_plot_overlay()` draws cell outlines along the pixel edges of each
   cell. It used to draw every boundary pixel as a hollow square, which
   looked like a grid on small images and covered the cells on large ones.

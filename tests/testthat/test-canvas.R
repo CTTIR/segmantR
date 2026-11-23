@@ -69,3 +69,43 @@ test_that("canvas outputs explain a missing htmlwidgets", {
   expect_error(sgCanvasOutput("cv"), "htmlwidgets")
   expect_error(renderSgCanvas(NULL), "htmlwidgets")
 })
+
+test_that("the canvas accepts protocol masks of images without a declared id", {
+  skip_if_not_installed("htmlwidgets")
+  skip_if_not_installed("magick")
+  img <- sg_example_image("fluorescence_nuclei")
+  expect_null(img$id)
+  run <- suppressMessages(sg_protocol_run(img, "threshold.otsu.v1",
+                                          min_area = 5L, output = "run"))
+  # the run binds the mask to the content hash of the image
+  expect_match(run$mask$image_id, "^sha256:")
+  w <- sg_canvas(img, run$mask)
+  expect_s3_class(w, "sgcanvas")
+  expect_gt(length(w$x$annotations$features), 0L)
+
+  # a mask bound to another image is still refused
+  other <- run$mask
+  other$image_id <- "sha256:0000000000000000"
+  expect_error(sg_canvas(img, other), "matching")
+  changed <- img
+  changed$pixels[1, 1] <- 1 - changed$pixels[1, 1]
+  expect_error(sg_canvas(changed, run$mask), "matching")
+})
+
+test_that("the app canvas still renders after a protocol run", {
+  skip_if_not_installed("htmlwidgets")
+  skip_if_not_installed("magick")
+  app <- sg_app(sg_example_image("fluorescence_nuclei"))
+  suppressMessages(shiny::testServer(app, {
+    session$setInputs(protocol = "threshold.otsu.v1", channel = "1",
+                      cell_tool = "pan", param_min_area = 5,
+                      param_max_area = 5000, param_open_size = 5,
+                      param_fill_holes = TRUE)
+    session$setInputs(run = 1)
+    expect_match(rv$message, "staged for review")
+    x <- canvas_state()
+    expect_no_error(w <- sg_canvas(x$image, x$mask, channel = 1L))
+    expect_gt(length(w$x$annotations$features), 0L)
+    expect_no_error(output$cell_canvas)
+  }))
+})
