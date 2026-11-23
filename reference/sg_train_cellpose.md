@@ -65,7 +65,7 @@ An `sg_trained_model` object.
 
 Uses the Cellpose 3 `train_seg` API on CPU. Images are converted with
 the same channel selection as inference. Cellpose's default training
-filter requires at least five labeled objects per retained training
+filter requires at least five labelled objects per retained training
 image. The returned model path names the actual saved weights file.
 
 ## Examples

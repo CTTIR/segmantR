@@ -4,6 +4,7 @@
 <url><loc>https://cttir.github.io/segmantR/LICENSE.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/articles/index.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/articles/protocols-and-interop.html</loc></url>
+<url><loc>https://cttir.github.io/segmantR/articles/segmantR.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/authors.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/index.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/news/index.html</loc></url>
@@ -13,6 +14,7 @@
 <url><loc>https://cttir.github.io/segmantR/reference/new_sg_trained_model.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/reference/plot.sg_roi.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/reference/plot.sg_roi_mask.html</loc></url>
+<url><loc>https://cttir.github.io/segmantR/reference/segmantR-package.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/reference/sgCanvasOutput.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/reference/sg_active_learning_loop.html</loc></url>
 <url><loc>https://cttir.github.io/segmantR/reference/sg_app.html</loc></url>

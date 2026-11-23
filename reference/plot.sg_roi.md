@@ -22,4 +22,6 @@ plot(x, ...)
 ## Value
 
 A [ggplot2::ggplot](https://ggplot2.tidyverse.org/reference/ggplot.html)
-object. The plot is not drawn; print it to render.
+object in image orientation (origin at the top left, y pointing down;
+this needs 'ggplot2' 4.0.0 or later, older versions draw y pointing up).
+The plot is not drawn; print it to render.

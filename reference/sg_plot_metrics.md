@@ -1,7 +1,7 @@
 # Bar chart of evaluation metrics
 
-Displays a bar chart of segmentation evaluation metrics such as IoU,
-precision, recall, and F1.
+Displays a bar chart of segmentation evaluation metrics on a 0 to 1
+scale, such as Dice, Jaccard, panoptic quality and F1.
 
 ## Usage
 
@@ -13,8 +13,8 @@ sg_plot_metrics(eval_result)
 
 - eval_result:
 
-  A data frame with columns `metric` and `value`, e.g., from
-  `sg_evaluate()`.
+  A data frame with columns `metric` and `value`, for example from
+  [`sg_evaluate_segmentation()`](https://cttir.github.io/segmantR/reference/sg_evaluate_segmentation.md).
 
 ## Value
 
@@ -23,10 +23,11 @@ A `ggplot2` object.
 ## Examples
 
 ``` r
-res <- data.frame(
-  metric = c("IoU", "Precision", "Recall", "F1"),
-  value = c(0.82, 0.90, 0.85, 0.87)
-)
-p <- sg_plot_metrics(res)
-p
+img <- sg_example_image("fluorescence_nuclei")
+reference <- sg_example_mask("fluorescence_nuclei")
+otsu <- sg_segment_threshold(img, min_area = 5)
+#> ℹ Threshold applied using "otsu" method.
+#> ✔ Segmented 8 objects via threshold (otsu).
+sg_plot_metrics(sg_evaluate_segmentation(otsu, reference))
+#> ✔ Computed 7 segmentation metrics.
 ```

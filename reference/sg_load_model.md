@@ -50,9 +50,9 @@ mdl <- new_sg_trained_model(weights, backend = "cellpose",
                             base_model = "cyto3",
                             training_metrics = list(n_epochs = 50L))
 archive <- sg_package_model(mdl, tempfile(fileext = ".segmantR"))
-#> ✔ Model packaged to /tmp/RtmpZNYdOa/file1f6c50426c71.segmantR.
+#> ✔ Model packaged to /tmp/RtmpgATlnS/file1f6437c1c4a6.segmantR.
 model <- sg_load_model(archive)
-#> ✔ Loaded model from /tmp/RtmpZNYdOa/file1f6c50426c71.segmantR.
+#> ✔ Loaded model from /tmp/RtmpgATlnS/file1f6437c1c4a6.segmantR.
 #> ℹ Backend: cellpose, base: cyto3.
 model$integrity
 #> [1] "verified"

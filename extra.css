@@ -1,0 +1,12 @@
+/* segmantR figures show microscopy images and label masks, whose
+   intensities and colours carry meaning. The default dark-mode filter
+   (invert + hue-rotate) turns a fluorescence image into a bright-field
+   look-alike and reverses every colour bar, so figures keep their true
+   colours in dark mode. They get a white backing instead, because figures
+   are rendered with a transparent background and dark text. */
+[data-bs-theme="dark"] img.r-plt,
+[data-bs-theme="dark"] pre .r-plt.img img,
+[data-bs-theme="dark"] .cell-output-display img {
+  filter: none;
+  background-color: #ffffff;
+}

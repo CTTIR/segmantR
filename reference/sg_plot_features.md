@@ -19,7 +19,8 @@ sg_plot_features(
 
 - features:
 
-  A data frame of cell features (e.g., from `sg_compute_features()`).
+  A data frame of cell features with one row per cell, for example from
+  [`sg_extract_features()`](https://cttir.github.io/segmantR/reference/sg_extract_features.md).
 
 - x:
 
@@ -28,6 +29,9 @@ sg_plot_features(
 - y:
 
   Character, column name for the y-axis (default `"mean_intensity"`).
+  [`sg_extract_features()`](https://cttir.github.io/segmantR/reference/sg_extract_features.md)
+  names intensity columns after the channel (for example `"ch1_mean"`),
+  so pass that name for its output.
 
 - color:
 
@@ -44,11 +48,11 @@ A `ggplot2` object.
 ## Examples
 
 ``` r
-feat <- data.frame(
-  cell_id = 1:10,
-  area = rpois(10, 200),
-  mean_intensity = runif(10)
-)
-p <- sg_plot_features(feat, x = "area", y = "mean_intensity")
-p
+img <- sg_example_image("fluorescence_nuclei")
+mask <- sg_example_mask("fluorescence_nuclei")
+feat <- sg_extract_features(img, mask,
+                            features = c("intensity", "morphology"))
+#> ✔ Extracted intensity, morphology features for 15 cells.
+sg_plot_features(feat, x = "area", y = "DAPI_mean",
+                 color = "circularity")
 ```

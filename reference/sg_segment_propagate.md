@@ -47,7 +47,7 @@ sg_segment_propagate(
   Nonnegative integer; maximum number of four-neighbour propagation
   steps from the supplied seed pixels. Default is `20L`. With no
   membrane, this bounds the support to Manhattan distance `expand_max`
-  pixels from a seed. Both engines honor this support bound; EBImage
+  pixels from a seed. Both engines honour this support bound; EBImage
   retains its intensity-aware assignment of labels within it, so the
   engines need not assign identical labels. Zero preserves the seeds.
 

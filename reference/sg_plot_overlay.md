@@ -1,7 +1,9 @@
 # Overlay cell boundaries on an image
 
-Renders a single image channel as a raster and overlays cell outlines
-from a segmentation mask.
+Renders a single image channel as a greyscale raster and overlays cell
+outlines from a segmentation mask. Outlines follow the pixel edges
+between a cell and its surroundings, so they stay sharp at any image
+size.
 
 ## Usage
 
@@ -26,7 +28,8 @@ sg_plot_overlay(
 
 - mask:
 
-  An `sg_mask` object, or `NULL` to show the image only.
+  An `sg_mask` object with the same height and width as `image`, or
+  `NULL` to show the image only.
 
 - channel:
 
@@ -34,15 +37,19 @@ sg_plot_overlay(
 
 - outline_color:
 
-  Character, colour for cell outlines (default `"#FF00FF"`).
+  Character, colour for cell outlines, fills and labels (default
+  `"#FF00FF"`).
 
 - outline_width:
 
-  Numeric, width of the outline strokes (default `1`).
+  Numeric, width of the outline strokes (default `1`). The width is in
+  absolute units, as `linewidth` in 'ggplot2': reduce it (for example to
+  `0.3`) for large images with many small cells.
 
 - fill_alpha:
 
-  Numeric in \[0, 1\], fill opacity for cell regions (default `0`).
+  Numeric in \[0, 1\], fill opacity for cell regions (default `0`,
+  outlines only).
 
 - label_cells:
 
@@ -60,7 +67,12 @@ A `ggplot2` object.
 ## Examples
 
 ``` r
-img <- new_sg_image(matrix(runif(400), 20, 20))
-p <- sg_plot_overlay(img)
-p
+img <- sg_example_image("fluorescence_nuclei")
+mask <- sg_example_mask("fluorescence_nuclei")
+sg_plot_overlay(img, mask)
+
+
+# Fill and label two selected cells
+sg_plot_overlay(img, mask, fill_alpha = 0.3, label_cells = TRUE,
+                highlight = c(1L, 5L))
 ```

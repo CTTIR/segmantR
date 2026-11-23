@@ -17,7 +17,8 @@
 <link href="../deps/JetBrains_Mono-0.5.0/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Standard protocols, DNN training and QuPath/StarDist exchange">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Standard protocols, DNN training and QuPath/StarDist exchange">
 <meta name="theme-color" content="#1565c0">
 <script defer data-domain="cttir.github.io/segmantr" src="https://analytics.hellebo.de/js/script.file-downloads.outbound-links.js"></script>
 <!-- Package browser icons -->
@@ -54,7 +55,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/protocols-and-interop.html">Standard protocols, DNN training and QuPath/StarDist exchange</a></li>
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Reproducibility and exchange</h6></li>
+    <li><a class="dropdown-item" href="../articles/protocols-and-interop.html">Standard protocols, DNN training and QuPath/StarDist exchange</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -241,7 +244,7 @@ and a SHA-256 inventory.</p>
 <span><span class="co">#&gt; [1] "integrity.json"   "manifest.json"    "mask.legend.json" "mask.tif"        </span></span>
 <span><span class="co">#&gt; [5] "measurements.csv" "objects.geojson"</span></span>
 <span><span class="va">bundle</span><span class="op">$</span><span class="va">bundle_digest</span></span>
-<span><span class="co">#&gt; [1] "sha256:54256426055dfe99d374fd4317649b7e2d00e3221cf618c314f30f41e1a0ccaf"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "sha256:22993ae390b1bbf8ae9369830fc3a16a00d4060a5af7082ec4cde6267979ba14"</span></span></code></pre></div>
 <p>Imports verify integrity, schema, dtype, orientation, plane, legend
 and the agreement between GeoJSON and TIFF, and return a
 <strong>staged</strong> mask:</p>
