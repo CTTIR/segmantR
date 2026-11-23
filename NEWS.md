@@ -1,5 +1,51 @@
 # segmantR 0.3.0
 
+* `sg_plot_overlay()` draws cell outlines along the pixel edges of each
+  cell. It used to draw every boundary pixel as a hollow square, which
+  looked like a grid on small images and covered the cells on large ones.
+  `fill_alpha` now fills the whole cell region, as documented, instead of
+  only the boundary pixels. A `channel` that does not exist and a `mask`
+  whose size differs from the image are errors instead of a failed subscript
+  or a misplaced overlay.
+
+* `sg_plot_mask()` accepts character, factor and logical feature columns,
+  such as cluster names with `color_by = "cluster"`, and draws them with a
+  discrete scale; they stopped with "Discrete value supplied to a continuous
+  scale". Features are matched to cells by `cell_id`. With `color_by = "id"`
+  the background is no longer a legend entry and the legend is hidden for
+  more than 20 cells, where it used to push the image off the plot.
+
+* `sg_plot_mask()` and `sg_plot_comparison()` start their colour scales
+  above the darkest fifth of the viridis palette, which was nearly
+  invisible on the dark grey background. `sg_plot_features()` uses a
+  viridis scale for `color`. `sg_plot_comparison()` reports identical panel
+  titles clearly; its `image` argument is documented as not drawn.
+
+* `plot()` for ROIs draws in image orientation (y pointing down) with
+  'ggplot2' 4.0.0 or later; the y axis pointed up because `coord_sf()`
+  ignores a reversed y scale. `plot()` for ROI masks gives every label its
+  own colour when labels share a legend colour, which is the default for
+  labels from different layers (they were all drawn in the same grey).
+
+* `sg_evaluate_segmentation()` counts the overlap of all instance pairs in
+  one pass over the pixels. The values are unchanged; 400 cells in a 240 x
+  240 image took about two and a half minutes and now take a fraction of a
+  second. The area filter of `sg_segment_threshold()`, `summary()` for masks
+  and the outline and centroid helpers of the plots no longer scan the
+  image once per cell. `summary()` for masks returns its rows sorted by
+  `cell_id`.
+
+* `new_sg_mask()` rejects arrays with more than two dimensions; a 3D array
+  became a wrong matrix with a warning. `sg_extract_features()` reports
+  channel numbers that are out of range.
+
+* New "Get started" vignette (`vignette("segmantR")`) with a first
+  segmentation, measurement and evaluation workflow, a package help topic
+  (`?segmantR`), and a grouped reference index on the website. The examples
+  of the plotting functions use the built-in example image, and their help
+  pages name the functions that exist (`sg_extract_features()`,
+  `sg_evaluate_segmentation()`).
+
 * Python setup selects `tensorflow` on macOS for both GPU preferences, avoiding
   the unavailable `tensorflow-cpu` macOS distribution. The preference selects
   a distribution; actual device support remains runtime dependent.
@@ -14,7 +60,7 @@
 
 - Propagation provenance now records whether lambda was applied and the pure-R membrane threshold. Documentation distinguishes EBImage distance/gradient weighting from the fixed pure-R membrane barrier; progress messages count actual cells even when label identifiers are sparse.
 
-* The EBImage propagation engine honors `expand_max` using the same
+* The EBImage propagation engine honours `expand_max` using the same
   four-neighbour support bound as the pure-R engine. It previously ignored
   the bound and could fill the entire image even when `expand_max = 0`.
   Label assignment inside that bound remains engine-specific. Propagation
