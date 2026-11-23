@@ -62,6 +62,15 @@ test_that("new_sg_mask rejects arrays that are not matrices", {
   expect_error(new_sg_mask(1:5), "without dimensions")
 })
 
+test_that("new_sg_mask accepts a single plane stored as a 3D array", {
+  labels <- matrix(c(0L, 1L, 1L, 2L, 0L, 2L), 2, 3)
+  m <- new_sg_mask(array(labels, c(2, 3, 1)))
+  expect_identical(m$labels, labels)
+  expect_equal(m$n_cells, 2L)
+  expect_identical(new_sg_mask(array(labels, c(2, 3, 1, 1)))$labels, labels)
+  expect_error(new_sg_mask(array(1L, c(2, 3, 2))), "3 dimensions")
+})
+
 test_that("summary.sg_mask sorts cells by id and handles sparse ids", {
   labels <- matrix(0L, 6, 6)
   labels[1:2, 1:2] <- 40L

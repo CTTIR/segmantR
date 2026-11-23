@@ -39,6 +39,11 @@ new_sg_mask <- function(labels, image_id = NULL, model_info = NULL,
                         status = c("draft", "staged", "reviewed"),
                         provenance = list(), id = NULL) {
   stopifnot(is.integer(labels) || is.numeric(labels))
+  # A single plane stored as an array with trailing dimensions of extent 1
+  # (for example height x width x 1) is a matrix.
+  if (length(dim(labels)) > 2L && all(dim(labels)[-(1:2)] == 1L)) {
+    dim(labels) <- dim(labels)[1:2]
+  }
   if (length(dim(labels)) != 2L) {
     n_dim <- length(dim(labels))
     cli::cli_abort(c(
