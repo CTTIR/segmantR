@@ -137,3 +137,11 @@ test_that("reserved ROI fields are not set by partial name matches", {
   r <- sg_roi_point(1, 2, label = "cell", id = "c1", source = "qc")
   expect_equal(c(r$id, r$source), c("c1", "qc"))
 })
+
+test_that("plot.sg_roi draws in image orientation (y pointing down)", {
+  skip_if_not("reverse" %in% names(formals(ggplot2::coord_sf)),
+              "coord_sf() has no `reverse` argument")
+  p <- plot(sg_roi_rect(10, 10, 60, 40, label = "a"))
+  expect_equal(p$coordinates$reverse, "y")
+  expect_no_error(ggplot2::ggplot_build(p))
+})

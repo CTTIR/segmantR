@@ -508,15 +508,23 @@ print.sg_roi <- function(x, ...) {
 #'
 #' @param x An [sg_roi].
 #' @param ... Ignored.
-#' @return A [ggplot2::ggplot] object. The plot is not drawn; print it to render.
+#' @return A [ggplot2::ggplot] object in image orientation (origin at the top
+#'   left, y pointing down; this needs 'ggplot2' 4.0.0 or later, older
+#'   versions draw y pointing up). The plot is not drawn; print it to render.
 #' @keywords internal
 #' @export
 plot.sg_roi <- function(x, ...) {
   sfobj <- sf::st_sf(label = x$label, geometry = x$geometry)
+  # coord_sf() ignores scale_y_reverse(); its own `reverse` argument
+  # (ggplot2 >= 4.0.0) puts the origin at the top left, as in the image.
+  coord <- if ("reverse" %in% names(formals(ggplot2::coord_sf))) {
+    ggplot2::coord_sf(default_crs = NULL, reverse = "y")
+  } else {
+    ggplot2::coord_sf(default_crs = NULL)
+  }
   ggplot2::ggplot(sfobj) +
     ggplot2::geom_sf(ggplot2::aes(fill = .data$label), alpha = 0.4) +
-    ggplot2::scale_y_reverse() +
-    ggplot2::coord_sf(default_crs = NULL) +
+    coord +
     ggplot2::labs(title = paste0("ROI: ", x$label), x = "x (px)", y = "y (px)") +
     ggplot2::theme_minimal()
 }

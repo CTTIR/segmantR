@@ -196,3 +196,27 @@ test_that("a right triangle is not rasterised as its bounding rectangle", {
   expect_true(segmantR:::.sg_roi_is_axis_aligned_rect(rect$geometry[[1]]))
   expect_equal(sum(sg_roi_mask(rect, dims = c(10, 10))), 36L)
 })
+
+test_that("plot.sg_roi_mask gives labels from different layers different colours", {
+  m <- sg_roi_mask(demo_project(), "multiclass")
+  lg <- sg_roi_mask_legend(m)
+  # both layers start their palette at the same colour
+  expect_equal(length(unique(lg$colour)), 1L)
+  p <- plot(m)
+  pal <- p$scales$get_scales("fill")$palette(2L)
+  expect_equal(anyDuplicated(unname(pal)), 0L)
+  expect_setequal(names(pal), lg$label)
+  expect_no_error(ggplot2::ggplot_build(p))
+})
+
+test_that("plot.sg_roi_mask keeps distinct legend colours", {
+  .sg_roi_reset_id_counter()
+  a <- sg_roi_layer("a", labels = "a", style = sg_roi_style(colour = "#D55E00"))
+  a <- sg_roi_layer_add(a, sg_roi_rect(0, 0, 10, 10, label = "a"))
+  b <- sg_roi_layer("b", labels = "b", style = sg_roi_style(colour = "#0072B2"))
+  b <- sg_roi_layer_add(b, sg_roi_rect(20, 20, 40, 40, label = "b"))
+  m <- sg_roi_mask(sg_roi_project(small_image(), list(a, b)), "multiclass")
+  pal <- plot(m)$scales$get_scales("fill")$palette(2L)
+  expect_equal(pal[["a"]], "#D55E00")
+  expect_equal(pal[["b"]], "#0072B2")
+})

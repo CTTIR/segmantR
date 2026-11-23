@@ -12,7 +12,9 @@
 \item{...}{Ignored.}
 }
 \value{
-A \link[ggplot2:ggplot]{ggplot2::ggplot} object. The plot is not drawn; print it to render.
+A \link[ggplot2:ggplot]{ggplot2::ggplot} object in image orientation (origin at the top
+left, y pointing down; this needs 'ggplot2' 4.0.0 or later, older
+versions draw y pointing up). The plot is not drawn; print it to render.
 }
 \description{
 Plot an ROI

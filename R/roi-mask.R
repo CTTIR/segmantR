@@ -735,7 +735,9 @@ sg_roi_mask_stats <- function(mask, pixel_size = NULL, call = rlang::caller_env(
 #' @param legend Logical; show the fill legend. Default `TRUE`.
 #' @param ... Ignored.
 #' @return A [ggplot2::ggplot] object (discrete fill from the legend colours,
-#'   image orientation). Not drawn; print it to render.
+#'   image orientation). When two labels share a legend colour, as labels
+#'   from different layers do by default, the plot uses one Okabe-Ito
+#'   colour per label instead. Not drawn; print it to render.
 #' @keywords internal
 #' @export
 plot.sg_roi_mask <- function(x, legend = TRUE, ...) {
@@ -749,8 +751,16 @@ plot.sg_roi_mask <- function(x, legend = TRUE, ...) {
   df$label <- if (nrow(df) > 0L && nrow(lg) > 0L) lg$label[match(df$value, lg$value)] else character(0)
   pal <- NULL
   if (nrow(lg) > 0L) {
-    pal <- lg$colour
-    names(pal) <- lg$label
+    keep <- !duplicated(lg$label)
+    pal <- lg$colour[keep]
+    names(pal) <- lg$label[keep]
+    # Every layer starts its own palette at the same colour, so labels from
+    # different layers can share one. Classes must stay distinguishable in
+    # the plot: fall back to one Okabe-Ito colour per label.
+    if (anyDuplicated(pal) || anyNA(pal)) {
+      oi <- .sg_roi_okabe_ito()[c(2:8, 1L)]
+      pal[] <- oi[((seq_along(pal) - 1L) %% length(oi)) + 1L]
+    }
   }
   p <- ggplot2::ggplot(df, ggplot2::aes(x = .data$x, y = .data$y, fill = .data$label)) +
     ggplot2::geom_tile() +

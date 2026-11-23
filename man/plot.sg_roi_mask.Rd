@@ -15,7 +15,9 @@
 }
 \value{
 A \link[ggplot2:ggplot]{ggplot2::ggplot} object (discrete fill from the legend colours,
-image orientation). Not drawn; print it to render.
+image orientation). When two labels share a legend colour, as labels
+from different layers do by default, the plot uses one Okabe-Ito
+colour per label instead. Not drawn; print it to render.
 }
 \description{
 Plot a mask
