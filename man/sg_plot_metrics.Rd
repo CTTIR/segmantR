@@ -8,20 +8,18 @@ sg_plot_metrics(eval_result)
 }
 \arguments{
 \item{eval_result}{A data frame with columns \code{metric} and \code{value},
-e.g., from \code{sg_evaluate()}.}
+for example from \code{\link[=sg_evaluate_segmentation]{sg_evaluate_segmentation()}}.}
 }
 \value{
 A \code{ggplot2} object.
 }
 \description{
-Displays a bar chart of segmentation evaluation metrics such as IoU,
-precision, recall, and F1.
+Displays a bar chart of segmentation evaluation metrics on a 0 to 1
+scale, such as Dice, Jaccard, panoptic quality and F1.
 }
 \examples{
-res <- data.frame(
-  metric = c("IoU", "Precision", "Recall", "F1"),
-  value = c(0.82, 0.90, 0.85, 0.87)
-)
-p <- sg_plot_metrics(res)
-p
+img <- sg_example_image("fluorescence_nuclei")
+reference <- sg_example_mask("fluorescence_nuclei")
+otsu <- sg_segment_threshold(img, min_area = 5)
+sg_plot_metrics(sg_evaluate_segmentation(otsu, reference))
 }

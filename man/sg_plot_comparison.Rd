@@ -16,21 +16,23 @@ sg_plot_comparison(
 
 \item{mask_b}{An \code{sg_mask} object (right panel).}
 
-\item{image}{An \code{sg_image} object, or \code{NULL}.}
+\item{image}{An \code{sg_image} object, or \code{NULL}. Currently not drawn; use
+\code{\link[=sg_plot_overlay]{sg_plot_overlay()}} to show a mask on its image.}
 
-\item{labels}{Character vector of length 2 giving panel titles
+\item{labels}{Character vector of two different panel titles
 (default \code{c("Method A", "Method B")}).}
 }
 \value{
 A \code{ggplot2} object.
 }
 \description{
-Shows two segmentation masks (and optionally the source image) next to
-each other using faceted panels.
+Shows two segmentation masks next to each other using faceted panels.
+Cells are coloured by their label; the labels of the two masks are
+independent, so equal colours do not mark matching cells.
 }
 \examples{
-m1 <- new_sg_mask(matrix(c(0L, 1L, 1L, 0L), 2, 2))
-m2 <- new_sg_mask(matrix(c(0L, 0L, 1L, 1L), 2, 2))
-p <- sg_plot_comparison(m1, m2)
-p
+img <- sg_example_image("fluorescence_nuclei")
+reference <- sg_example_mask("fluorescence_nuclei")
+otsu <- sg_segment_threshold(img, min_area = 5)
+sg_plot_comparison(reference, otsu, labels = c("Reference", "Otsu"))
 }

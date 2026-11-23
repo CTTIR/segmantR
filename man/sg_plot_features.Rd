@@ -13,13 +13,15 @@ sg_plot_features(
 )
 }
 \arguments{
-\item{features}{A data frame of cell features (e.g., from
-\code{sg_compute_features()}).}
+\item{features}{A data frame of cell features with one row per cell, for
+example from \code{\link[=sg_extract_features]{sg_extract_features()}}.}
 
 \item{x}{Character, column name for the x-axis (default \code{"area"}).}
 
 \item{y}{Character, column name for the y-axis
-(default \code{"mean_intensity"}).}
+(default \code{"mean_intensity"}). \code{\link[=sg_extract_features]{sg_extract_features()}} names intensity
+columns after the channel (for example \code{"ch1_mean"}), so pass that
+name for its output.}
 
 \item{color}{Character column name for point colour, or \code{NULL}.}
 
@@ -33,11 +35,10 @@ Produces a scatter plot of two numeric cell features, with optional
 colour and faceting variables.
 }
 \examples{
-feat <- data.frame(
-  cell_id = 1:10,
-  area = rpois(10, 200),
-  mean_intensity = runif(10)
-)
-p <- sg_plot_features(feat, x = "area", y = "mean_intensity")
-p
+img <- sg_example_image("fluorescence_nuclei")
+mask <- sg_example_mask("fluorescence_nuclei")
+feat <- sg_extract_features(img, mask,
+                            features = c("intensity", "morphology"))
+sg_plot_features(feat, x = "area", y = "DAPI_mean",
+                 color = "circularity")
 }

@@ -18,17 +18,20 @@ sg_plot_overlay(
 \arguments{
 \item{image}{An \code{sg_image} object.}
 
-\item{mask}{An \code{sg_mask} object, or \code{NULL} to show the image only.}
+\item{mask}{An \code{sg_mask} object with the same height and width as
+\code{image}, or \code{NULL} to show the image only.}
 
 \item{channel}{Integer, which channel to display (default \code{1L}).}
 
-\item{outline_color}{Character, colour for cell outlines
+\item{outline_color}{Character, colour for cell outlines, fills and labels
 (default \code{"#FF00FF"}).}
 
-\item{outline_width}{Numeric, width of the outline strokes (default \code{1}).}
+\item{outline_width}{Numeric, width of the outline strokes (default \code{1}).
+The width is in absolute units, as \code{linewidth} in 'ggplot2': reduce it
+(for example to \code{0.3}) for large images with many small cells.}
 
 \item{fill_alpha}{Numeric in [0, 1], fill opacity for cell regions
-(default \code{0}).}
+(default \code{0}, outlines only).}
 
 \item{label_cells}{Logical, whether to draw cell-ID labels at centroids
 (default \code{FALSE}).}
@@ -40,11 +43,16 @@ for all cells.}
 A \code{ggplot2} object.
 }
 \description{
-Renders a single image channel as a raster and overlays cell outlines
-from a segmentation mask.
+Renders a single image channel as a greyscale raster and overlays cell
+outlines from a segmentation mask. Outlines follow the pixel edges between
+a cell and its surroundings, so they stay sharp at any image size.
 }
 \examples{
-img <- new_sg_image(matrix(runif(400), 20, 20))
-p <- sg_plot_overlay(img)
-p
+img <- sg_example_image("fluorescence_nuclei")
+mask <- sg_example_mask("fluorescence_nuclei")
+sg_plot_overlay(img, mask)
+
+# Fill and label two selected cells
+sg_plot_overlay(img, mask, fill_alpha = 0.3, label_cells = TRUE,
+                highlight = c(1L, 5L))
 }

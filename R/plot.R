@@ -3,17 +3,21 @@
 
 #' Overlay cell boundaries on an image
 #'
-#' Renders a single image channel as a raster and overlays cell outlines
-#' from a segmentation mask.
+#' Renders a single image channel as a greyscale raster and overlays cell
+#' outlines from a segmentation mask. Outlines follow the pixel edges between
+#' a cell and its surroundings, so they stay sharp at any image size.
 #'
 #' @param image An `sg_image` object.
-#' @param mask An `sg_mask` object, or `NULL` to show the image only.
+#' @param mask An `sg_mask` object with the same height and width as
+#'   `image`, or `NULL` to show the image only.
 #' @param channel Integer, which channel to display (default `1L`).
-#' @param outline_color Character, colour for cell outlines
+#' @param outline_color Character, colour for cell outlines, fills and labels
 #'   (default `"#FF00FF"`).
 #' @param outline_width Numeric, width of the outline strokes (default `1`).
+#'   The width is in absolute units, as `linewidth` in 'ggplot2': reduce it
+#'   (for example to `0.3`) for large images with many small cells.
 #' @param fill_alpha Numeric in \[0, 1\], fill opacity for cell regions
-#'   (default `0`).
+#'   (default `0`, outlines only).
 #' @param label_cells Logical, whether to draw cell-ID labels at centroids
 #'   (default `FALSE`).
 #' @param highlight Integer vector of cell IDs to highlight, or `NULL`
@@ -22,18 +26,28 @@
 #' @return A `ggplot2` object.
 #' @export
 #' @examples
-#' img <- new_sg_image(matrix(runif(400), 20, 20))
-#' p <- sg_plot_overlay(img)
-#' p
+#' img <- sg_example_image("fluorescence_nuclei")
+#' mask <- sg_example_mask("fluorescence_nuclei")
+#' sg_plot_overlay(img, mask)
+#'
+#' # Fill and label two selected cells
+#' sg_plot_overlay(img, mask, fill_alpha = 0.3, label_cells = TRUE,
+#'                 highlight = c(1L, 5L))
 sg_plot_overlay <- function(image, mask = NULL, channel = 1L,
                             outline_color = "#FF00FF", outline_width = 1,
                             fill_alpha = 0, label_cells = FALSE,
                             highlight = NULL) {
-  stopifnot(inherits(image, "sg_image"))
-  pixels <- image$pixels
-  if (length(dim(pixels)) == 3L) {
-    pixels <- pixels[, , channel]
+  if (!inherits(image, "sg_image")) {
+    cli::cli_abort("{.arg image} must be an {.cls sg_image} object.")
   }
+  if (!is.numeric(channel) || length(channel) != 1L || is.na(channel)) {
+    cli::cli_abort("{.arg channel} must be a single channel number.")
+  }
+  if (!is.numeric(fill_alpha) || length(fill_alpha) != 1L ||
+        is.na(fill_alpha) || fill_alpha < 0 || fill_alpha > 1) {
+    cli::cli_abort("{.arg fill_alpha} must be a single number between 0 and 1.")
+  }
+  pixels <- .extract_channel(image, as.integer(channel))
 
   nr <- nrow(pixels)
   nc <- ncol(pixels)
@@ -53,26 +67,50 @@ sg_plot_overlay <- function(image, mask = NULL, channel = 1L,
     ggplot2::theme_void() +
     ggplot2::theme(legend.position = "none")
 
-
   if (!is.null(mask)) {
-    stopifnot(inherits(mask, "sg_mask"))
-    outline_df <- .mask_to_outline_df(mask$labels, highlight = highlight)
+    if (!inherits(mask, "sg_mask")) {
+      cli::cli_abort("{.arg mask} must be an {.cls sg_mask} object or {.code NULL}.")
+    }
+    if (!identical(dim(mask$labels), c(nr, nc))) {
+      cli::cli_abort(c(
+        "{.arg mask} and {.arg image} must have the same height and width.",
+        "x" = "The image is {nr} x {nc}, the mask is {nrow(mask$labels)} x {ncol(mask$labels)}."
+      ))
+    }
+    labels <- .mask_select_labels(mask$labels, highlight)
+
+    if (fill_alpha > 0) {
+      fill_idx <- which(labels > 0L, arr.ind = TRUE)
+      if (nrow(fill_idx) > 0L) {
+        fill_df <- data.frame(row = fill_idx[, 1], col = fill_idx[, 2])
+        p <- p + ggplot2::geom_tile(
+          data = fill_df,
+          ggplot2::aes(x = .data[["col"]], y = .data[["row"]]),
+          fill = outline_color,
+          colour = NA,
+          alpha = fill_alpha,
+          inherit.aes = FALSE
+        )
+      }
+    }
+
+    outline_df <- .mask_outline_segments(labels)
     if (nrow(outline_df) > 0L) {
-      p <- p + ggplot2::geom_tile(
+      p <- p + ggplot2::geom_segment(
         data = outline_df,
         ggplot2::aes(
-          x = .data[["col"]], y = .data[["row"]]
+          x = .data[["x"]], y = .data[["y"]],
+          xend = .data[["xend"]], yend = .data[["yend"]]
         ),
-        fill = if (fill_alpha > 0) outline_color else NA,
         colour = outline_color,
         linewidth = outline_width,
-        alpha = fill_alpha,
+        lineend = "square",
         inherit.aes = FALSE
       )
     }
 
     if (label_cells) {
-      centroid_df <- .mask_centroids(mask$labels, highlight = highlight)
+      centroid_df <- .mask_centroids(labels)
       if (nrow(centroid_df) > 0L) {
         p <- p + ggplot2::geom_text(
           data = centroid_df,
@@ -82,6 +120,7 @@ sg_plot_overlay <- function(image, mask = NULL, channel = 1L,
           ),
           colour = outline_color,
           size = 3,
+          fontface = "bold",
           inherit.aes = FALSE
         )
       }
@@ -100,23 +139,36 @@ sg_plot_overlay <- function(image, mask = NULL, channel = 1L,
 #' @param color_by Character, one of `"id"`, `"area"`, `"circularity"`,
 #'   or `"cluster"`.
 #' @param features A data frame of cell features (required when `color_by`
-#'   is `"area"`, `"circularity"`, or `"cluster"`). Must contain a
-#'   `cell_id` column.
+#'   is `"area"`, `"circularity"`, or `"cluster"`), for example from
+#'   [sg_extract_features()]. Must contain a `cell_id` column and a column
+#'   named like `color_by`. Numeric columns are drawn with a continuous
+#'   colour scale; character, factor and logical columns (such as cluster
+#'   names) with a discrete one.
 #' @param palette Character, name of a viridis palette
 #'   (default `"viridis"`).
+#'
+#' @details Background pixels are dark grey; cell colours skip the darkest
+#'   fifth of the palette so that every cell stands out against it. With
+#'   `color_by = "id"` the legend lists every cell and is therefore hidden
+#'   for masks with more than 20 cells.
 #'
 #' @return A `ggplot2` object.
 #' @export
 #' @examples
-#' labels <- matrix(c(0L, 1L, 1L, 2L, 2L, 0L, 3L, 3L, 0L), 3, 3)
-#' mask <- new_sg_mask(labels)
-#' p <- sg_plot_mask(mask)
-#' p
+#' mask <- sg_example_mask("fluorescence_nuclei")
+#' sg_plot_mask(mask)
+#'
+#' # Colour by a measured feature
+#' img <- sg_example_image("fluorescence_nuclei")
+#' feat <- sg_extract_features(img, mask, features = "morphology")
+#' sg_plot_mask(mask, color_by = "area", features = feat)
 sg_plot_mask <- function(mask,
                          color_by = c("id", "area", "circularity", "cluster"),
                          features = NULL,
                          palette = "viridis") {
-  stopifnot(inherits(mask, "sg_mask"))
+  if (!inherits(mask, "sg_mask")) {
+    cli::cli_abort("{.arg mask} must be an {.cls sg_mask} object.")
+  }
   color_by <- match.arg(color_by)
 
   labels <- mask$labels
@@ -125,24 +177,36 @@ sg_plot_mask <- function(mask,
 
   mask_df <- expand.grid(col = seq_len(nc), row = seq_len(nr))
   mask_df$cell_id <- as.vector(t(labels))
+  discrete <- TRUE
+  n_levels <- 0L
 
   if (color_by == "id") {
-    mask_df$fill_value <- as.factor(mask_df$cell_id)
-    mask_df$fill_value[mask_df$cell_id == 0L] <- NA
+    ids <- mask_df$cell_id
+    ids[ids == 0L] <- NA
+    mask_df$fill_value <- factor(ids)
+    n_levels <- nlevels(mask_df$fill_value)
   } else {
     if (is.null(features)) {
       cli::cli_abort(
         "A {.arg features} data frame is required when {.arg color_by} is {.val {color_by}}."
       )
     }
-    stopifnot("cell_id" %in% names(features))
+    if (!is.data.frame(features) || !"cell_id" %in% names(features)) {
+      cli::cli_abort(
+        "{.arg features} must be a data frame with a {.field cell_id} column."
+      )
+    }
     merge_col <- color_by
     if (!merge_col %in% names(features)) {
       cli::cli_abort("Column {.val {merge_col}} not found in {.arg features}.")
     }
-    lookup <- stats::setNames(features[[merge_col]], features[["cell_id"]])
-    mask_df$fill_value <- lookup[as.character(mask_df$cell_id)]
-    mask_df$fill_value[mask_df$cell_id == 0L] <- NA
+    values <- features[[merge_col]]
+    discrete <- !is.numeric(values)
+    if (discrete && !is.factor(values)) values <- factor(values)
+    fill <- values[match(mask_df$cell_id, features[["cell_id"]])]
+    fill[mask_df$cell_id == 0L] <- NA
+    mask_df$fill_value <- fill
+    if (discrete) n_levels <- nlevels(values)
   }
 
   p <- ggplot2::ggplot(mask_df, ggplot2::aes(
@@ -153,13 +217,22 @@ sg_plot_mask <- function(mask,
     ggplot2::coord_fixed() +
     ggplot2::theme_void()
 
-  if (color_by == "id") {
+  if (discrete) {
+    # Fixed limits keep the background (NA, drawn in `na.value`) out of the
+    # legend and unused factor levels in it.
     p <- p + ggplot2::scale_fill_viridis_d(
-      option = palette, na.value = "grey20", name = "Cell ID"
+      option = palette, begin = .sg_viridis_begin, na.value = "grey20",
+      limits = levels(mask_df$fill_value),
+      name = if (color_by == "id") "Cell ID" else color_by
     )
+    # A legend with one key per cell crowds out the image.
+    if (color_by == "id" && n_levels > 20L) {
+      p <- p + ggplot2::theme(legend.position = "none")
+    }
   } else {
     p <- p + ggplot2::scale_fill_viridis_c(
-      option = palette, na.value = "grey20", name = color_by
+      option = palette, begin = .sg_viridis_begin, na.value = "grey20",
+      name = color_by
     )
   }
 
@@ -171,27 +244,30 @@ sg_plot_mask <- function(mask,
 #' Produces a scatter plot of two numeric cell features, with optional
 #' colour and faceting variables.
 #'
-#' @param features A data frame of cell features (e.g., from
-#'   `sg_compute_features()`).
+#' @param features A data frame of cell features with one row per cell, for
+#'   example from [sg_extract_features()].
 #' @param x Character, column name for the x-axis (default `"area"`).
 #' @param y Character, column name for the y-axis
-#'   (default `"mean_intensity"`).
+#'   (default `"mean_intensity"`). [sg_extract_features()] names intensity
+#'   columns after the channel (for example `"ch1_mean"`), so pass that
+#'   name for its output.
 #' @param color Character column name for point colour, or `NULL`.
 #' @param facet Character column name for faceting, or `NULL`.
 #'
 #' @return A `ggplot2` object.
 #' @export
 #' @examples
-#' feat <- data.frame(
-#'   cell_id = 1:10,
-#'   area = rpois(10, 200),
-#'   mean_intensity = runif(10)
-#' )
-#' p <- sg_plot_features(feat, x = "area", y = "mean_intensity")
-#' p
+#' img <- sg_example_image("fluorescence_nuclei")
+#' mask <- sg_example_mask("fluorescence_nuclei")
+#' feat <- sg_extract_features(img, mask,
+#'                             features = c("intensity", "morphology"))
+#' sg_plot_features(feat, x = "area", y = "DAPI_mean",
+#'                  color = "circularity")
 sg_plot_features <- function(features, x = "area", y = "mean_intensity",
                              color = NULL, facet = NULL) {
-  stopifnot(is.data.frame(features))
+  if (!is.data.frame(features)) {
+    cli::cli_abort("{.arg features} must be a data frame.")
+  }
   if (!x %in% names(features)) {
     cli::cli_abort("Column {.val {x}} not found in {.arg features}.")
   }
@@ -199,23 +275,27 @@ sg_plot_features <- function(features, x = "area", y = "mean_intensity",
     cli::cli_abort("Column {.val {y}} not found in {.arg features}.")
   }
 
-  p <- ggplot2::ggplot(features, ggplot2::aes(
-    x = .data[[x]], y = .data[[y]]
-  )) +
-    ggplot2::geom_point(alpha = 0.7) +
-    ggplot2::labs(x = x, y = y) +
-    ggplot2::theme_minimal()
-
+  mapping <- ggplot2::aes(x = .data[[x]], y = .data[[y]])
   if (!is.null(color)) {
     if (!color %in% names(features)) {
       cli::cli_abort("Column {.val {color}} not found in {.arg features}.")
     }
-    p <- ggplot2::ggplot(features, ggplot2::aes(
+    mapping <- ggplot2::aes(
       x = .data[[x]], y = .data[[y]], colour = .data[[color]]
-    )) +
-      ggplot2::geom_point(alpha = 0.7) +
-      ggplot2::labs(x = x, y = y, colour = color) +
-      ggplot2::theme_minimal()
+    )
+  }
+
+  p <- ggplot2::ggplot(features, mapping) +
+    ggplot2::geom_point(alpha = 0.7) +
+    ggplot2::labs(x = x, y = y, colour = color) +
+    ggplot2::theme_minimal()
+
+  if (!is.null(color)) {
+    p <- p + if (is.numeric(features[[color]])) {
+      ggplot2::scale_colour_viridis_c(end = 0.9)
+    } else {
+      ggplot2::scale_colour_viridis_d(end = 0.9)
+    }
   }
 
   if (!is.null(facet)) {
@@ -230,26 +310,37 @@ sg_plot_features <- function(features, x = "area", y = "mean_intensity",
 
 #' Side-by-side comparison of two masks
 #'
-#' Shows two segmentation masks (and optionally the source image) next to
-#' each other using faceted panels.
+#' Shows two segmentation masks next to each other using faceted panels.
+#' Cells are coloured by their label; the labels of the two masks are
+#' independent, so equal colours do not mark matching cells.
 #'
 #' @param mask_a An `sg_mask` object (left panel).
 #' @param mask_b An `sg_mask` object (right panel).
-#' @param image An `sg_image` object, or `NULL`.
-#' @param labels Character vector of length 2 giving panel titles
+#' @param image An `sg_image` object, or `NULL`. Currently not drawn; use
+#'   [sg_plot_overlay()] to show a mask on its image.
+#' @param labels Character vector of two different panel titles
 #'   (default `c("Method A", "Method B")`).
 #'
 #' @return A `ggplot2` object.
 #' @export
 #' @examples
-#' m1 <- new_sg_mask(matrix(c(0L, 1L, 1L, 0L), 2, 2))
-#' m2 <- new_sg_mask(matrix(c(0L, 0L, 1L, 1L), 2, 2))
-#' p <- sg_plot_comparison(m1, m2)
-#' p
+#' img <- sg_example_image("fluorescence_nuclei")
+#' reference <- sg_example_mask("fluorescence_nuclei")
+#' otsu <- sg_segment_threshold(img, min_area = 5)
+#' sg_plot_comparison(reference, otsu, labels = c("Reference", "Otsu"))
 sg_plot_comparison <- function(mask_a, mask_b, image = NULL,
                                labels = c("Method A", "Method B")) {
-  stopifnot(inherits(mask_a, "sg_mask"), inherits(mask_b, "sg_mask"))
-  stopifnot(length(labels) == 2L)
+  if (!inherits(mask_a, "sg_mask") || !inherits(mask_b, "sg_mask")) {
+    cli::cli_abort(
+      "{.arg mask_a} and {.arg mask_b} must be {.cls sg_mask} objects."
+    )
+  }
+  if (!is.character(labels) || length(labels) != 2L || anyNA(labels) ||
+        labels[1] == labels[2]) {
+    cli::cli_abort(
+      "{.arg labels} must be a character vector of two different panel titles."
+    )
+  }
 
   df_a <- .mask_to_df(mask_a$labels, panel_label = labels[1])
   df_b <- .mask_to_df(mask_b$labels, panel_label = labels[2])
@@ -261,35 +352,39 @@ sg_plot_comparison <- function(mask_a, mask_b, image = NULL,
     fill = .data[["cell_id"]]
   )) +
     ggplot2::geom_raster() +
-    ggplot2::scale_fill_viridis_c(na.value = "grey20", name = "Cell ID") +
+    ggplot2::scale_fill_viridis_c(
+      begin = .sg_viridis_begin, na.value = "grey20", name = "Cell ID"
+    ) +
     ggplot2::scale_y_reverse() +
     ggplot2::coord_fixed() +
     ggplot2::facet_wrap(ggplot2::vars(.data[["panel"]])) +
     ggplot2::theme_void() +
-    ggplot2::theme(strip.text = ggplot2::element_text(size = 12))
+    ggplot2::theme(strip.text = ggplot2::element_text(
+      size = 12, margin = ggplot2::margin(b = 6)
+    ))
 
   p
 }
 
 #' Bar chart of evaluation metrics
 #'
-#' Displays a bar chart of segmentation evaluation metrics such as IoU,
-#' precision, recall, and F1.
+#' Displays a bar chart of segmentation evaluation metrics on a 0 to 1
+#' scale, such as Dice, Jaccard, panoptic quality and F1.
 #'
 #' @param eval_result A data frame with columns `metric` and `value`,
-#'   e.g., from `sg_evaluate()`.
+#'   for example from [sg_evaluate_segmentation()].
 #'
 #' @return A `ggplot2` object.
 #' @export
 #' @examples
-#' res <- data.frame(
-#'   metric = c("IoU", "Precision", "Recall", "F1"),
-#'   value = c(0.82, 0.90, 0.85, 0.87)
-#' )
-#' p <- sg_plot_metrics(res)
-#' p
+#' img <- sg_example_image("fluorescence_nuclei")
+#' reference <- sg_example_mask("fluorescence_nuclei")
+#' otsu <- sg_segment_threshold(img, min_area = 5)
+#' sg_plot_metrics(sg_evaluate_segmentation(otsu, reference))
 sg_plot_metrics <- function(eval_result) {
-  stopifnot(is.data.frame(eval_result))
+  if (!is.data.frame(eval_result)) {
+    cli::cli_abort("{.arg eval_result} must be a data frame.")
+  }
   if (!all(c("metric", "value") %in% names(eval_result))) {
     cli::cli_abort(
       "{.arg eval_result} must contain columns {.val metric} and {.val value}."
@@ -305,7 +400,7 @@ sg_plot_metrics <- function(eval_result) {
     ggplot2::coord_flip() +
     ggplot2::labs(x = NULL, y = "Value") +
     ggplot2::theme_minimal() +
-    ggplot2::scale_fill_viridis_d(option = "viridis") +
+    ggplot2::scale_fill_viridis_d(option = "viridis", end = 0.9) +
     ggplot2::ylim(0, 1)
 
   p
@@ -314,56 +409,104 @@ sg_plot_metrics <- function(eval_result) {
 
 # ---- internal helpers -------------------------------------------------------
 
+# The darkest fifth of the viridis palettes is nearly indistinguishable from
+# the dark grey ("grey20") mask background, so cell colours start above it.
+.sg_viridis_begin <- 0.2
+
+#' Keep only the highlighted labels of a label matrix
+#' @noRd
+.mask_select_labels <- function(labels, highlight = NULL) {
+  if (!is.null(highlight)) {
+    labels[!(labels %in% highlight)] <- 0L
+  }
+  labels
+}
+
 #' Extract boundary pixels from a label matrix
+#'
+#' A foreground pixel is a boundary pixel when it lies on the image border
+#' or when one of its four neighbours carries another label.
 #' @noRd
 .mask_to_outline_df <- function(labels, highlight = NULL) {
   nr <- nrow(labels)
   nc <- ncol(labels)
 
-  is_border <- matrix(FALSE, nrow = nr, ncol = nc)
-  for (i in seq_len(nr)) {
-    for (j in seq_len(nc)) {
-      cid <- labels[i, j]
-      if (cid == 0L) next
-      if (!is.null(highlight) && !cid %in% highlight) next
-      if (i == 1L || i == nr || j == 1L || j == nc) {
-        is_border[i, j] <- TRUE
-        next
-      }
-      if (labels[i - 1L, j] != cid || labels[i + 1L, j] != cid ||
-          labels[i, j - 1L] != cid || labels[i, j + 1L] != cid) {
-        is_border[i, j] <- TRUE
-      }
-    }
+  differs <- matrix(FALSE, nrow = nr, ncol = nc)
+  for (o in .sg_offsets(4L)) {
+    # Out-of-image neighbours count as "another label" (-1 never occurs).
+    differs <- differs | (.sg_shift(labels, o[1], o[2], -1L) != labels)
+  }
+  is_border <- differs & labels > 0L
+  if (!is.null(highlight)) {
+    is_border <- is_border & matrix(labels %in% highlight, nr, nc)
   }
 
   idx <- which(is_border, arr.ind = TRUE)
   if (nrow(idx) == 0L) {
     return(data.frame(row = integer(0), col = integer(0)))
   }
-  data.frame(row = idx[, 1], col = idx[, 2])
+  data.frame(row = unname(idx[, 1]), col = unname(idx[, 2]))
+}
+
+#' Outline segments along the pixel edges of a label matrix
+#'
+#' Returns one segment per pixel edge that separates two different labels
+#' (or a label from the image border), in the plotting coordinates of the
+#' `sg_plot_*` functions: pixel `[row, col]` covers `col - 0.5` to
+#' `col + 0.5` in x and `row - 0.5` to `row + 0.5` in y.
+#' @noRd
+.mask_outline_segments <- function(labels) {
+  nr <- nrow(labels)
+  nc <- ncol(labels)
+  empty <- data.frame(x = numeric(0), y = numeric(0),
+                      xend = numeric(0), yend = numeric(0))
+  if (nr == 0L || nc == 0L || !any(labels > 0L)) return(empty)
+
+  padded <- matrix(0L, nr + 2L, nc + 2L)
+  padded[seq_len(nr) + 1L, seq_len(nc) + 1L] <- labels
+  inner_rows <- seq_len(nr) + 1L
+  inner_cols <- seq_len(nc) + 1L
+
+  # Horizontal edges: between padded rows r and r + 1, at y = r - 0.5.
+  h <- which(
+    padded[seq_len(nr + 1L), inner_cols, drop = FALSE] !=
+      padded[seq_len(nr + 1L) + 1L, inner_cols, drop = FALSE],
+    arr.ind = TRUE
+  )
+  # Vertical edges: between padded columns c and c + 1, at x = c - 0.5.
+  v <- which(
+    padded[inner_rows, seq_len(nc + 1L), drop = FALSE] !=
+      padded[inner_rows, seq_len(nc + 1L) + 1L, drop = FALSE],
+    arr.ind = TRUE
+  )
+  data.frame(
+    x = c(h[, 2] - 0.5, v[, 2] - 0.5),
+    y = c(h[, 1] - 0.5, v[, 1] - 0.5),
+    xend = c(h[, 2] + 0.5, v[, 2] - 0.5),
+    yend = c(h[, 1] - 0.5, v[, 1] + 0.5)
+  )
 }
 
 #' Compute centroids for cell IDs
 #' @noRd
 .mask_centroids <- function(labels, highlight = NULL) {
-  cell_ids <- sort(unique(as.vector(labels)))
-  cell_ids <- cell_ids[cell_ids > 0L]
-  if (!is.null(highlight)) {
-    cell_ids <- cell_ids[cell_ids %in% highlight]
-  }
-  if (length(cell_ids) == 0L) {
+  labels <- .mask_select_labels(labels, highlight)
+  pos <- which(labels > 0L)
+  if (length(pos) == 0L) {
     return(data.frame(
       row = numeric(0), col = numeric(0), cell_id = integer(0)
     ))
   }
-  rows <- vapply(cell_ids, function(cid) {
-    mean(which(labels == cid, arr.ind = TRUE)[, 1])
-  }, numeric(1))
-  cols <- vapply(cell_ids, function(cid) {
-    mean(which(labels == cid, arr.ind = TRUE)[, 2])
-  }, numeric(1))
-  data.frame(row = rows, col = cols, cell_id = cell_ids)
+  ids <- labels[pos]
+  sums <- rowsum(
+    cbind(row = row(labels)[pos], col = col(labels)[pos], n = 1),
+    group = ids
+  )
+  data.frame(
+    row = unname(sums[, "row"] / sums[, "n"]),
+    col = unname(sums[, "col"] / sums[, "n"]),
+    cell_id = as.integer(rownames(sums))
+  )
 }
 
 #' Convert label matrix to data frame for ggplot
