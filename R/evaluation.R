@@ -83,23 +83,16 @@ sg_evaluate_segmentation <- function(predicted, ground_truth,
   gt_ids <- .sg_label_ids(gt_lab)
 
   iou_matrix <- NULL
+  overlap <- NULL
   if (any(c("aji", "panoptic_quality", "ap50", "ap75", "f1_detection") %in% metrics)) {
     if (length(pred_ids) > 0L && length(gt_ids) > 0L) {
-      iou_matrix <- matrix(0, nrow = length(pred_ids), ncol = length(gt_ids))
-      for (pi in seq_along(pred_ids)) {
-        pred_px <- pred_lab == pred_ids[pi]
-        for (gi in seq_along(gt_ids)) {
-          gt_px <- gt_lab == gt_ids[gi]
-          inter <- sum(pred_px & gt_px)
-          un <- sum(pred_px | gt_px)
-          iou_matrix[pi, gi] <- if (un > 0L) inter / un else 0
-        }
-      }
+      overlap <- .sg_instance_overlap(pred_lab, gt_lab, pred_ids, gt_ids)
+      iou_matrix <- overlap$iou
     }
   }
 
   if ("aji" %in% metrics) {
-    aji_val <- .compute_aji(pred_lab, gt_lab, pred_ids, gt_ids, iou_matrix)
+    aji_val <- .compute_aji(pred_ids, gt_ids, overlap)
     results <- rbind(results, tibble::tibble(metric = "aji", value = aji_val))
   }
 
@@ -146,41 +139,66 @@ print.sg_eval <- function(x, ...) {
 
 #' Aggregated Jaccard Index
 #' @noRd
-.compute_aji <- function(pred_lab, gt_lab, pred_ids, gt_ids, iou_matrix) {
+# Pixel overlap between every predicted and every ground-truth instance.
+# One pass over the pixels instead of one comparison of the whole image per
+# instance pair: `intersection[p, g]` counts the pixels shared by predicted
+# instance `pred_ids[p]` and ground-truth instance `gt_ids[g]`, and
+# IoU = intersection / (area_pred + area_gt - intersection).
+.sg_instance_overlap <- function(pred_lab, gt_lab, pred_ids, gt_ids) {
+  n_pred <- length(pred_ids)
+  n_gt <- length(gt_ids)
+  area_pred <- tabulate(match(pred_lab[pred_lab > 0L], pred_ids), n_pred)
+  area_gt <- tabulate(match(gt_lab[gt_lab > 0L], gt_ids), n_gt)
+
+  intersection <- matrix(0, nrow = n_pred, ncol = n_gt)
+  both <- which(pred_lab > 0L & gt_lab > 0L)
+  if (length(both) > 0L) {
+    # Column-major cell index of the (pred, gt) pair, kept as a double so
+    # that large instance counts do not overflow.
+    cell <- (match(gt_lab[both], gt_ids) - 1) * n_pred +
+      match(pred_lab[both], pred_ids)
+    pairs <- unique(cell)
+    intersection[pairs] <- tabulate(match(cell, pairs), length(pairs))
+  }
+  union <- outer(area_pred, area_gt, "+") - intersection
+  list(
+    iou = intersection / union,
+    intersection = intersection,
+    area_pred = area_pred,
+    area_gt = area_gt
+  )
+}
+
+.compute_aji <- function(pred_ids, gt_ids, overlap) {
   if (length(gt_ids) == 0L && length(pred_ids) == 0L) return(1.0)
   if (length(gt_ids) == 0L || length(pred_ids) == 0L) return(0.0)
 
+  iou_matrix <- overlap$iou
   numerator <- 0
   denominator <- 0
 
   matched_pred <- logical(length(pred_ids))
 
   for (gi in seq_along(gt_ids)) {
-    gt_px <- gt_lab == gt_ids[gi]
     best_pi <- which.max(iou_matrix[, gi])
     if (length(best_pi) > 0L && iou_matrix[best_pi, gi] > 0) {
-      pred_px <- pred_lab == pred_ids[best_pi]
-      inter <- sum(gt_px & pred_px)
-      un <- sum(gt_px | pred_px)
+      inter <- overlap$intersection[best_pi, gi]
       numerator <- numerator + inter
-      denominator <- denominator + un
+      denominator <- denominator +
+        overlap$area_gt[gi] + overlap$area_pred[best_pi] - inter
       matched_pred[best_pi] <- TRUE
     } else {
-      denominator <- denominator + sum(gt_px)
+      denominator <- denominator + overlap$area_gt[gi]
     }
   }
 
   # Add unmatched predictions to denominator
-  for (pi in which(!matched_pred)) {
-    denominator <- denominator + sum(pred_lab == pred_ids[pi])
-  }
+  denominator <- denominator + sum(overlap$area_pred[!matched_pred])
 
   if (denominator == 0) return(1.0)
   numerator / denominator
 }
 
-#' Panoptic Quality
-#' @noRd
 .compute_panoptic_quality <- function(iou_matrix, pred_ids, gt_ids) {
   if (length(gt_ids) == 0L && length(pred_ids) == 0L) return(1.0)
   if (is.null(iou_matrix) || length(gt_ids) == 0L || length(pred_ids) == 0L) {
