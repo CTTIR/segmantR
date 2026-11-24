@@ -1,5 +1,8 @@
 # segmantR ![segmantR logo](reference/figures/logo-with-name.png)
 
+Zenodo DOI reserved for the release: `10.5281/zenodo.21889962` (not yet
+published).
+
 segmantR segments microscopy images, records reproducible segmentation
 protocols, and exchanges masks and measurements with downstream tools.
 The core threshold and watershed workflows use R; optional external
